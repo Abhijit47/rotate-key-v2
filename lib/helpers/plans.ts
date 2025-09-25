@@ -6,5 +6,5 @@ export const checkPlan = async (plan: Plans, isExpired: boolean) => {
   if (plan === 'semi_subscribe' && !isExpired) {
     redirect('/');
   }
-  return sessionClaims?.metadata.plan === plan;
+  return sessionClaims?.metadata?.plan === plan;
 };
