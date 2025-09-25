@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 // import { HiArrowRight } from 'react-icons/hi2';
 // import { FAQs } from '../dynamic';
 

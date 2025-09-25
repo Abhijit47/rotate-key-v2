@@ -1,7 +1,7 @@
 import { footerLinks } from '@/constants';
 import Logo from '@/public/logos/logo-landscape-2.webp';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 // import { BsArrowRight } from 'react-icons/bs';
 // import { FaEnvelope, FaPhone, FaRegMap } from 'react-icons/fa6';
 // import { HiChevronDoubleDown } from 'react-icons/hi2';

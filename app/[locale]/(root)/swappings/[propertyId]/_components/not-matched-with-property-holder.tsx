@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { ArrowLeftCircle } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import PropertyInteractions from '../../_components/property-interactions';
 
 export default function NotMatchedWithPropertyHolder({

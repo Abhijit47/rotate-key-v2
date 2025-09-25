@@ -21,7 +21,7 @@ import {
   Video,
   X,
 } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 
 export default async function MyMatchesCard() {
   // await new Promise((resolve) => setTimeout(resolve, 20000));

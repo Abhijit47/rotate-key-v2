@@ -1,8 +1,8 @@
 import BannerBG from '@/public/how-it-works/banner.jpg';
 import Image from 'next/image';
-import Link from 'next/link';
 import SectionContextWrapper from './SectionContextWrapper';
 import SectionWrapper from './SectionWrapper';
+import { Link } from '@/i18n/navigation';
 
 export default function SectionBanner(props: SectionBannerProps) {
   const { description, buttonText, buttonLink, coverImage, children } = props;

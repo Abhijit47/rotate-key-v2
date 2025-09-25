@@ -16,7 +16,7 @@ import { PricingTable } from '@clerk/nextjs';
 import { shadcn } from '@clerk/themes';
 import { ArrowLeftCircle, Loader2 } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 
 export default function PricingTableCards() {
   const { systemTheme } = useTheme();

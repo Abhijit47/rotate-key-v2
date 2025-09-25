@@ -34,7 +34,7 @@ import {
 // import { cache } from 'react';
 // import { unstable_cache as cache } from 'next/cache';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { cache, Suspense } from 'react';
 import PropertyInteractions from '../swappings/_components/property-interactions';
 

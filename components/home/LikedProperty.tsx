@@ -1,6 +1,6 @@
 import LikedBG from '@/public/home/r-architecture-2gDwlIim3Uw-unsplash.jpg';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 
 import { ArrowRight } from 'lucide-react';
 import SectionDescription from '../shared/SectionDescription';

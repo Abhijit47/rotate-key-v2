@@ -16,7 +16,7 @@ import {
 import { cn } from '@/lib/utils';
 import { SignedOut } from '@clerk/nextjs';
 import { BellOff } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import CustomUserButton from './custom-user-button';

@@ -19,7 +19,7 @@ import {
   Video,
   X,
 } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { Suspense } from 'react';
 // import TestSwpping from './[userId]/_components/test-swpping';
 

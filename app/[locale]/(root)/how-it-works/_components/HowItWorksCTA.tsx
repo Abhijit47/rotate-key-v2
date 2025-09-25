@@ -3,7 +3,7 @@ import SectionWrapper from '@/components/shared/SectionWrapper';
 import HOWITWORKSCTABG from '@/public/how-it-works/how-it-works-cta.jpg';
 import { ArrowRightIcon } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 // import { HiArrowRight } from 'react-icons/hi2';
 
 export default function HowItWorksCTA() {

@@ -33,7 +33,7 @@ import {
 } from '@/components/ui/sidebar';
 import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { useRouter } from 'next/navigation';
 import { NavDocuments } from './../_components/nav-documents';
 import { AdminNavMain } from './admin-nav-main';
