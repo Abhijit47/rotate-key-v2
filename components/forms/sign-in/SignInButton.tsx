@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
+// import Link from 'next/link';
 
 export default function SignInButton() {
   return (
@@ -20,7 +21,7 @@ export default function SignInButton() {
         }>
         Don&apos;t have an account?{' '}
         <Link
-          href='/auth/sign-up'
+          href='/sign-up'
           className='text-primary-500 hover:underline focus:outline-none data-[focus]:outline-1 data-[focus]:outline-primary-300'>
           Sign up
         </Link>

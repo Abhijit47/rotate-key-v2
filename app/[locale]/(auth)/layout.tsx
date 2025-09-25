@@ -11,5 +11,5 @@ export default async function AuthLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return children;
+  return <main>{children}</main>;
 }

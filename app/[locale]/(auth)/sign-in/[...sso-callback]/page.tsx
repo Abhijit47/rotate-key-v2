@@ -9,8 +9,8 @@ export default function SSOCallback() {
     <>
       <div id='clerk-captcha' className={'hidden'}></div>
       <AuthenticateWithRedirectCallback
-        signInFallbackRedirectUrl={'/auth/sign-in'}
-        signUpFallbackRedirectUrl={'/auth/sign-up'}
+        signInFallbackRedirectUrl={'/sign-in'}
+        signUpFallbackRedirectUrl={'/sign-up'}
         continueSignUpUrl={'/auth/sign-up-complete'}
       />
       <div className='flex flex-col items-center justify-center h-dvh gap-4 md:gap-6'>

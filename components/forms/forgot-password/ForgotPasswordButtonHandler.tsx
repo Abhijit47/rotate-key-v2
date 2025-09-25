@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { useAuthContext } from '@/contexts/auth-context';
 import { useForgotPassword } from '@/hooks/useForgotPassword';
 import { ForgotPasswordValues } from '@/lib/validations/auth.schema';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { useFormContext } from 'react-hook-form';
 
 export default function ForgotPasswordButtonHandler() {
@@ -73,7 +73,7 @@ export default function ForgotPasswordButtonHandler() {
         }>
         Don&apos;t forgot password ?{' '}
         <Link
-          href='/auth/sign-in'
+          href='/sign-in'
           className='text-primary-500 hover:underline focus:outline-none data-[focus]:outline-1 data-[focus]:outline-primary-300'>
           Sign in
         </Link>

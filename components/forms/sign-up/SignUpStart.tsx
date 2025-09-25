@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import SignUpButtons from './SignUpButtons';
 
 export default function SignUpStart() {
@@ -22,7 +22,7 @@ export default function SignUpStart() {
         <p>
           Already have an account ?{' '}
           <Link
-            href='/auth/sign-in'
+            href='/sign-in'
             className={'text-primary-500 hover:underline'}>
             Sign In
           </Link>
@@ -30,13 +30,13 @@ export default function SignUpStart() {
         <p className={'text-xs text-secondary-500'}>
           *By signing up, you agree to our{' '}
           <Link
-            href={'terms-and-conditions'}
+            href={'/terms-and-conditions'}
             className={'underline hover:no-underline font-medium'}>
             Terms of Service
           </Link>{' '}
           and{' '}
           <Link
-            href={'privacy-policy'}
+            href={'/privacy-policy'}
             className={'underline hover:no-underline font-medium'}>
             Privacy Policy
           </Link>

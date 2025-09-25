@@ -13,7 +13,7 @@ import { UserLoginValues } from '@/lib/validations/auth.schema';
 
 import { ErrorMessage } from '@hookform/error-message';
 import { EyeClosed, EyeIcon } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
@@ -73,7 +73,7 @@ export default function SignInForm() {
               <FormLabel className={'flex w-full items-center justify-between'}>
                 Password
                 <Link
-                  href={'/auth/forgot-password'}
+                  href={'/forgot-password'}
                   className={
                     'text-xs md:text-sm text-secondary-500 underline hover:no-underline'
                   }>

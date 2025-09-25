@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useAuthContext } from '@/contexts/auth-context';
 import { useSignUpForm } from '@/hooks/useSignUp';
 import { UserRegistrationValues } from '@/lib/validations/auth.schema';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { useFormContext } from 'react-hook-form';
 
 export default function SignUpButtonHandler() {
@@ -99,7 +99,7 @@ export default function SignUpButtonHandler() {
       </Button>
       <p>
         Already have an account?{' '}
-        <Link href='/auth/sign-in' className='font-bold'>
+        <Link href='/sign-in' className='font-bold'>
           Sign In
         </Link>
       </p>
