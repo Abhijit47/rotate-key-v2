@@ -70,7 +70,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   // );
   return (
     <NextIntlClientProvider>
-      <html lang='en' suppressHydrationWarning>
+      <html lang={locale} suppressHydrationWarning>
         <body
           className={`${poppins.variable} ${baumans.variable} ${freehand.variable} antialiased relative`}>
           <ThemeProvider

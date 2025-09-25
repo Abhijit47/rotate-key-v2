@@ -167,6 +167,107 @@
   --tracking-wide: calc(var(--tracking-normal) + 0.025em);
   --tracking-wider: calc(var(--tracking-normal) + 0.05em);
   --tracking-widest: calc(var(--tracking-normal) + 0.1em);
+
+  /* Custom properties */
+  --font-primary: 'Poppins', sans-serif;
+  --font-secondary: 'Baumans', 'serif';
+  --font-tertiary: 'Freehand', sans-serif;
+
+  --color-primary-50: #ddfdec;
+  --color-primary-100: #c0fcdc;
+  --color-primary-200: #7df8b6;
+  --color-primary-300: #3ef493;
+  --color-primary-400: #0de371;
+  --color-primary-500: #09a350;
+  --color-primary-600: #078241;
+  --color-primary-700: #056130;
+  --color-primary-800: #033f1f;
+  --color-primary-900: #022211;
+  --color-primary-950: #010e07;
+
+  --color-secondary-50: #ebebeb;
+  --color-secondary-100: #d6d6d6;
+  --color-secondary-200: #adadad;
+  --color-secondary-300: #858585;
+  --color-secondary-400: #5c5c5c;
+  --color-secondary-500: #333333;
+  --color-secondary-600: #292929;
+  --color-secondary-700: #1f1f1f;
+  --color-secondary-800: #141414;
+  --color-secondary-900: #0a0a0a;
+  --color-secondary-950: #050505;
+
+  --color-tertiary-50: #fcfcfc;
+  --color-tertiary-100: #fafafa;
+  --color-tertiary-200: #f7f7f7;
+  --color-tertiary-300: #f2f2f2;
+  --color-tertiary-400: #ededed;
+  --color-tertiary-500: #e9e9e9;
+  --color-tertiary-600: #bababa;
+  --color-tertiary-700: #8c8c8c;
+  --color-tertiary-800: #5e5e5e;
+  --color-tertiary-900: #2e2e2e;
+  --color-tertiary-950: #171717;
+
+  --color-brandRed-50: #feecec;
+  --color-brandRed-100: #fcd9d9;
+  --color-brandRed-200: #f9b3b3;
+  --color-brandRed-300: #f78d8d;
+  --color-brandRed-400: #f46767;
+  --color-brandRed-500: #f13e3e;
+  --color-brandRed-600: #e41111;
+  --color-brandRed-700: #ab0c0c;
+  --color-brandRed-800: #720808;
+  --color-brandRed-900: #390404;
+  --color-brandRed-950: #1d0202;
+
+  --color-brandYellow-50: #ffffe5;
+  --color-brandYellow-100: #feffcc;
+  --color-brandYellow-200: #fdff99;
+  --color-brandYellow-300: #fcff66;
+  --color-brandYellow-400: #fcff33;
+  --color-brandYellow-500: #faff00;
+  --color-brandYellow-600: #c9cc00;
+  --color-brandYellow-700: #969900;
+  --color-brandYellow-800: #646600;
+  --color-brandYellow-900: #323300;
+  --color-brandYellow-950: #191900;
+
+  --color-brandBlue-50: #d2eafe;
+  --color-brandBlue-100: #a5d5fd;
+  --color-brandBlue-200: #47aafa;
+  --color-brandBlue-300: #067ee0;
+  --color-brandBlue-400: #034981;
+  --color-brandBlue-500: #011627;
+  --color-brandBlue-600: #01111e;
+  --color-brandBlue-700: #010e19;
+  --color-brandBlue-800: #00080f;
+  --color-brandBlue-900: #00060a;
+  --color-brandBlue-950: #000305;
+
+  --gradient-radial: radial-gradient(var(--tw-gradient-stops));
+  --gradient-conic: conic-gradient(
+    from 180deg at 50% 50%,
+    var(--tw-gradient-stops)
+  );
+  --gradient-linear-b: linear-gradient(to bottom, var(--tw-gradient-stops));
+  --gradient-linear-t: linear-gradient(to top, var(--tw-gradient-stops));
+  --gradient-linear-l: linear-gradient(to left, var(--tw-gradient-stops));
+  --gradient-linear-r: linear-gradient(to right, var(--tw-gradient-stops));
+  --gradient-linear-tl: linear-gradient(to top left, var(--tw-gradient-stops));
+  --gradient-linear-tr: linear-gradient(to top right, var(--tw-gradient-stops));
+  --gradient-linear-bl: linear-gradient(
+    to bottom left,
+    var(--tw-gradient-stops)
+  );
+  --gradient-linear-br: linear-gradient(
+    to bottom right,
+    var(--tw-gradient-stops)
+  );
+}
+
+html {
+  scroll-behavior: auto;
 }
 
 body {
@@ -291,4 +392,62 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@layer components {
+  .btn-gradient {
+    @apply bg-gradient-to-r from-[#4C68D7] via-[#CD486B] to-[#FBAD50];
+  }
+
+  .linear-gradient1 {
+    /* 
+    Linear Gradient
+    #FFFFFF
+    #EAFFF4 
+    */
+    @apply bg-gradient-to-r from-[#FFFFFF] to-[#EAFFF4];
+  }
+
+  .linear-gradient2 {
+    /*
+    linear-gradient: 
+    #09A35000
+    #09A35000
+    */
+    @apply bg-gradient-to-r from-[#09A35000] to-[#09A35000];
+  }
+}
+
+@layer utilities {
+  .filter-none {
+    filter: none;
+  }
+
+  .filter-grayscale {
+    filter: grayscale(100%);
+  }
+}
+
+.react-international-phone-input {
+  @apply w-full;
+}
+
+.cl-internal-1dauvpw {
+  display: none;
+}
+
+.rnf-notification-feed__knock-branding {
+  display: none;
+}
+
+.rdp-root {
+  --rdp-accent-color: #09a350;
+  /* Change the accent color to indigo. */
+  --rdp-accent-background-color: #f0f0f0;
+  /* Change the accent background color. */
+  /* Add more CSS variables here. */
+}
+
+.rdp-root > .rdp-months > .rdp-month > .rdp-month_grid > .rdp-weeks {
+  /* border-radius: 100px !important; */
 }
