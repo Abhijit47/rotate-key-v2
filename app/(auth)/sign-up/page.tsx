@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 import RegistrationFormStep from '@/components/forms/sign-up/RegistrationFormStep';
 import SignUpFormProvider from '@/components/forms/sign-up/SignUpFormProvider';
-import { AuthContextProvider } from '@/contexts/AuthContext';
+import { AuthContextProvider } from '@/contexts/auth-context';
 import SignUpImagePNG from '@/public/sign-up/sign-up.png';
 import SignUpImageSVG from '@/public/sign-up/sign-up.svg';
 import { currentUser } from '@clerk/nextjs/server';

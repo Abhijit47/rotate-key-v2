@@ -2,7 +2,7 @@ import ForgotPasswordFormProvider from '@/components/forms/forgot-password/Forgo
 import ForgotPasswordFormStep from '@/components/forms/forgot-password/ForgotPasswordFormStep';
 import SectionOverlay from '@/components/shared/SectionOverlay';
 import SectionWrapper from '@/components/shared/SectionWrapper';
-import { AuthContextProvider } from '@/contexts/AuthContext';
+import { AuthContextProvider } from '@/contexts/auth-context';
 import SignUpImagePNG from '@/public/sign-up/sign-up.png';
 import SignUpImageSVG from '@/public/sign-up/sign-up.svg';
 import { currentUser } from '@clerk/nextjs/server';

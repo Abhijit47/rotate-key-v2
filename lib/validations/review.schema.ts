@@ -1,0 +1,28 @@
+import { z } from 'zod/v4';
+
+export const reviewFormSchema = z.object({
+  title: z
+    .string()
+    .min(1, 'Title must be at least 1 character long')
+    .max(100, 'Title must be at most 100 characters long'),
+  rating: z.coerce
+    .number()
+    .int()
+    .positive()
+    .superRefine((value, ctx) => {
+      if (value < 1 || value > 5) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Rating must be between 1 and 5',
+        });
+        return false;
+      }
+      return true;
+    }),
+  description: z
+    .string()
+    .min(1, 'Description must be at least 1 character long')
+    .max(1000, 'Description must be at most 1000 characters long'),
+});
+
+export type ReviewFormValues = z.infer<typeof reviewFormSchema>;
