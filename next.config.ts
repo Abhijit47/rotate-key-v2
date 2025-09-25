@@ -4,7 +4,7 @@ const isDev = process.env.NODE_ENV === 'development' ? false : true;
 
 const nextConfig: NextConfig = {
   /* config options here */
-experimental: {
+  experimental: {
     globalNotFound: true,
     optimizePackageImports: [
       '@clerk/nextjs',
