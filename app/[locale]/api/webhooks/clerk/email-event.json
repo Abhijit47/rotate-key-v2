@@ -1,0 +1,49 @@
+{
+  "data": {
+    "body": "",
+    "data": {
+      "app": {
+        "domain_name": "superb.bluegill-93.lcl.dev",
+        "logo_image_url": "",
+        "logo_url": null,
+        "name": "next-property",
+        "url": "https://superb-bluegill-93.accounts.dev"
+      },
+      "browser_name": "Chrome",
+      "device_type": "Windows",
+      "ip_address": "103.217.231.233",
+      "location": "Bālurghāt, IN",
+      "operating_system": "Windows",
+      "revoke_session_url": "",
+      "session_created_at": "August 31, 02:18PM +0000",
+      "sign_in_method": "Password",
+      "support_email": "",
+      "theme": {
+        "button_text_color": "#ffffff",
+        "primary_color": "#6c47ff",
+        "show_clerk_branding": true
+      }
+    },
+    "delivered_by_clerk": true,
+    "email_address_id": "idn_323VQ89BdBZf63kigszVDBz62vV",
+    "from_email_name": "noreply",
+    "id": "ema_323Wni8lVDRTnemlsDKxVqhfVhU",
+    "object": "email",
+    "reply_to_email_name": null,
+    "slug": "new_device_sign_in",
+    "status": "queued",
+    "subject": "[Development] New device signed in to your next-property account\n",
+    "to_email_address": "trudie_gottlieb@gmail.com",
+    "user_id": "user_323VQ3gso4kwLXVkV4pUE0yQCia"
+  },
+  "event_attributes": {
+    "http_request": {
+      "client_ip": null,
+      "user_agent": null
+    }
+  },
+  "instance_id": "ins_320TZkpHa2FYmcojJyW1GBX5viD",
+  "object": "event",
+  "timestamp": 1756649904293,
+  "type": "email.created"
+}
