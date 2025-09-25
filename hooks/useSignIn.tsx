@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form';
 // } from '@clerk/nextjs/errors'
 
 // import { ClerkAPIResponseError, isClerkAPIResponseError } from '@clerk/shared';
-import { signInWithCredentials } from '@/lib/actions/auth.actions';
+import { signInWithCredentials } from '@/lib/auth.actions';
 import { isClerkAPIResponseError } from '@clerk/shared';
 import { OAuthStrategy } from '@clerk/types';
 import { toast } from 'sonner';

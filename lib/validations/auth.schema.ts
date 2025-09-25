@@ -26,7 +26,7 @@ export const UserRegistrationSchema: ZodType<UserRegistrationProps> = z
     fullName: z
       .string()
       .min(4, { message: 'your full name must be atleast 4 characters long' }),
-    email: z.string().email({ message: 'Incorrect email format' }),
+    email: z.email({ message: 'Incorrect email format' }),
     password: z
       .string()
       .min(8, { message: 'Your password must be atleast 8 characters long' })
@@ -59,7 +59,7 @@ export const UserRegistrationSchema: ZodType<UserRegistrationProps> = z
 // });
 
 export const UserLoginSchema: ZodType<UserLoginProps> = z.object({
-  email: z.string().email({ message: 'You did not enter a valid email' }),
+  email: z.email({ message: 'You did not enter a valid email' }),
   password: z
     .string()
     .min(8, { message: 'Your password must be atleast 8 characters long' })
@@ -101,7 +101,7 @@ export const SignUpCompleteSchema = z.object({
 
 export const ForgotPasswordSchema = z
   .object({
-    email: z.string().email({ message: 'Incorrect email format' }),
+    email: z.email({ message: 'Incorrect email format' }),
     password: z
       .string()
       .min(8, { message: 'Your password must be atleast 8 characters long' })

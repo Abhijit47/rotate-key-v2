@@ -1,4 +1,4 @@
-import { signUpWithCredentials } from '@/lib/actions/auth.actions';
+import { signUpWithCredentials } from '@/lib/auth.actions';
 import {
   UserRegistrationSchema,
   UserRegistrationValues,
