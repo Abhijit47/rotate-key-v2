@@ -9,15 +9,13 @@ export const reviewFormSchema = z.object({
     .number()
     .int()
     .positive()
-    .superRefine((value, ctx) => {
-      if (value < 1 || value > 5) {
+    .superRefine((arg, ctx) => {
+      if (arg < 1 || arg > 5) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: 'Rating must be between 1 and 5',
         });
-        return false;
       }
-      return true;
     }),
   description: z
     .string()

@@ -3,13 +3,13 @@ import { z } from 'zod';
 export const appointmentSchema = z
   .object({
     startDate: z.coerce.date({
-      required_error: 'A start date is required.',
+      error: 'A start date is required.',
     }),
     endDate: z.coerce.date({
-      required_error: 'An end date is required.',
+      error: 'An end date is required.',
     }),
     guests: z.enum(['active', 'paused', 'delayed', 'cancelled'], {
-      required_error: 'A guests is required.',
+      error: 'A guests is required.',
     }),
   })
   .superRefine((data, ctx) => {
