@@ -62,7 +62,7 @@ export default function Navbar() {
     // { href: '/matches', label: 'Matches' },
     // { href: '/my-properties', label: 'My Properties' },
     // { href: '/my-matches', label: 'My Matches' },
-    { href: '/profile', label: 'Profile' },
+    // { href: '/profile', label: 'Profile' },
     { href: '/pricing', label: 'Pricing' },
     // { href: '/chat', label: 'Live Chat' },
     // { href: '/admin', label: 'Admin' },
