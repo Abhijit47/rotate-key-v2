@@ -4,6 +4,12 @@ import HowItWorksCTA from './_components/HowItWorksCTA';
 import HowItWorksSteps from './_components/HowItWorksSteps';
 import WhyTurnKeys from './_components/WhyTurnKeys';
 
+import { routing } from '@/i18n/routing';
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export default function HowItWorksPage() {
   // await new Promise((resolve) => setTimeout(resolve, 1200));
 

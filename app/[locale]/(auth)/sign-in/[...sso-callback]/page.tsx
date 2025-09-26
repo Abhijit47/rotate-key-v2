@@ -1,6 +1,12 @@
 import { AuthenticateWithRedirectCallback } from '@clerk/nextjs';
 import { Loader2 } from 'lucide-react';
 
+import { routing } from '@/i18n/routing';
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export default function SSOCallback() {
   // Handle the redirect flow by rendering the
   // prebuilt AuthenticateWithRedirectCallback component.

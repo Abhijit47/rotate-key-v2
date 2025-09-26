@@ -5,9 +5,14 @@
 // import { AboutCounter } from '@/components/dynamic';
 import FAQSection from '@/components/shared/FAQSection';
 import SectionBanner from '@/components/shared/SectionBanner';
+import { routing } from '@/i18n/routing';
 import AboutInfo from './_components/AboutInfo';
 import CustomerFeedback from './_components/CustomerFeedback';
 import OurTeams from './_components/OurTeams';
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 
 export default function AboutPage() {
   // await new Promise((resolve) => setTimeout(resolve, 1200));

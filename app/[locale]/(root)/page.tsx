@@ -22,6 +22,12 @@ import ReadyToSwap from '@/components/home/ReadyToSwap';
 //   'user_32Km5PH0di3nRVeexhfEAkqxh33'
 // ]
 
+import { routing } from '@/i18n/routing';
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export default function Home() {
   // serverClient
   //   .deleteUser('user_32Km5PH0di3nRVeexhfEAkqxh33')

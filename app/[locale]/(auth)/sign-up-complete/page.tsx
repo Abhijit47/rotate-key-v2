@@ -10,13 +10,19 @@ import SignUpImageSVG from '@/public/sign-up/sign-up.svg';
 // import { currentUser, User } from '@clerk/nextjs/server';
 import { Metadata } from 'next';
 
+import { routing } from '@/i18n/routing';
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export const metadata: Metadata = {
   title: 'Rotate Key | Sign Up Complete',
   description:
     "Unlock the Door to Your Next Adventure with Rotate Keys. Rotate Keys is not just a platform; it's a community of like-minded individuals sharing the joy of exploration and discovery. Your dream house swap is just a click away.",
 };
 
-export default async function SignUpComplete() {
+export default function SignUpComplete() {
   // const user = (await currentUser()) as User;
 
   // const email = user.emailAddresses[0].emailAddress;

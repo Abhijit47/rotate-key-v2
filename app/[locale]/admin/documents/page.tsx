@@ -9,6 +9,12 @@ import RevalidateData from '../_components/revalidate-data';
 import UploadDocumentsLoader from './_components/upload-documents-loader';
 import UploadedDocuments from './_components/uploaded-documents-card';
 
+import { routing } from '@/i18n/routing';
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export default function DocumentsPage() {
   return (
     <div className={'px-8 space-y-6'}>

@@ -14,6 +14,12 @@ import { Suspense } from 'react';
 import MyMatchesCard from './_components/my-matches-card';
 // import SwapUnswapButtons from './_components/swap-unswap-buttons';
 
+import { routing } from '@/i18n/routing';
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export default function MyMatches() {
   return (
     <div className={'container mx-auto max-w-7xl px-4 2xl:px-0 py-8 space-y-8'}>

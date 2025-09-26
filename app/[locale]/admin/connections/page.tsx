@@ -9,6 +9,12 @@ import RevalidateData from '../_components/revalidate-data';
 import ConnectionsListTable from './_components/connections-list-table';
 import ConnectionsTableRowLoader from './_components/connections-table-loader';
 
+import { routing } from '@/i18n/routing';
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export default function ConnectionsPage() {
   return (
     <div className={'px-8 space-y-6'}>

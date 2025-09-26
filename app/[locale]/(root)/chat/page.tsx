@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Link } from '@/i18n/navigation';
 import { getUserMatchesV2 } from '@/lib/user-matches';
 import {
   CalendarClock,
@@ -19,9 +20,14 @@ import {
   Video,
   X,
 } from 'lucide-react';
-import { Link } from '@/i18n/navigation';
 import { Suspense } from 'react';
 // import TestSwpping from './[userId]/_components/test-swpping';
+
+import { routing } from '@/i18n/routing';
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 
 export default function ChatPage() {
   return (

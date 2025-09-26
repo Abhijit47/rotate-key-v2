@@ -10,6 +10,12 @@ import RevalidateData from '../_components/revalidate-data';
 import PropertiesListTable from './_components/properties-list-table';
 import PropertyTableRowLoader from './_components/property-table-loader';
 
+import { routing } from '@/i18n/routing';
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export default function PropertiesPage() {
   return (
     <div className={'px-8 space-y-6'}>

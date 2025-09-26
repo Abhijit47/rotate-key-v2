@@ -10,6 +10,12 @@ import RevalidateData from '../_components/revalidate-data';
 import UserListLoader from './_components/user-list-loader';
 import UsersList from './_components/users-lists';
 
+import { routing } from '@/i18n/routing';
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export default function UsersPage() {
   return (
     <div className={'px-8 space-y-6'}>

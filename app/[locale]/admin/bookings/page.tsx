@@ -9,6 +9,12 @@ import RevalidateData from '../_components/revalidate-data';
 import BookingTableRowLoader from './_components/booking-table-loader';
 import BookingsListTable from './_components/bookings-list-table';
 
+import { routing } from '@/i18n/routing';
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export default function BookingsPage() {
   return (
     <div className={'px-8 space-y-6'}>

@@ -5,6 +5,12 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
+import { routing } from '@/i18n/routing';
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export default function SettingsPage() {
   return (
     <div className={'px-8 space-y-6'}>

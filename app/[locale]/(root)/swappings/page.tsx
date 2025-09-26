@@ -6,6 +6,12 @@ import MyPreferenceBasedPropertiesLoader from './_components/my-preference-based
 import PreferenceLoader from './_components/preference-loader';
 import UserPreferenceCard from './_components/user-preference-card';
 
+import { routing } from '@/i18n/routing';
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export const revalidate = 3600; // 1 hour
 
 export default function SwappingsPage() {

@@ -9,6 +9,12 @@ import RevalidateData from '../_components/revalidate-data';
 import SwapListTable from './_components/swap-list-table';
 import SwapTableRowLoader from './_components/swap-table-loader';
 
+import { routing } from '@/i18n/routing';
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export default function SwappingListsPage() {
   return (
     <div className={'px-8 space-y-6'}>
