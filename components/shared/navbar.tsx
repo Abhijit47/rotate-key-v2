@@ -13,11 +13,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 import { SignedOut } from '@clerk/nextjs';
 import { BellOff } from 'lucide-react';
-import { Link } from '@/i18n/navigation';
-import { usePathname } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
+import { useSelectedLayoutSegment } from 'next/navigation';
 import { useState } from 'react';
 import CustomUserButton from './custom-user-button';
 import LanguageSwitcher from './language-switcher';
@@ -32,23 +33,14 @@ import { ThemeModeToggle } from './theme-mode-toggle';
 // };
 
 // Navigation links array to be used in both desktop and mobile menus
-const navigationLinks = [
-  { href: '/', label: 'Home', active: true },
-  { href: '/about', label: 'About' },
-  { href: '/swappings', label: 'Swappings' },
-  { href: '/how-it-works', label: 'How it works' },
-  // { href: '/matches', label: 'Matches' },
-  // { href: '/my-properties', label: 'My Properties' },
-  // { href: '/my-matches', label: 'My Matches' },
-  { href: '/profile', label: 'Profile' },
-  { href: '/pricing', label: 'Pricing' },
-  // { href: '/chat', label: 'Live Chat' },
-  // { href: '/admin', label: 'Admin' },
-];
 
 export default function Navbar() {
-  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const selectedLayoutSegment = useSelectedLayoutSegment();
+  const locale = useLocale();
+  const t = useTranslations();
+  const pathname = selectedLayoutSegment ? `/${selectedLayoutSegment}` : '/';
 
   // Regex to match /chat/[userId] paths
   const chatSlugRegex = /^\/chat\/[^/]+$/;
@@ -61,6 +53,20 @@ export default function Navbar() {
   if (pathname && pricingSlugRegex.test(pathname)) {
     return null;
   }
+
+  const navigationLinks = [
+    { href: '/', label: `${t('home')}`, active: true },
+    { href: '/about', label: `${t('about')}` },
+    { href: '/swappings', label: 'Swappings' },
+    { href: '/how-it-works', label: 'How it works' },
+    // { href: '/matches', label: 'Matches' },
+    // { href: '/my-properties', label: 'My Properties' },
+    // { href: '/my-matches', label: 'My Matches' },
+    { href: '/profile', label: 'Profile' },
+    { href: '/pricing', label: 'Pricing' },
+    // { href: '/chat', label: 'Live Chat' },
+    // { href: '/admin', label: 'Admin' },
+  ];
 
   function toggleMenu() {
     setIsOpen((prev) => !prev);
@@ -110,9 +116,11 @@ export default function Navbar() {
                         <NavigationMenuLink
                           asChild
                           className='py-1.5'
-                          active={pathname === link.href}
+                          active={pathname === link.href || pathname === t.name}
                           onClick={toggleMenu}>
-                          <Link href={link.href}>{link.label}</Link>
+                          <Link href={link.href} locale={locale}>
+                            {link.label}
+                          </Link>
                         </NavigationMenuLink>
                       </NavigationMenuItem>
                     ))}
@@ -129,20 +137,25 @@ export default function Navbar() {
             {/* Navigation menu */}
             <NavigationMenu className='h-full *:h-full max-md:hidden'>
               <NavigationMenuList className='h-full gap-2'>
-                {navigationLinks.map((link, index) => (
-                  <NavigationMenuItem key={index} className='h-full'>
-                    <NavigationMenuLink
-                      active={pathname === link.href}
-                      asChild
-                      className={cn(
-                        pathname === link.href &&
-                          'text-muted-foreground hover:text-primary border-b-primary hover:border-b-primary data-[active]:border-b-primary',
-                        'h-full justify-center rounded-none border-y-2 border-transparent py-1.5 font-medium hover:bg-transparent data-[active]:bg-transparent!'
-                      )}>
-                      <Link href={link.href}>{link.label}</Link>
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                ))}
+                {navigationLinks.map((link, index) => {
+                  const isActive = pathname === link.href;
+                  return (
+                    <NavigationMenuItem key={index} className='h-full'>
+                      <NavigationMenuLink
+                        active={isActive}
+                        asChild
+                        className={cn(
+                          pathname === link.href &&
+                            'text-muted-foreground hover:text-primary border-b-primary hover:border-b-primary data-[active]:border-b-primary',
+                          'h-full justify-center rounded-none border-y-2 border-transparent py-1.5 font-medium hover:bg-transparent data-[active]:bg-transparent!'
+                        )}>
+                        <Link href={link.href} locale={locale}>
+                          {link.label}
+                        </Link>
+                      </NavigationMenuLink>
+                    </NavigationMenuItem>
+                  );
+                })}
               </NavigationMenuList>
             </NavigationMenu>
           </div>
@@ -160,10 +173,14 @@ export default function Navbar() {
           <CustomUserButton />
           <SignedOut>
             <Button asChild variant='ghost' size='sm' className='text-sm'>
-              <Link href='/sign-in'>Sign In</Link>
+              <Link href='/sign-in' locale={locale}>
+                Sign In
+              </Link>
             </Button>
             <Button asChild size='sm' className='text-sm'>
-              <Link href='/sign-up'>Get Started</Link>
+              <Link href='/sign-up' locale={locale}>
+                Get Started
+              </Link>
             </Button>
           </SignedOut>
         </div>

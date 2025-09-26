@@ -2,10 +2,10 @@ import { defineRouting } from 'next-intl/routing';
 
 export const routing = defineRouting({
   // A list of all locales that are supported
-  locales: ['en-IN', 'bn-IN', 'es'],
+  locales: ['en', 'bn-IN'],
 
   // Used when no locale matches
-  defaultLocale: 'en-IN',
+  defaultLocale: 'en',
   // GDPR compliance
   localeCookie: {
     // Expire the cookie after 1 year
