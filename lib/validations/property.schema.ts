@@ -9,7 +9,7 @@ import {
 } from '@/constants';
 import { emailRegex, validatePostalCode } from '@/lib/helpers';
 import libphonenumber from 'google-libphonenumber';
-import { z } from 'zod/v4';
+import { z } from 'zod';
 
 const phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
 
