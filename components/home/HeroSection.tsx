@@ -2,7 +2,7 @@ import HeroBGPNG from '@/public/home/hero.png';
 import HeroBGSVG from '@/public/home/hero.svg';
 import HeroGraphic from '@/public/home/Waves.png';
 import Image from 'next/image';
-import { HeroSearch, KeyWordTags } from '../dynamic';
+import { LazyHeroSearch, LazyKeyWordTags } from '../dynamic';
 import SectionContextWrapper from '../shared/SectionContextWrapper';
 import SectionDescription from '../shared/SectionDescription';
 import SectionWrapper from '../shared/SectionWrapper';
@@ -43,7 +43,7 @@ export default function HeroSection() {
             </SectionDescription>
 
             {/* <PropertyFilter /> */}
-            <HeroSearch />
+            <LazyHeroSearch />
           </div>
 
           <div className='relative flex justify-end'>
@@ -62,7 +62,7 @@ export default function HeroSection() {
               className={
                 'h-16 w-fit absolute bottom-16 right-10 xl:left-10 z-10'
               }>
-              <KeyWordTags />
+              <LazyKeyWordTags />
             </div>
           </div>
         </div>

@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import { whyTurnKeys } from '@/constants';
 import Image from 'next/image';
 
@@ -51,6 +52,8 @@ export default function WhyTurnKeys() {
                   />
                 </AspectRatio>
               </CardContent>
+
+              <Separator />
 
               <CardHeader>
                 <CardTitle>{item.title}</CardTitle>

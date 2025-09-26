@@ -1,10 +1,10 @@
-import FAQSection from '@/components/shared/FAQSection';
 import SectionBanner from '@/components/shared/SectionBanner';
 import HowItWorksCTA from './_components/HowItWorksCTA';
 import HowItWorksSteps from './_components/HowItWorksSteps';
 import WhyTurnKeys from './_components/WhyTurnKeys';
 
 import { routing } from '@/i18n/routing';
+import FAQSection from './_components/FAQSection';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

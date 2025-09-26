@@ -1,5 +1,6 @@
 import SectionBadge from '@/components/shared/SectionBadge';
 import SectionWrapper from '@/components/shared/SectionWrapper';
+import { Card } from '@/components/ui/card';
 import { howItWorksSteps } from '@/constants';
 import { Link } from '@/i18n/navigation';
 import {
@@ -7,6 +8,7 @@ import {
   FootprintsIcon,
   SquareArrowOutUpRightIcon,
 } from 'lucide-react';
+import { useLocale } from 'next-intl';
 // import {
 //   HiOutlineArrowTopRightOnSquare,
 //   HiOutlineCheckCircle,
@@ -14,17 +16,19 @@ import {
 // import { IoFootstepsOutline } from 'react-icons/io5';
 
 export default function HowItWorksSteps() {
+  const locale = useLocale();
+
   return (
     <section className={''}>
       <SectionWrapper>
-        <div className='bg-primary-50 dark:bg-primary-700/30 space-y-8 md:space-y-12 lg:space-y-16 py-8 md:py-10 lg-py-12'>
+        <Card className='bg-primary-50 dark:bg-primary-600/30 space-y-8 md:space-y-12 lg:space-y-16 py-8 md:py-10 lg-py-12'>
           <div className='space-y-4 md:space-y-6 lg:space-y-8'>
             <SectionBadge
               align='center'
-              className={'bg-primary-400 text-tertiary-50'}>
+              className={'bg-primary-400 dark:bg-primary-600 text-tertiary-50'}>
               How to begin your journey?
             </SectionBadge>
-            <h2 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold text-center'>
+            <h2 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold text-center text-foreground'>
               Steps to House Swapping
             </h2>
           </div>
@@ -33,6 +37,7 @@ export default function HowItWorksSteps() {
             <div className='ring-1 ring-primary-500 aspect-square inline-grid w-full h-full place-items-center content-center rounded-full'>
               <Link
                 href={'/sign-up'}
+                locale={locale}
                 className={
                   'inline-grid text-center place-items-center content-center gap-2'
                 }>
@@ -69,7 +74,7 @@ export default function HowItWorksSteps() {
                     }>
                     <h3
                       className={
-                        'text-lg lg:text-xl font-semibold inline-flex items-center gap-2'
+                        'text-lg lg:text-xl text-foreground font-semibold inline-flex items-center gap-2'
                       }>
                       <span>
                         <FootprintsIcon
@@ -84,7 +89,7 @@ export default function HowItWorksSteps() {
                           <li
                             key={item.id}
                             className={
-                              'text-sm inline-flex items-center gap-1'
+                              'text-sm inline-flex items-center gap-1 text-muted-foreground'
                             }>
                             <span>
                               <CheckCircle2Icon
@@ -105,7 +110,7 @@ export default function HowItWorksSteps() {
               ))}
             </div>
           </div>
-        </div>
+        </Card>
       </SectionWrapper>
     </section>
   );

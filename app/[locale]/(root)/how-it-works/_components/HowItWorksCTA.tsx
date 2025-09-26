@@ -1,9 +1,9 @@
 import SectionWrapper from '@/components/shared/SectionWrapper';
 // import HOWITWORKSCTABG2 from '@/public/how-it-works/cta.png';
+import { Link } from '@/i18n/navigation';
 import HOWITWORKSCTABG from '@/public/how-it-works/how-it-works-cta.jpg';
 import { ArrowRightIcon } from 'lucide-react';
 import Image from 'next/image';
-import { Link } from '@/i18n/navigation';
 // import { HiArrowRight } from 'react-icons/hi2';
 
 export default function HowItWorksCTA() {
@@ -58,7 +58,7 @@ export default function HowItWorksCTA() {
                   'bg-gradient-to-b from-secondary-500 to-secondary-600 absolute inset-0 h-full w-full opacity-65'
                 }></div>
             </div>
-            <div className='absolute inset-0 z-[100] aspect-square h-full w-full bg-gradient-to-t from-emerald-600 via-primary-500 to-emerald-600 [clip-path:polygon(70%_0%,_100%_0%,_100%_100%,_50%_100%)]'>
+            <div className='absolute inset-0 -z-10 aspect-square h-full w-full bg-gradient-to-t from-emerald-600 via-primary-500 to-emerald-600 [clip-path:polygon(70%_0%,_100%_0%,_100%_100%,_50%_100%)]'>
               &nbsp;
             </div>
 
@@ -80,7 +80,7 @@ export default function HowItWorksCTA() {
                   money efficient
                 </p>
               </div>
-              <p className='col-span-3 text-tertiary-50 font-semibold text-xs sm:text-sm md:text-base lg:text-lg lg:col-span-1 px-4 lg:px-0 backdrop-blur-sm rounded-md p-2 lg:p-4'>
+              <p className='col-span-3 text-tertiary-50 font-semibold text-xs sm:text-sm md:text-base lg:text-lg lg:col-span-1 px-4 lg:px-0 backdrop-blur-sm rounded-md p-2 lg:p-4 -z-10'>
                 Introducing Turn Keys Cost Escapes, where we offers numerous
                 benefits, including cost saving, cultural immersion, and
                 flexibility. It enables individuals to experience a new way of

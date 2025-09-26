@@ -607,7 +607,7 @@ export const faqs = [
     id: crypto.randomUUID(),
     question: 'How to create an account?',
     answer:
-      'To create an account, find the &lsquo;Sign up&rsquo; or &lsquo;Create account&rsquo; button, fill out the registration form with your personal information, and click &lsquo;Create account&rsquo; or &lsquo;Sign up.&rsquo; Verify your email address if needed, and then log in to start using the platform.',
+      'To create an account, find the "Sign up" or "Create account" button, fill out the registration form with your personal information, and click "Create account" or "Sign up". Verify your email address if needed, and then log in to start using the platform.',
   },
   {
     id: crypto.randomUUID(),

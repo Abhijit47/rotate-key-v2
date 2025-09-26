@@ -1,9 +1,4 @@
-// import { useSignUp, useUser } from '@clerk/nextjs';
-// import { useRouter, useSearchParams } from 'next/navigation';
-// import { useEffect, useState } from 'react';
-
-// import { AboutCounter } from '@/components/dynamic';
-import FAQSection from '@/components/shared/FAQSection';
+import FAQSection from '@/app/[locale]/(root)/about/_components/FAQSection';
 import SectionBanner from '@/components/shared/SectionBanner';
 import { routing } from '@/i18n/routing';
 import AboutInfo from './_components/AboutInfo';
@@ -15,8 +10,6 @@ export function generateStaticParams() {
 }
 
 export default function AboutPage() {
-  // await new Promise((resolve) => setTimeout(resolve, 1200));
-
   return (
     <main
       className={
@@ -26,7 +19,7 @@ export default function AboutPage() {
         description='"From Registration to Adventure - A Seamless Experience
                     Awaits You"'
         buttonText='Create your account for free'
-        buttonLink='#'>
+        buttonLink='/sign-in'>
         <span className={'text-primary-500'}>Rotate Keys</span>
         <span className={'text-tertiary-50'}> : About Us</span>
       </SectionBanner>

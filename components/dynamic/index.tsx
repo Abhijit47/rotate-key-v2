@@ -3,16 +3,19 @@
 import dynamic from 'next/dynamic';
 import DynamicLoader from '../shared/DynamicLoader';
 
-export const HeroSearch = dynamic(() => import('../shared/PropertyFilter'), {
-  ssr: false,
-  loading: () => (
-    <div className={''}>
-      <DynamicLoader />
-    </div>
-  ),
-});
+export const LazyHeroSearch = dynamic(
+  () => import('../shared/PropertyFilter'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className={'inline-grid place-items-center content-center'}>
+        <DynamicLoader />
+      </div>
+    ),
+  }
+);
 
-export const KeyWordTags = dynamic(() => import('../home/KeywordTags'), {
+export const LazyKeyWordTags = dynamic(() => import('../home/KeywordTags'), {
   ssr: false,
   loading: () => (
     <div className={'absolute bottom-16 left-10 translate-y-1/2'}>
@@ -33,15 +36,6 @@ export const TrendingHomeCarousel = dynamic(
     loading: () => <DynamicLoader />,
   }
 );
-
-// export const FAQs = dynamic(() => import('../ui/FAQs'), {
-//   ssr: false,
-//   loading: () => (
-//     <div className={'inline-grid place-items-center content-center'}>
-//       <DynamicLoader />
-//     </div>
-//   ),
-// });
 
 // export const RoomsCategoryTab = dynamic(
 //   () => import('../shared/RoomsCategoryTab'),
@@ -86,14 +80,6 @@ export const CustomerFeedbackTestimonials = dynamic(
 
 // export const MyExchangeCarousel = dynamic(
 //   () => import('../../app/(root)/my-exchanges/_components/MyExchangeCarousel'),
-//   {
-//     ssr: false,
-//     loading: () => <DynamicLoader />,
-//   }
-// );
-
-// export const NewsLetterForm = dynamic(
-//   () => import('../../app/(root)/how-it-works/_components/NewsLetterForm'),
 //   {
 //     ssr: false,
 //     loading: () => <DynamicLoader />,
