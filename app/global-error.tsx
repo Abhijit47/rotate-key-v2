@@ -3,6 +3,9 @@
 import Error from 'next/error';
 // Error boundaries must be Client Components
 
+// Follow for more information:
+// https://next-intl.dev/docs/environments/error-files
+
 export default function GlobalError({
   error,
   reset,
