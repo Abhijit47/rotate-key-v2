@@ -1,3 +1,4 @@
+import { useRouter } from '@/i18n/navigation';
 import { signUpWithCredentials } from '@/lib/auth.actions';
 import {
   UserRegistrationSchema,
@@ -8,7 +9,8 @@ import { isClerkAPIResponseError } from '@clerk/shared';
 // import { ClerkAPIError } from '@clerk/types';
 // import { OAuthStrategy } from '@clerk/types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import { useLocale } from 'next-intl';
+// import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -19,6 +21,7 @@ export function useSignUpForm() {
   const { signUp, isLoaded, setActive } = useSignUp();
 
   const router = useRouter();
+  const locale = useLocale();
 
   const methods = useForm<UserRegistrationValues>({
     resolver: zodResolver(UserRegistrationSchema),
@@ -71,7 +74,7 @@ export function useSignUpForm() {
       }
       toast.error('An error occurred, please try again');
       setLoading(false);
-      router.replace('/auth/sign-up');
+      router.replace('/sign-up', { locale });
     }
   }
 
@@ -89,7 +92,7 @@ export function useSignUpForm() {
         if (completeSignUp.status !== 'complete') {
           toast.error('Something went wrong!');
           setLoading(false);
-          router.replace('/auth/sign-up');
+          router.replace('/sign-up', { locale });
         }
 
         if (completeSignUp.status === 'complete') {
@@ -115,13 +118,13 @@ export function useSignUpForm() {
               session: completeSignUp.createdSessionId,
             });
             setLoading(false);
-            router.push('/onboarding');
+            router.push('/onboarding', { locale });
           }
 
           if (result.status === 400) {
             toast.error('Something went wrong!');
             setLoading(false);
-            router.replace('/auth/sign-up');
+            router.replace('/sign-up', { locale });
             router.refresh();
           }
         }
@@ -135,7 +138,7 @@ export function useSignUpForm() {
         }
         toast.error('An error occurred, please try again');
         setLoading(false);
-        router.replace('/auth/sign-up');
+        router.replace('/sign-up', { locale });
         router.refresh();
       }
     }

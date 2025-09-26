@@ -1,3 +1,4 @@
+import { useRouter } from '@/i18n/navigation';
 import {
   ForgotPasswordSchema,
   ForgotPasswordValues,
@@ -5,7 +6,8 @@ import {
 import { useAuth, useSignIn } from '@clerk/nextjs';
 import { isClerkAPIResponseError } from '@clerk/nextjs/errors';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import { useLocale } from 'next-intl';
+// import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -31,6 +33,7 @@ export function useForgotPassword() {
   const router = useRouter();
   const { isSignedIn } = useAuth();
   const { isLoaded, signIn, setActive } = useSignIn();
+  const locale = useLocale();
 
   // If the user is already signed in,
   // redirect them to the home page
@@ -115,11 +118,11 @@ export function useForgotPassword() {
           // the newly created session (user is now signed in)
           setActive({ session: res.createdSessionId });
           setIsLoading(false);
-          router.push('/');
+          router.push('/', { locale });
         } else {
           toast.info(res.status);
           setIsLoading(false);
-          router.push('/auth/forgot-password');
+          router.push('/forgot-password', { locale });
         }
       } catch (error) {
         if (isClerkAPIResponseError(error)) {
@@ -131,7 +134,7 @@ export function useForgotPassword() {
         }
         toast.error('An error occurred, please try again');
         setIsLoading(false);
-        router.push('/auth/forgot-password');
+        router.push('/forgot-password', { locale });
       }
 
       if (isSecondFactor) {
@@ -163,7 +166,7 @@ export function useForgotPassword() {
       if (res.status === 'complete') {
         setActive({ session: res.createdSessionId });
         setIsLoading(false);
-        router.push('/');
+        router.push('/', { locale });
       }
     } catch (error) {
       if (isClerkAPIResponseError(error)) {
@@ -175,7 +178,7 @@ export function useForgotPassword() {
       }
       toast.error('An error occurred, please try again');
       setIsLoading(false);
-      router.push('/auth/forgot-password');
+      router.push('/forgot-password', { locale });
     }
   }
 

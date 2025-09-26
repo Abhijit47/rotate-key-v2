@@ -4,7 +4,7 @@ import {
 } from '@/lib/validations/auth.schema';
 import { useSignIn } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 // import { useToast } from '../use-toast';
@@ -17,15 +17,18 @@ import { useForm } from 'react-hook-form';
 // } from '@clerk/nextjs/errors'
 
 // import { ClerkAPIResponseError, isClerkAPIResponseError } from '@clerk/shared';
+import { useRouter } from '@/i18n/navigation';
 import { signInWithCredentials } from '@/lib/auth.actions';
 import { isClerkAPIResponseError } from '@clerk/shared';
 import { OAuthStrategy } from '@clerk/types';
+import { useLocale } from 'next-intl';
 import { toast } from 'sonner';
 
 export function useSignInForm() {
   const { isLoaded, setActive, signIn } = useSignIn();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
+  const locale = useLocale();
   const methods = useForm<UserLoginValues>({
     resolver: zodResolver(UserLoginSchema),
     defaultValues: {
@@ -54,7 +57,7 @@ export function useSignInForm() {
           if (result.status === 200) {
             await setActive({ session: authenticated.createdSessionId });
             toast.success('Welcome Back!');
-            router.push('/');
+            router.push('/', { locale });
           }
         }
       } catch (error) {
@@ -67,7 +70,7 @@ export function useSignInForm() {
         }
         toast.error('An error occurred, please try again');
         setLoading(false);
-        router.replace('/auth/sign-up');
+        router.replace('/sign-up', { locale });
         router.refresh();
       }
     }

@@ -1,8 +1,10 @@
 // import { ExchnageOAuthDetails } from '@/lib/actions/auth.actions';
 
+import { useRouter } from '@/i18n/navigation';
 import { useSignIn, useSignUp } from '@clerk/nextjs';
 import { OAuthStrategy } from '@clerk/types';
-import { useRouter } from 'next/navigation';
+import { useLocale } from 'next-intl';
+// import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export function useOAuthSignIn() {
@@ -12,6 +14,8 @@ export function useOAuthSignIn() {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const router = useRouter();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const locale = useLocale();
 
   // if (!signIn || !signUp) return null;
 
@@ -129,7 +133,7 @@ export function useOAuthSignIn() {
       setLoading(true);
       alert('signing in');
       signInWith(strategy);
-      // router.replace('/auth/sign-up');
+      // router.replace('/sign-up');
       // router.refresh();
       // setLoading(false);
     }

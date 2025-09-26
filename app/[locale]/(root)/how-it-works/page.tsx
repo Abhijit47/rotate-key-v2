@@ -19,7 +19,7 @@ export default function HowItWorksPage() {
         description='"From Registration to Adventure - A Seamless Experience
               Awaits You"'
         buttonText='Create your account for free'
-        buttonLink='/auth/sign-up'>
+        buttonLink='/sign-up'>
         <span className={'text-primary-500'}>Rotate Keys</span>
         <span className={'text-tertiary-50'}> : How does it works?</span>
       </SectionBanner>

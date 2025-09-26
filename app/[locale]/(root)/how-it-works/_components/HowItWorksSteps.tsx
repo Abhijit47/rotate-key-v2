@@ -1,12 +1,12 @@
 import SectionBadge from '@/components/shared/SectionBadge';
 import SectionWrapper from '@/components/shared/SectionWrapper';
 import { howItWorksSteps } from '@/constants';
+import { Link } from '@/i18n/navigation';
 import {
   CheckCircle2Icon,
   FootprintsIcon,
   SquareArrowOutUpRightIcon,
 } from 'lucide-react';
-import { Link } from '@/i18n/navigation';
 // import {
 //   HiOutlineArrowTopRightOnSquare,
 //   HiOutlineCheckCircle,
@@ -32,7 +32,7 @@ export default function HowItWorksSteps() {
           <div className='max-w-32 sm:max-w-40 md:max-w-48 lg:max-w-56 mx-auto relative'>
             <div className='ring-1 ring-primary-500 aspect-square inline-grid w-full h-full place-items-center content-center rounded-full'>
               <Link
-                href={'/auth/sign-up'}
+                href={'/sign-up'}
                 className={
                   'inline-grid text-center place-items-center content-center gap-2'
                 }>

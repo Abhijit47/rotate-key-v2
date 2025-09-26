@@ -64,7 +64,7 @@ export default function CTASection() {
 
           <div className='justify-self-center'>
             <Link
-              href='/auth/sign-up'
+              href='/sign-up'
               className='block px-4 py-3 text-sm font-semibold rounded bg-primary-500 text-secondary-50 shadow-sm shadow-secondary-500'>
               Get Started-It&apos;s Free
             </Link>

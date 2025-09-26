@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
 const isDev = process.env.NODE_ENV === 'development' ? false : true;
@@ -98,6 +98,16 @@ const nextConfig: NextConfig = {
 
 // export default nextConfig;
 
-const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
+const withNextIntl = createNextIntlPlugin(
+  // './i18n/request.ts'
+  {
+    requestConfig: './i18n/request.ts',
+    experimental: {
+      // Provide the path to the messages that you're using in `AppConfig`
+      createMessagesDeclaration: './locales/en.json',
+    },
+    // ...
+  }
+);
 
 export default withNextIntl(nextConfig);
