@@ -3,8 +3,8 @@
 import { Button } from '@/components/ui/button';
 import { useAuthContext } from '@/contexts/auth-context';
 import { useSignUpForm } from '@/hooks/useSignUp';
-import { UserRegistrationValues } from '@/lib/validations/auth.schema';
 import { Link } from '@/i18n/navigation';
+import { UserRegistrationValues } from '@/lib/validations/auth.schema';
 import { useFormContext } from 'react-hook-form';
 
 export default function SignUpButtonHandler() {
@@ -28,9 +28,7 @@ export default function SignUpButtonHandler() {
         <Button
           disabled={loading || formState.isSubmitting || formState.isLoading}
           type='submit'
-          className={'w-full hover:cursor-pointer disabled:cursor-not-allowed'}
-          // className='inline-flex w-full justify-center items-center gap-2 rounded-md bg-primary-500 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-secondary-500/10 focus:outline-none data-[hover]:bg-primary-700 data-[open]:bg-primary-600 data-[focus]:outline-1 data-[focus]:outline-tertiary-50'
-        >
+          className={'w-full hover:cursor-pointer disabled:cursor-not-allowed'}>
           {loading || formState.isSubmitting || formState.isLoading
             ? 'Creating Account...'
             : 'Create an account'}
@@ -47,7 +45,6 @@ export default function SignUpButtonHandler() {
           disabled={loading || formState.isSubmitting || formState.isLoading}
           type='submit'
           className={'w-full hover:cursor-pointer disabled:cursor-not-allowed'}
-          // className='inline-flex w-full justify-center items-center gap-2 rounded-md bg-primary-500 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-secondary-500/10 focus:outline-none data-[hover]:bg-primary-700 data-[open]:bg-primary-600 data-[focus]:outline-1 data-[focus]:outline-tertiary-50'
           onClick={() => setCurrentStep((prev: number) => prev + 1)}>
           {loading || formState.isSubmitting || formState.isLoading
             ? 'Verifying otp...'
@@ -66,7 +63,6 @@ export default function SignUpButtonHandler() {
           disabled={loading || formState.isSubmitting || formState.isLoading}
           type='submit'
           className={'w-full hover:cursor-pointer disabled:cursor-not-allowed'}
-          // className='inline-flex w-full justify-center items-center gap-2 rounded-md bg-primary-500 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-secondary-500/10 focus:outline-none data-[hover]:bg-primary-700 data-[open]:bg-primary-600 data-[focus]:outline-1 data-[focus]:outline-tertiary-50'
           {...(isName &&
             isEmail &&
             isPassword && {
@@ -93,11 +89,10 @@ export default function SignUpButtonHandler() {
         disabled={loading || formState.isSubmitting || formState.isLoading}
         type='submit'
         className={'w-full hover:cursor-pointer disabled:cursor-not-allowed'}
-        // className='inline-flex w-full justify-center items-center gap-2 rounded-md bg-primary-500 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-secondary-500/10 focus:outline-none data-[hover]:bg-primary-700 data-[open]:bg-primary-600 data-[focus]:outline-1 data-[focus]:outline-tertiary-50'
         onClick={() => setCurrentStep((prev: number) => prev + 1)}>
         Continue 0
       </Button>
-      <p>
+      <p className={'text-muted-foreground'}>
         Already have an account?{' '}
         <Link href='/sign-in' className='font-bold'>
           Sign In

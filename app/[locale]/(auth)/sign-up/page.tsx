@@ -5,6 +5,7 @@ import Image from 'next/image';
 
 import RegistrationFormStep from '@/components/forms/sign-up/RegistrationFormStep';
 import SignUpFormProvider from '@/components/forms/sign-up/SignUpFormProvider';
+import { Card } from '@/components/ui/card';
 import { AuthContextProvider } from '@/contexts/auth-context';
 import SignUpImagePNG from '@/public/sign-up/sign-up.png';
 import SignUpImageSVG from '@/public/sign-up/sign-up.svg';
@@ -26,15 +27,9 @@ export default async function SignUpPage() {
   }
 
   return (
-    <section
-      className={
-        'bg-gradient-to-b from-primary-500 via-primary-400 to-primary-600 aspect-video'
-      }>
+    <section>
       <SectionWrapper className={'py-20'}>
-        <div
-          className={
-            'grid grid-cols-2 gap-4 bg-tertiary-50 shadow-xl rounded-lg'
-          }>
+        <Card className={'grid grid-cols-2 gap-4 rounded-lg p-0'}>
           <div className={'col-span-full lg:col-span-1 relative'}>
             <div
               className={
@@ -66,7 +61,7 @@ export default async function SignUpPage() {
               </SignUpFormProvider>
             </AuthContextProvider>
           </div>
-        </div>
+        </Card>
       </SectionWrapper>
     </section>
   );

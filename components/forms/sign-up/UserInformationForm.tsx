@@ -30,16 +30,12 @@ export default function UserInformationForm() {
   } = useFormContext<UserRegistrationValues>();
 
   return (
-    // <div className={'inline-grid content-center w-full h-full'}>
-    <fieldset className='space-y-6 bg-tertiary-50'>
-      {/* <legend className='text-2xl font-semibold text-secondary-700'>
-        Let&apos;s get to know each other!
-      </legend> */}
+    <fieldset className='space-y-6'>
       <div className={'space-y-2'}>
-        <legend className='text-4xl font-semibold text-secondary-700'>
+        <legend className='text-4xl font-semibold text-foreground'>
           Let&apos;s get to know each other!
         </legend>
-        <p className={'text-sm font-medium'}>
+        <p className={'text-sm font-medium text-muted-foreground'}>
           We need to know a little bit about you before we can get started.
         </p>
       </div>
@@ -201,6 +197,5 @@ export default function UserInformationForm() {
           Create your account
         </Button> */}
     </fieldset>
-    // </div>
   );
 }

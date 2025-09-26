@@ -14,7 +14,6 @@ export default function OAuthSignInButtons() {
         <Button
           disabled={loading}
           className='w-full hover:cursor-pointer'
-          // className='inline-flex w-full justify-center items-center gap-2 rounded-md bg-primary-500 py-2 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-secondary-500/10 focus:outline-none data-[hover]:bg-primary-700 data-[open]:bg-primary-600 data-[focus]:outline-1 data-[focus]:outline-tertiary-50 disabled:cursor-not-allowed disabled:bg-primary-400 disabled:text-white disabled:shadow-none'
           onClick={() => handleSignIn('oauth_google')}>
           <span>
             <IconBrandGoogle className={'size-4 md:size-6'} />
@@ -28,7 +27,6 @@ export default function OAuthSignInButtons() {
         <Button
           disabled={loading}
           className='w-full hover:cursor-pointer'
-          // className='inline-flex w-full justify-center items-center gap-2 rounded-md bg-primary-500 py-2 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-secondary-500/10 focus:outline-none data-[hover]:bg-primary-700 data-[open]:bg-primary-600 data-[focus]:outline-1 data-[focus]:outline-tertiary-50 disabled:cursor-not-allowed disabled:bg-primary-400 disabled:text-white disabled:shadow-none'
           onClick={() => handleSignIn('oauth_facebook')}>
           <span>
             <IconBrandFacebook className={'size-4 md:size-6'} />

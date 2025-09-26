@@ -47,7 +47,6 @@ export default function RegistrationFormStep() {
           <CreateAccountForm />
           {isDev ? (
             <Button
-              variant={'outline'}
               className='absolute top-0 right-0'
               onClick={() => {
                 setCurrentStep(2);
@@ -65,7 +64,6 @@ export default function RegistrationFormStep() {
           <OTPForm />
           {isDev ? (
             <Button
-              variant={'outline'}
               className='absolute top-0 right-0'
               onClick={() => {
                 setCurrentStep(3);

@@ -11,9 +11,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { UserLoginValues } from '@/lib/validations/auth.schema';
 
+import { ThemeModeToggle } from '@/components/shared/theme-mode-toggle';
+import { Link } from '@/i18n/navigation';
 import { ErrorMessage } from '@hookform/error-message';
 import { EyeClosed, EyeIcon } from 'lucide-react';
-import { Link } from '@/i18n/navigation';
 import { useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
@@ -27,15 +28,17 @@ export default function SignInForm() {
   } = useFormContext<UserLoginValues>();
 
   return (
-    <fieldset className='space-y-6 bg-tertiary-50'>
+    <fieldset className='space-y-6'>
       <div className='space-y-2'>
-        <legend className='text-xl md:text-2xl lg:text-3xl xl:text-4xl font-semibold text-secondary-700'>
+        <legend className='text-xl md:text-2xl lg:text-3xl xl:text-4xl font-semibold text-foreground'>
           Login
         </legend>
-        <p className='text-xs sm:text-sm font-semibold text-secondary-700'>
+        <p className='text-xs sm:text-sm font-semibold text-muted-foreground'>
           Kindly Fill The Credential To Proceed
         </p>
       </div>
+
+      <ThemeModeToggle />
 
       <div className={'space-y-4'}>
         <FormField
@@ -52,16 +55,19 @@ export default function SignInForm() {
                   {...field}
                 />
               </FormControl>
-              <FormDescription>
-                We will send you a verification code to this email.
-              </FormDescription>
-              <ErrorMessage
-                errors={errors}
-                name='email'
-                render={({ message }) => (
-                  <p className='text-xs text-red-500'>{message}</p>
-                )}
-              />
+              {errors ? (
+                <ErrorMessage
+                  errors={errors}
+                  name='email'
+                  render={({ message }) => (
+                    <p className='text-xs text-destructive'>{message}</p>
+                  )}
+                />
+              ) : (
+                <FormDescription>
+                  We will send you a verification code to this email.
+                </FormDescription>
+              )}
             </FormItem>
           )}
         />
@@ -75,7 +81,7 @@ export default function SignInForm() {
                 <Link
                   href={'/forgot-password'}
                   className={
-                    'text-xs md:text-sm text-secondary-500 underline hover:no-underline'
+                    'text-xs md:text-sm text-muted-foreground underline hover:no-underline'
                   }>
                   Forgot Password ?
                 </Link>
@@ -98,7 +104,7 @@ export default function SignInForm() {
                     size={'icon'}
                     variant={'ghost'}
                     className={
-                      'absolute right-3 top-1/2 -translate-y-1/2 size-4 text-secondary-500 hover:cursor-pointer'
+                      'absolute right-3 top-1/2 -translate-y-1/2 size-4 hover:cursor-pointer'
                     }
                     onClick={() => {
                       // const input = watch('password');
@@ -117,86 +123,29 @@ export default function SignInForm() {
                       }
                     }}>
                     {!isShowPassword ? (
-                      <EyeClosed className={'text-secondary-500'} />
+                      <EyeClosed className={'stroke-muted-foreground'} />
                     ) : (
-                      <EyeIcon className={'text-primary-500'} />
+                      <EyeIcon className={'stroke-primary-500'} />
                     )}
                   </Button>
                 </div>
               </FormControl>
-              <FormDescription>
-                Your password must be at least 8 characters long.
-              </FormDescription>
-              <ErrorMessage
-                errors={errors}
-                name='password'
-                render={({ message }) => (
-                  <p className='text-xs text-red-500'>{message}</p>
-                )}
-              />
+              {errors ? (
+                <ErrorMessage
+                  errors={errors}
+                  name='password'
+                  render={({ message }) => (
+                    <p className='text-xs text-destructive'>{message}</p>
+                  )}
+                />
+              ) : (
+                <FormDescription>
+                  Your password must be at least 8 characters long.
+                </FormDescription>
+              )}
             </FormItem>
           )}
         />
-        {/* <div>
-          <label className='text-sm/6 font-medium text-secondary-500'>
-            Email
-          </label>
-          <input
-            className={cn(
-              'mt-3 relative block w-full rounded-lg ring-1 ring-secondary-200 bg-tertiary-50 py-1.5 px-3 text-sm/6 text-secondary-700',
-              'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-primary-300'
-            )}
-            type='email'
-            placeholder='someone@gmail.com'
-            required
-            {...register('email')}
-          />
-          <ErrorMessage
-            errors={errors}
-            name='email'
-            render={({ message }) => (
-              <p className='text-xs text-red-500'>{message}</p>
-            )}
-          />
-        </div>
-        <div className={'space-y-2'}>
-          <div className={'w-full flex items-center justify-between'}>
-            <label className='text-sm/6 font-medium text-secondary-500'>
-              Password
-            </label>
-
-            <Link
-              href={'/auth/forgot-password'}
-              className={
-                'text-xs md:text-sm text-secondary-500 underline hover:no-underline'
-              }>
-              Forgot Password ?
-            </Link>
-          </div>
-          <input
-            className={cn(
-              'mt-3 relative block w-full rounded-lg ring-1 ring-secondary-200 bg-tertiary-50 py-1.5 px-3 text-sm/6 text-secondary-700',
-              'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-primary-300'
-            )}
-            type='password'
-            placeholder='********'
-            required
-            {...register('password')}
-          />
-          {!errors?.password ? (
-            <p className={'text-xs text-secondary-500'}>
-              Password must be at least 8 characters long
-            </p>
-          ) : (
-            <ErrorMessage
-              errors={errors}
-              name='password'
-              render={({ message }) => (
-                <p className='text-xs text-red-500'>{message}</p>
-              )}
-            />
-          )}
-        </div> */}
       </div>
     </fieldset>
   );

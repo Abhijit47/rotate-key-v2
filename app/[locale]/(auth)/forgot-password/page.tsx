@@ -2,6 +2,8 @@ import ForgotPasswordFormProvider from '@/components/forms/forgot-password/Forgo
 import ForgotPasswordFormStep from '@/components/forms/forgot-password/ForgotPasswordFormStep';
 import SectionOverlay from '@/components/shared/SectionOverlay';
 import SectionWrapper from '@/components/shared/SectionWrapper';
+import { ThemeModeToggle } from '@/components/shared/theme-mode-toggle';
+import { Card } from '@/components/ui/card';
 import { AuthContextProvider } from '@/contexts/auth-context';
 import SignUpImagePNG from '@/public/sign-up/sign-up.png';
 import SignUpImageSVG from '@/public/sign-up/sign-up.svg';
@@ -25,49 +27,42 @@ export default async function ForgotPassword() {
   }
 
   return (
-    <main>
-      <section
-        className={
-          'bg-gradient-to-b from-primary-500 via-primary-400 to-primary-600 aspect-video'
-        }>
-        <SectionWrapper className={'py-20'}>
+    <section>
+      <SectionWrapper className={'py-20'}>
+        <Card className={'grid grid-cols-5 gap-4 p-0 rounded-lg'}>
           <div
             className={
-              'grid grid-cols-5 gap-4 bg-tertiary-50 shadow-xl rounded-lg'
+              'col-span-full md:col-span-2 p-4 md:p-6 inline-grid content-center h-full relative'
             }>
+            <ThemeModeToggle />
+            <AuthContextProvider>
+              <ForgotPasswordFormProvider>
+                <ForgotPasswordFormStep />
+              </ForgotPasswordFormProvider>
+            </AuthContextProvider>
+          </div>
+
+          <div className={'col-span-full md:col-span-3 relative'}>
             <div
               className={
-                'col-span-full md:col-span-2 p-4 md:p-6 inline-grid content-center h-full relative'
+                'aspect-square h-full w-full overflow-hidden rounded-tr-lg rounded-br-lg relative'
               }>
-              <AuthContextProvider>
-                <ForgotPasswordFormProvider>
-                  <ForgotPasswordFormStep />
-                </ForgotPasswordFormProvider>
-              </AuthContextProvider>
+              <Image
+                src={SignUpImageSVG}
+                alt='Sign Up Image'
+                width={945}
+                height={800}
+                className={'w-full h-full object-cover'}
+                placeholder='blur'
+                blurDataURL={SignUpImagePNG.blurDataURL}
+              />
             </div>
-
-            <div className={'col-span-full md:col-span-3 relative'}>
-              <div
-                className={
-                  'aspect-square h-full w-full overflow-hidden rounded-tr-lg rounded-br-lg relative'
-                }>
-                <Image
-                  src={SignUpImageSVG}
-                  alt='Sign Up Image'
-                  width={945}
-                  height={800}
-                  className={'w-full h-full object-cover'}
-                  placeholder='blur'
-                  blurDataURL={SignUpImagePNG.blurDataURL}
-                />
-              </div>
-              <SectionOverlay description="Forgot your password don't worry.">
-                <span className={'block'}>Forgot Password ?</span>
-              </SectionOverlay>
-            </div>
+            <SectionOverlay description="Forgot your password don't worry.">
+              <span className={'block'}>Forgot Password ?</span>
+            </SectionOverlay>
           </div>
-        </SectionWrapper>
-      </section>
-    </main>
+        </Card>
+      </SectionWrapper>
+    </section>
   );
 }

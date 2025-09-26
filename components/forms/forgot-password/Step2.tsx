@@ -39,13 +39,13 @@ export default function Step2() {
   } = useFormContext<ForgotPasswordValues>();
 
   return (
-    <fieldset className='space-y-4 bg-tertiary-50'>
+    <fieldset className='space-y-4'>
       {/* <legend className='sr-only'>Reset your password</legend> */}
       <div className='space-y-2'>
-        <legend className='text-xl md:text-2xl lg:text-3xl xl:text-4xl font-semibold text-secondary-700'>
+        <legend className='text-xl md:text-2xl lg:text-3xl xl:text-4xl font-semibold text-foreground'>
           Provide New Credentials
         </legend>
-        <p className='text-xs sm:text-sm font-semibold text-secondary-700'>
+        <p className='text-xs sm:text-sm font-semibold text-muted-foreground'>
           Kindly Fill Your Credential To Proceed with password reset
         </p>
       </div>
@@ -93,23 +93,26 @@ export default function Step2() {
                     }
                   }}>
                   {!isShowRecoveryAccountPassword ? (
-                    <EyeClosed className={'text-secondary-500'} />
+                    <EyeClosed className={'stroke-muted-foreground'} />
                   ) : (
-                    <EyeIcon className={'text-primary-500'} />
+                    <EyeIcon className={'stroke-primary-500'} />
                   )}
                 </Button>
               </div>
             </FormControl>
-            <FormDescription>
-              Password must be at least 8 characters long.
-            </FormDescription>
-            <ErrorMessage
-              errors={errors}
-              name='password'
-              render={({ message }) => (
-                <p className='text-xs text-red-500'>{message}</p>
-              )}
-            />
+            {errors ? (
+              <ErrorMessage
+                errors={errors}
+                name='password'
+                render={({ message }) => (
+                  <p className='text-xs text-red-500'>{message}</p>
+                )}
+              />
+            ) : (
+              <FormDescription>
+                Password must be at least 8 characters long.
+              </FormDescription>
+            )}
           </FormItem>
         )}
       />
@@ -161,23 +164,26 @@ export default function Step2() {
                     }
                   }}>
                   {!isShowRecoveryAccountConfirmPassword ? (
-                    <EyeClosed className={'text-secondary-500'} />
+                    <EyeClosed className={'stroke-muted-foreground'} />
                   ) : (
-                    <EyeIcon className={'text-primary-500'} />
+                    <EyeIcon className={'stroke-primary-500'} />
                   )}
                 </Button>
               </div>
             </FormControl>
-            <FormDescription>
-              Password should match the one you entered above.
-            </FormDescription>
-            <ErrorMessage
-              errors={errors}
-              name='confirmPassword'
-              render={({ message }) => (
-                <p className='text-xs text-red-500'>{message}</p>
-              )}
-            />
+            {errors ? (
+              <ErrorMessage
+                errors={errors}
+                name='confirmPassword'
+                render={({ message }) => (
+                  <p className='text-xs text-red-500'>{message}</p>
+                )}
+              />
+            ) : (
+              <FormDescription>
+                Password should match the one you entered above.
+              </FormDescription>
+            )}
           </FormItem>
         )}
       />

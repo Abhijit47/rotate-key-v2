@@ -29,15 +29,11 @@ export default function OTPForm() {
   return (
     <fieldset
       className={'inline-grid w-full h-full content-center gap-4 md:gap-6'}>
-      {/* <h2 className='text-gravel md:text-4xl font-bold'>Enter OTP</h2>
-      <legend className='text-iridium md:text-sm'>
-        Enter the one time password that was sent to your email.
-      </legend> */}
       <div className={'space-y-2'}>
-        <legend className='text-4xl font-semibold text-secondary-700'>
+        <legend className='text-4xl font-semibold text-foreground'>
           Enter OTP
         </legend>
-        <p className={'text-sm font-medium'}>
+        <p className={'text-sm font-medium text-muted-foreground'}>
           Enter the one time password that was sent to your email.
         </p>
       </div>
@@ -80,21 +76,6 @@ export default function OTPForm() {
           </FormItem>
         )}
       />
-      {/* <div>
-        <input
-          type='text'
-          name='otp'
-          id='otp'
-          autoComplete='one-time-code'
-          required
-          aria-label='Enter OTP'
-          className='w-full h-12 text-lg border-[#929496] border rounded-sm focus:border-ring focus:shadow-md focus-visible:ring-structure-focus py-3.5 px-4 appearance-none'
-          value={otp}
-          maxLength={6}
-          onChange={(e) => setOTP(e.target.value)}
-        />
-      </div> */}
-      {/* <OTPInput otp={otp} setOTP={setOTP} /> */}
     </fieldset>
   );
 }

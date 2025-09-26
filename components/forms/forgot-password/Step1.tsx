@@ -20,12 +20,12 @@ export default function Step1() {
   } = useFormContext<ForgotPasswordValues>();
 
   return (
-    <fieldset className='space-y-4 bg-tertiary-50'>
+    <fieldset className='space-y-4'>
       <div className='space-y-2'>
-        <legend className='text-xl md:text-2xl lg:text-3xl xl:text-4xl font-semibold text-secondary-700'>
+        <legend className='text-xl md:text-2xl lg:text-3xl xl:text-4xl font-semibold text-foreground'>
           Forgot Password
         </legend>
-        <p className='text-xs sm:text-sm font-semibold text-secondary-700'>
+        <p className='text-xs sm:text-sm font-semibold text-muted-foreground'>
           Kindly Fill Your Credential To Proceed with password reset
         </p>
       </div>
@@ -44,8 +44,8 @@ export default function Step1() {
                 {...field}
               />
             </FormControl>
-            <FormDescription>
-              Please enter the email address associated with your account. We
+            <FormDescription className={'text-xs'}>
+              *Please enter the email address associated with your account. We
               will send you a link to reset your password.
             </FormDescription>
             <ErrorMessage
@@ -58,28 +58,6 @@ export default function Step1() {
           </FormItem>
         )}
       />
-      {/* <div>
-        <label className='text-sm/6 font-medium text-secondary-500'>
-          Email
-        </label>
-        <input
-          className={cn(
-            'mt-3 relative block w-full rounded-lg ring-1 ring-secondary-200 bg-tertiary-50 py-1.5 px-3 text-sm/6 text-secondary-700',
-            'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-primary-300'
-          )}
-          type='email'
-          autoComplete='email'
-          placeholder='someone@gmail.com'
-          {...register('email')}
-        />
-        <ErrorMessage
-          errors={errors}
-          name='email'
-          render={({ message }) => (
-            <p className='text-xs text-red-500'>{message}</p>
-          )}
-        />
-      </div> */}
     </fieldset>
   );
 }

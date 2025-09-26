@@ -1,3 +1,4 @@
+import { ThemeModeToggle } from '@/components/shared/theme-mode-toggle';
 import { Button } from '@/components/ui/button';
 import {
   FormControl,
@@ -35,15 +36,17 @@ export default function CreateAccountForm() {
 
   return (
     // <div className={'inline-grid content-center w-full h-full'}>
-    <fieldset className='space-y-4 bg-tertiary-50'>
+    <fieldset className='space-y-4'>
       <div className={'space-y-2'}>
-        <legend className='text-4xl font-semibold text-secondary-700'>
+        <legend className='text-4xl font-semibold text-foreground'>
           Create an Account
         </legend>
         <p className={'text-sm font-medium'}>
           Kindly fill the credential to proceed
         </p>
       </div>
+
+      <ThemeModeToggle />
 
       <FormField
         control={control}
@@ -147,9 +150,9 @@ export default function CreateAccountForm() {
                     }
                   }}>
                   {!isShowNewAccountPassword ? (
-                    <EyeClosed className={'text-secondary-500'} />
+                    <EyeClosed className={'stroke-muted-foreground'} />
                   ) : (
-                    <EyeIcon className={'text-primary-500'} />
+                    <EyeIcon className={'stroke-primary-500'} />
                   )}
                 </Button>
               </div>
@@ -213,9 +216,9 @@ export default function CreateAccountForm() {
                     }
                   }}>
                   {!isShowNewAccountConfirmPassword ? (
-                    <EyeClosed className={'text-secondary-500'} />
+                    <EyeClosed className={'stroke-muted-foreground'} />
                   ) : (
-                    <EyeIcon className={'text-primary-500'} />
+                    <EyeIcon className={'stroke-primary-500'} />
                   )}
                 </Button>
               </div>

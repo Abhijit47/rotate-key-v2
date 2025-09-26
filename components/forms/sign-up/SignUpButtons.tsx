@@ -16,9 +16,7 @@ export default function SignUpButtons() {
   // className={'grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6'}
   return (
     <div>
-      <RadioGroup.Root
-        // defaultValue={options[0].value}
-        className='w-full grid grid-cols-3 gap-4'>
+      <RadioGroup.Root className='w-full grid grid-cols-3 gap-4'>
         <RadioGroup.Item
           disabled={loading}
           onClick={() => handleSignIn('oauth_facebook')}
@@ -60,48 +58,6 @@ export default function SignUpButtons() {
           <p className='text-xs'>Continue with Email</p>
         </RadioGroup.Item>
       </RadioGroup.Root>
-      {/* <div
-        className={
-          'aspect-square inline-grid w-full h-full rounded-lg ring-1 ring-primary-500'
-        }>
-        <div id='clerk-captcha' className={'invisible hidden'}></div>
-        <Button
-          disabled={loading}
-          className='inline-flex flex-col w-full h-full justify-center items-center gap-1 lg:gap-2 rounded-md bg-transparent ring-1 ring-primary-500 py-1.5 px-3 text-sm md:text-sm/4 lg:text-sm/6 font-medium lg:font-semibold text-primary-500 shadow-inner shadow-secondary-500/10 overflow-hidden focus:outline-none data-[hover]:bg-primary-500 data-[hover]:text-primary-50 data-[hover]:ring-primary-50 data-[open]:bg-primary-600 data-[focus]:outline-1 data-[focus]:outline-primary-600 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 disabled:ring-gray-300'
-          onClick={() => handleSignIn('oauth_facebook')}>
-          <span>
-            <LogosFacebook className={'size-4 sm:size-6 lg:size-8'} />
-          </span>
-          <span>Continue with Facebook</span>
-        </Button>
-      </div>
-      <div
-        className={
-          'aspect-square inline-grid w-full h-full rounded-lg ring-1 ring-primary-500'
-        }>
-        <div id='clerk-captcha' className={'invisible hidden'}></div>
-        <Button
-          disabled={loading}
-          className='inline-flex flex-col w-full h-full justify-center items-center gap-1 lg:gap-2 rounded-md bg-transparent ring-1 ring-primary-500 py-1.5 px-3 text-sm md:text-sm/4 lg:text-sm/6 font-medium lg:font-semibold text-primary-500 shadow-inner shadow-secondary-500/10 overflow-hidden focus:outline-none data-[hover]:bg-primary-500 data-[hover]:text-primary-50 data-[hover]:ring-primary-50 data-[open]:bg-primary-600 data-[focus]:outline-1 data-[focus]:outline-primary-600 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 disabled:ring-gray-300'
-          onClick={() => handleSignIn('oauth_google')}>
-          <FlatColorIconsGoogle className={'size-4 sm:size-6 lg:size-8'} />
-          <span>Continue with Google</span>
-        </Button>
-      </div>
-      <div
-        className={
-          'aspect-square inline-grid w-full h-full rounded-lg ring-1 ring-primary-500'
-        }>
-        <Button
-          disabled={loading}
-          className='inline-flex flex-col w-full h-full justify-center items-center gap-1 lg:gap-2 rounded-md bg-transparent ring-1 ring-primary-500 py-1.5 px-3 text-sm md:text-sm/4 lg:text-sm/6 font-medium lg:font-semibold text-primary-500 shadow-inner shadow-secondary-500/10 overflow-hidden focus:outline-none data-[hover]:bg-primary-500 data-[hover]:text-primary-50 data-[hover]:ring-primary-50 data-[open]:bg-primary-600 data-[focus]:outline-1 data-[focus]:outline-primary-600 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 disabled:ring-gray-300'
-          onClick={() => {
-            setCurrentStep(1);
-          }}>
-          <Mail className={'size-4 sm:size-6 lg:size-8'} />
-          <span>Continue with Email</span>
-        </Button>
-      </div> */}
     </div>
   );
 }

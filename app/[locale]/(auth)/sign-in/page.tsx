@@ -6,6 +6,7 @@ import SignInForm from '@/components/forms/sign-in/SignInForm';
 import SignInFormProvider from '@/components/forms/sign-in/SignInFormProvider';
 import SectionOverlay from '@/components/shared/SectionOverlay';
 import SectionWrapper from '@/components/shared/SectionWrapper';
+import { Card } from '@/components/ui/card';
 import SignUpImagePNG from '@/public/sign-up/sign-up.png';
 import SignUpImageSVG from '@/public/sign-up/sign-up.svg';
 import { currentUser } from '@clerk/nextjs/server';
@@ -26,15 +27,9 @@ export default async function SignInPage() {
   }
 
   return (
-    <section
-      className={
-        'bg-gradient-to-b from-primary-500 via-primary-400 to-primary-600 aspect-video'
-      }>
+    <section>
       <SectionWrapper className={'py-20'}>
-        <div
-          className={
-            'grid grid-cols-5 gap-4 bg-tertiary-50 shadow-xl rounded-lg'
-          }>
+        <Card className={'grid grid-cols-5 gap-4 shadow-xl rounded-lg p-0'}>
           <SignInFormProvider>
             <SignInForm />
             <OAuthSignInButtons />
@@ -60,7 +55,7 @@ export default async function SignInPage() {
               <span className={'block'}>Welcome Back</span>
             </SectionOverlay>
           </div>
-        </div>
+        </Card>
       </SectionWrapper>
     </section>
   );

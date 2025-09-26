@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { useAuthContext } from '@/contexts/auth-context';
 import { useForgotPassword } from '@/hooks/useForgotPassword';
-import { ForgotPasswordValues } from '@/lib/validations/auth.schema';
 import { Link } from '@/i18n/navigation';
+import { ForgotPasswordValues } from '@/lib/validations/auth.schema';
 import { useFormContext } from 'react-hook-form';
 
 export default function ForgotPasswordButtonHandler() {
@@ -67,10 +67,7 @@ export default function ForgotPasswordButtonHandler() {
         {formState.isLoading || isLoading ? 'Processing...' : 'Continue'}
       </Button>
 
-      <p
-        className={
-          'text-xs sm:text-sm md:text-base text-secondary-500 text-center'
-        }>
+      <p className={'text-xs sm:text-sm text-muted-foreground text-center'}>
         Don&apos;t forgot password ?{' '}
         <Link
           href='/sign-in'

@@ -67,7 +67,7 @@ export default function SignUpCompleteForm() {
         router.push('/onboarding');
       } else {
         toast.error('Signup failed');
-        router.replace('/auth/sign-up');
+        router.replace('/sign-up');
         router.refresh();
       }
     });
@@ -80,12 +80,12 @@ export default function SignUpCompleteForm() {
         <Button>One Tap Login</Button>
       </CustomGoogleOneTap> */}
 
-        <fieldset className='space-y-6 bg-tertiary-50'>
+        <fieldset className='space-y-6'>
           <div className={'space-y-2'}>
-            <legend className='text-4xl font-semibold text-secondary-700'>
+            <legend className='text-4xl font-semibold text-foreground'>
               Let&apos;s get to know each other!
             </legend>
-            <p className={'text-sm font-medium'}>
+            <p className={'text-sm font-medium text-muted-foreground'}>
               We need to know a little bit about you before we can get started.
             </p>
           </div>
