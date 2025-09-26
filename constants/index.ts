@@ -449,12 +449,12 @@ export const footerLinks: { [key: string]: FooterLink[] } = {
     {
       id: crypto.randomUUID(),
       title: 'Login',
-      link: '/auth/sign-in',
+      link: '/sign-in',
     },
     {
       id: crypto.randomUUID(),
       title: 'Register',
-      link: '/auth/sign-up',
+      link: '/sign-up',
     },
   ],
   socialMedia: [

@@ -1,7 +1,7 @@
 import { footerLinks } from '@/constants';
+import { Link } from '@/i18n/navigation';
 import Logo from '@/public/logos/logo-landscape-2.webp';
 import Image from 'next/image';
-import { Link } from '@/i18n/navigation';
 // import { BsArrowRight } from 'react-icons/bs';
 // import { FaEnvelope, FaPhone, FaRegMap } from 'react-icons/fa6';
 // import { HiChevronDoubleDown } from 'react-icons/hi2';
@@ -12,18 +12,19 @@ import {
   MapPinned,
   PhoneCall,
 } from 'lucide-react';
+import { Separator } from '../ui/separator';
 import SectionWrapper from './SectionWrapper';
 
 export default function Footer() {
   return (
-    <footer className='py-20 bg-secondary-800'>
+    <footer className='py-20 bg-foreground dark:bg-background'>
       <SectionWrapper>
         <div className={'space-y-6 md:space-y-8 lg:space-y-10 xl:space-y-12'}>
           <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 md:gap-6 lg:gap-8'>
             <div className='inline-grid gap-8'>
               <Link
                 href='/'
-                className='flex items-center w-auto h-16 xs:w-48 sm:w-72 justify-self-center lg:w-full'>
+                className='flex items-center w-auto h-16 xs:w-48 sm:w-72 justify-self-start lg:w-full'>
                 <Image
                   className='object-cover w-full h-full'
                   src={Logo}
@@ -33,9 +34,10 @@ export default function Footer() {
                 />
               </Link>
 
-              <div className='border-b border-secondary-200' />
+              <Separator />
+              {/* <div className='border-b border-secondary-200' /> */}
 
-              <div className='space-y-4 text-sm text-tertiary-600'>
+              <div className='space-y-4 text-sm text-tertiary-300'>
                 <div className={'flex items-center gap-2'}>
                   <span className={'block self-start'}>
                     <MapPinned className={'size-4 md:size-6'} />
@@ -44,7 +46,7 @@ export default function Footer() {
                     <h5 className={'test-xs sm:text-sm md:text-base'}>
                       Bengaluru (HQ)
                     </h5>
-                    <p className={'test-xs sm:text-sm md:text-base'}>
+                    <p className={'test-xs sm:text-sm'}>
                       #12 Second Floor 3rd Cross
                       <br />
                       Patel Narayana Reddy Layout
@@ -67,7 +69,7 @@ export default function Footer() {
                     href={`tel:+91 12345-67890`}
                     target='_blank'
                     className={
-                      'block test-xs sm:text-sm md:text-base group-hover:text-primary-500'
+                      'block test-xs sm:text-sm group-hover:text-primary-500'
                     }>
                     +91 12345-67890
                   </Link>
@@ -85,7 +87,7 @@ export default function Footer() {
                     href={`mailto:rotatekey@gmail.com`}
                     target='_blank'
                     className={
-                      'block test-xs sm:text-sm md:text-base group-hover:text-primary-500'
+                      'block test-xs sm:text-sm group-hover:text-primary-500'
                     }>
                     rotatekey@gmail.com
                   </Link>
@@ -94,7 +96,7 @@ export default function Footer() {
                 <Link
                   href='#'
                   className={
-                    'flex w-full items-center gap-2 test-xs sm:text-sm md:text-base'
+                    'flex w-full items-center gap-2 test-xs sm:text-sm'
                   }>
                   <span>See Details</span>
                   <span>
@@ -136,7 +138,7 @@ export default function Footer() {
           </div>
 
           <div className='flex justify-center'>
-            <p className='text-sm font-bold text-white'>
+            <p className='text-sm font-bold text-tertiary-500'>
               Copyright &copy; {new Date().getFullYear()} Rotate Keys. All Right
               Reserved
             </p>
