@@ -1,4 +1,7 @@
-import { UserLoginProps, UserLoginSchema } from '@/lib/validations/auth.schema';
+import {
+  UserLoginSchema,
+  UserLoginValues,
+} from '@/lib/validations/auth.schema';
 import { useSignIn } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -23,7 +26,7 @@ export function useSignInForm() {
   const { isLoaded, setActive, signIn } = useSignIn();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const methods = useForm<UserLoginProps>({
+  const methods = useForm<UserLoginValues>({
     resolver: zodResolver(UserLoginSchema),
     defaultValues: {
       email: '',
@@ -33,7 +36,7 @@ export function useSignInForm() {
   });
 
   const onHandleSubmit = methods.handleSubmit(
-    async (values: UserLoginProps) => {
+    async (values: UserLoginValues) => {
       if (!isLoaded) return;
 
       try {

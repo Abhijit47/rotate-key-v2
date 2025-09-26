@@ -1,27 +1,27 @@
-import { z, ZodType } from 'zod/v4';
+import { z, ZodType } from 'zod';
 
-export type UserRegistrationProps = {
-  fullName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  otp: string;
-  yourLocation: string;
-  yourDestination: string;
-  // joinedAs: 'owner' | 'customer';
-};
+// export type UserRegistrationProps = {
+//   fullName: string;
+//   email: string;
+//   password: string;
+//   confirmPassword: string;
+//   otp: string;
+//   yourLocation: string;
+//   yourDestination: string;
+//   // joinedAs: 'owner' | 'customer';
+// };
 
-export type UserLoginProps = {
-  email: string;
-  password: string;
-};
+// export type UserLoginProps = {
+//   email: string;
+//   password: string;
+// };
 
 export type ChangePasswordProps = {
   password: string;
   confirmPassword: string;
 };
 
-export const UserRegistrationSchema: ZodType<UserRegistrationProps> = z
+export const UserRegistrationSchema = z
   .object({
     fullName: z
       .string()
@@ -58,7 +58,7 @@ export const UserRegistrationSchema: ZodType<UserRegistrationProps> = z
 //   path: ['confirmEmail'],
 // });
 
-export const UserLoginSchema: ZodType<UserLoginProps> = z.object({
+export const UserLoginSchema = z.object({
   email: z.email({ message: 'You did not enter a valid email' }),
   password: z
     .string()
