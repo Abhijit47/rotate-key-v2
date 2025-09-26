@@ -26,7 +26,7 @@ export function generateStaticParams() {
 
 export default function UserProfilePage() {
   return (
-    <div>
+    <div className={'h-dvh flex items-center justify-center'}>
       <CustomProfile />
     </div>
   );
