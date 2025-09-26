@@ -1,16 +1,19 @@
+import { Link } from '@/i18n/navigation';
 import LikedBG from '@/public/home/r-architecture-2gDwlIim3Uw-unsplash.jpg';
 import Image from 'next/image';
-import { Link } from '@/i18n/navigation';
 
 import { ArrowRight } from 'lucide-react';
+import { useLocale } from 'next-intl';
 import SectionDescription from '../shared/SectionDescription';
 import SectionHeading from '../shared/SectionHeading';
 import SectionHeadingGroup from '../shared/SectionHeadingGroup';
 import SectionWrapper from '../shared/SectionWrapper';
 
 export default function LikedProperty() {
+  const locale = useLocale();
+
   return (
-    <section>
+    <section className={'my-16 md:my-20 lg:my-24'}>
       <SectionWrapper className={'flex items-center'}>
         <div className='relative inline-flex w-full md:overflow-hidden'>
           <div className='hidden lg:block w-full h-full lg:[clip-path:polygon(0%_0%,25%_0%,80%_100%,0%_100%)]'>
@@ -25,7 +28,7 @@ export default function LikedProperty() {
               blurDataURL={LikedBG.blurDataURL}
             />
           </div>
-          <div className='w-full h-full py-16 lg:py-0 lg:absolute lg:inset-0 lg:[clip-path:polygon(27%_0%,100%_0%,100%_100%,82%_100%)] rounded-2xl bg-gradient-to-l from-primary-400 to-primary-500'>
+          <div className='w-full h-full py-16 lg:py-0 lg:absolute lg:inset-0 lg:[clip-path:polygon(27%_0%,100%_0%,100%_100%,82%_100%)] rounded-2xl bg-gradient-to-l from-primary-400 to-primary-500 dark:from-primary-600 dark:to-primary-700'>
             <div
               className={
                 'flex w-full justify-end items-center p-2 md:p-4 lg:p-6 xl:p-8'
@@ -74,7 +77,8 @@ export default function LikedProperty() {
               }>
               <div className={'lg:w-3/12'}>
                 <Link
-                  href='/swapping-places'
+                  href='/swappings'
+                  locale={locale}
                   className={
                     'text-primary-50 text-center ring-1 ring-primary-50 px-6 lg:px-8 py-2 rounded-lg flex items-center justify-center space-x-2 text-xs md:text-sm lg:text-base xl:text-lg shadow-lg hover:shadow-sm transition-all duration-300'
                   }>

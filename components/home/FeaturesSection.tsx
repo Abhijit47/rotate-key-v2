@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
+import { Separator } from '../ui/separator';
 
 export default function FeaturesSection() {
   return (
@@ -21,13 +22,13 @@ export default function FeaturesSection() {
         className={
           'space-y-6 lg:space-y-8 xl:space-y-12 py-8 lg:py-12 xl:py-16'
         }>
-        {/* <SectionHeading align='center' className={'text-secondary-500'}>
+        {/* <SectionHeading align='center' className={'text-muted-foreground'}>
           <span className={'block'}>Features That Set Us Apart</span>
         </SectionHeading> */}
 
         <h2
           className={
-            'text-6xl font-bold text-center font-primary bg-gradient-to-t bg-clip-text text-transparent from-primary-600 to-primary-300'
+            'text-xl sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl font-bold text-center font-primary bg-gradient-to-t bg-clip-text text-transparent from-primary-600 to-primary-300'
           }>
           Features That Set Us Apart
         </h2>
@@ -36,7 +37,7 @@ export default function FeaturesSection() {
           {features.map((feature) => (
             <Card
               className={
-                'lg:hover:-translate-y-2 transition-all delay-150 ease-in-out cursor-pointer w-full h-full ring-1 ring-primary-400 shadow-xl hover:shadow-md'
+                'lg:hover:-translate-y-2 transition-all delay-150 ease-in-out cursor-pointer w-full h-full ring-1 ring-primary-400 shadow-xl hover:shadow-md gap-4 py-2'
               }
               key={feature.id}>
               <CardContent className={'p-2'}>
@@ -52,6 +53,7 @@ export default function FeaturesSection() {
                   />
                 </AspectRatio>
               </CardContent>
+              <Separator />
               <CardHeader className={''}>
                 <CardTitle>
                   <h4 className='text-base font-medium text-center lg:text-lg'>
@@ -59,7 +61,7 @@ export default function FeaturesSection() {
                   </h4>
                 </CardTitle>
                 <CardDescription>
-                  <p className='text-sm text-center text-secondary-400 md:text-base font-regular'>
+                  <p className='text-sm text-center text-muted-foreground md:text-base font-regular'>
                     {feature.description}
                   </p>
                 </CardDescription>

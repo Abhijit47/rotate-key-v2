@@ -6,6 +6,7 @@ import Image from 'next/image';
 
 import { Link } from '@/i18n/navigation';
 import { ChevronRightCircle } from 'lucide-react';
+import { useLocale } from 'next-intl';
 import SectionBadge from '../shared/SectionBadge';
 import SectionDescription from '../shared/SectionDescription';
 import SectionHeading from '../shared/SectionHeading';
@@ -14,9 +15,12 @@ import SectionWrapper from '../shared/SectionWrapper';
 import { Button } from '../ui/button';
 
 export default function ReadyToSwap() {
+  const locale = useLocale();
   return (
     <section
-      className={'bg-secondary-900 py-8 md:py-10 lg:py-12 xl:py-16 relative'}>
+      className={
+        'bg-foreground dark:bg-background py-8 md:py-10 lg:py-12 xl:py-16 relative'
+      }>
       <SectionWrapper className={''}>
         <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
           <div className=''>
@@ -55,6 +59,7 @@ export default function ReadyToSwap() {
               <Button asChild>
                 <Link
                   href={'/swappings'}
+                  locale={locale}
                   // className='inline-flex items-center gap-2 px-4 py-3 text-sm rounded bg-primary-500 text-tertiary-50 justify-self-center'
                 >
                   <span>I want to Exchange My Home</span>

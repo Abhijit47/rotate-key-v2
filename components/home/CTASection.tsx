@@ -14,7 +14,7 @@ import SectionWrapper from '../shared/SectionWrapper';
 
 export default function CTASection() {
   return (
-    <section className={'bg-secondary-900 relative'}>
+    <section className={'bg-foreground dark:bg-background relative'}>
       <div className={'absolute left-0 top-0 hidden lg:block'}>
         <div className={'w-full h-full'}>
           <Image

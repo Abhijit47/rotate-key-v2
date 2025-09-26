@@ -15,7 +15,7 @@ export const HeroSearch = dynamic(() => import('../shared/PropertyFilter'), {
 export const KeyWordTags = dynamic(() => import('../home/KeywordTags'), {
   ssr: false,
   loading: () => (
-    <div className={'absolute bottom-16 left-10'}>
+    <div className={'absolute bottom-16 left-10 translate-y-1/2'}>
       <DynamicLoader />
     </div>
   ),

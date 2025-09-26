@@ -13,7 +13,7 @@ export default function SectionBadge(props: SectionBadgeProps) {
           props.className
             ? props.className
             : 'text-tertiary-50 bg-secondary-500',
-          'text-xs sm:text-sm md:text-base px-10 py-1 rounded'
+          'text-xs sm:text-sm md:text-base px-10 py-2 rounded'
         )}>
         {props.children}
       </span>

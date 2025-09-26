@@ -4,6 +4,7 @@ import FeaturesSection from '@/components/home/FeaturesSection';
 import HeroSection from '@/components/home/HeroSection';
 import LikedProperty from '@/components/home/LikedProperty';
 import ReadyToSwap from '@/components/home/ReadyToSwap';
+import { Separator } from '@/components/ui/separator';
 // import TestimonialSection from '@/components/home/TestimonialSection';
 // import TrendingHomeSection from '@/components/home/TrendingHomeSection';
 // import DynamicLoader from '@/components/shared/DynamicLoader';
@@ -51,7 +52,7 @@ export default function Home() {
   //   });
 
   return (
-    <main className={'space-y-12'}>
+    <main className={''}>
       <HeroSection />
 
       {/* <Suspense fallback={<DynamicLoader />}>
@@ -69,6 +70,7 @@ export default function Home() {
       {/* <TestimonialSection /> */}
 
       <CTASection />
+      <Separator />
     </main>
   );
 }

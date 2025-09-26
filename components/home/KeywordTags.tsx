@@ -1,53 +1,62 @@
 'use client';
 
 import { initialTags } from '@/constants';
-import { cn } from '@/lib/utils';
-
-import { useState } from 'react';
-import { Autoplay } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
+// import { cn } from '@/lib/utils';
+// import { useState } from 'react';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
 
 export default function KeywordTags() {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  // const [currentSlide, setCurrentSlide] = useState(0);
 
   return (
-    <div
-    // className={'absolute bottom-16 left-10 h-12 w-fit'}
-    >
-      <Swiper
-        direction={'vertical'}
-        modules={[Autoplay]}
-        // autoplay={{
-        //   delay: 3000,
-        //   disableOnInteraction: true,
-        // }}
-        grabCursor={true}
-        loop={true}
-        rewind={true}
-        edgeSwipeDetection={true}
-        draggable={true}
-        followFinger={true}
-        touchReleaseOnEdges={true}
-        simulateTouch={true}
-        onSlideChange={(current) => {
-          // update current slide index
-          setCurrentSlide(current.realIndex);
-        }}
-        className='w-full h-12 gap-2 md:h-14 lg:h-16 mySwiper'>
+    <Carousel
+      plugins={[
+        Autoplay({
+          delay: 2000,
+          stopOnMouseEnter: true,
+          stopOnInteraction: false,
+          stopOnFocusIn: true,
+          active: true,
+        }),
+      ]}
+      opts={{
+        active: true,
+        align: 'start',
+        loop: true,
+        slidesToScroll: 1,
+        skipSnaps: true,
+        watchSlides: (emblaApi) => {
+          console.log('watchSlides', emblaApi);
+        },
+        startIndex: 0,
+      }}
+      orientation='vertical'
+      className='w-full h-full'>
+      <CarouselContent className='h-20 px-1'>
         {initialTags.map((tag, index) => (
-          <SwiperSlide key={index} className={'w-full h-fit p-2'}>
+          <CarouselItem
+            key={index}
+            className='mt-1 basis-2/4 md:basis-1/2 pt-1'>
             <div
-              className={cn(
-                currentSlide === index
-                  ? 'bg-primary-500 ring-primary-100 text-tertiary-50'
-                  : 'bg-secondary-50 ring-secondary-500 text-secondary-700',
-                'w-full h-full inline-flex justify-center items-center rounded-lg px-4 py-2 font-semibold text-sm sm:text-base lg:text-lg xl:text-xl shadow-lg'
-              )}>
+              // className={cn(
+              //   currentSlide === index
+              //     ? 'bg-primary-500 ring-primary-100 text-tertiary-50'
+              //     : 'bg-background ring-secondary-500 text-muted-foreground',
+              //   'w-full h-full inline-flex justify-center items-center rounded-lg px-4 py-2 font-semibold text-sm sm:text-base lg:text-lg shadow-lg'
+              // )}
+              className={
+                'w-full h-full inline-flex justify-center items-center rounded-lg px-4 py-2 font-semibold text-sm sm:text-base shadow-lg bg-background ring-secondary-500 text-muted-foreground'
+              }>
               {tag}
             </div>
-          </SwiperSlide>
+          </CarouselItem>
         ))}
-      </Swiper>
-    </div>
+      </CarouselContent>
+    </Carousel>
   );
 }
