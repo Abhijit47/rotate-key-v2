@@ -26,10 +26,10 @@ export const addPropertySchema = z.object({
   streetAddress: z.coerce
     .string()
     .min(1, {
-      message: 'Street address must be 1 to 50 characters.',
+      error: 'Street address must be 1 to 50 characters.',
     })
     .max(50, {
-      message: 'Street address must be 1 to 50 characters.',
+      error: 'Street address must be 1 to 50 characters.',
     }),
   countryOrNation: z
     .object({
@@ -39,9 +39,9 @@ export const addPropertySchema = z.object({
     .superRefine((data, ctx) => {
       if (data.name.length < 1) {
         ctx.addIssue({
-          code: z.ZodIssueCode.too_small,
+          code: 'too_small',
+          origin: 'string',
           minimum: 1,
-          type: 'string',
           inclusive: true,
           message: 'Choose a country',
         });
@@ -55,9 +55,9 @@ export const addPropertySchema = z.object({
     .superRefine((data, ctx) => {
       if (data.name.length < 1) {
         ctx.addIssue({
-          code: z.ZodIssueCode.too_small,
+          code: 'too_small',
+          origin: 'string',
           minimum: 1,
-          type: 'string',
           inclusive: true,
           message: 'Choose a state',
         });
@@ -71,9 +71,9 @@ export const addPropertySchema = z.object({
     .superRefine((data, ctx) => {
       if (data.name.length < 1) {
         ctx.addIssue({
-          code: z.ZodIssueCode.too_small,
+          code: 'too_small',
+          origin: 'string',
           minimum: 1,
-          type: 'string',
           inclusive: true,
           message: 'Choose a city',
         });
@@ -84,10 +84,12 @@ export const addPropertySchema = z.object({
     if (!validatePostalCode(data, 'IN')) {
       console.log('fail-status:', validatePostalCode(data, 'IN'));
       ctx.addIssue({
-        code: z.ZodIssueCode.invalid_string,
+        code: 'invalid_format',
+        format: 'postal-code',
         validation: 'regex',
         // path: ['zipcode'],
-        fatal: true,
+        // fatal: true,
+        path: ['zipcode'],
         message: 'Invalid postal code',
       });
     } else {
@@ -107,39 +109,34 @@ export const addPropertySchema = z.object({
   // }),
   propertyArea: z.coerce
     .string()
-    .min(1, { message: 'Property area is required' })
-    .max(50, { message: 'Property area must be 1 to 50 characters.' }),
+    .min(1, { error: 'Property area is required' })
+    .max(50, { error: 'Property area must be 1 to 50 characters.' }),
   propertyAreaUnit: z.coerce
     .string()
-    .min(1, { message: 'Property area unit is required' })
-    .max(50, { message: 'Property area unit must be 1 to 50 characters.' }),
+    .min(1, { error: 'Property area unit is required' })
+    .max(50, { error: 'Property area unit must be 1 to 50 characters.' }),
   propertyDescription: z.coerce
     .string()
     .min(10, {
-      message: 'Property description must be 10 character.',
+      error: 'Property description must be 10 character.',
     })
     .max(1000, {
-      message: 'Property description max limit 1000 character.',
+      error: 'Property description max limit 1000 character.',
     }),
 
   // 2.
   propertyType: z.enum(propertyTypesEnum, {
-    required_error: 'Please select a room type.',
-    message: 'Please select a room type',
+    error: 'Please select a room type.',
   }),
 
   // 3.
   propertyOwnership: z.enum(propertyOwnershipsEnum, {
-    required_error: 'Please select a room ownership.',
-    invalid_type_error: 'Please select a valid room ownership',
-    message: 'Please select a room ownership',
+    error: 'Please select a room ownership.',
   }),
 
   // 4.
   propertySwapping: z.enum(propertySwappingsEnum, {
-    required_error: 'Please select a swapping type.',
-    invalid_type_error: 'Please select a valid swapping type',
-    message: 'Please select a swapping type',
+    error: 'Please select a swapping type.',
   }),
 
   // 5.
@@ -151,31 +148,37 @@ export const addPropertySchema = z.object({
         if (data.length < 3) {
         }
         ctx.addIssue({
-          code: z.ZodIssueCode.too_small,
+          code: 'too_small',
+          origin: 'string',
           minimum: 3,
-          type: 'string',
           inclusive: true,
           message: 'Owner name must be at least 3 characters',
         });
       }
     }),
-  propertyOwnerEmail: z.coerce
-    .string()
-    .optional()
-    .superRefine((data, ctx) => {
-      if (data) {
-        // const isValidEmail = emailRegex.test(data);
-        const isValidEmail = emailRegex.test(data);
-        if (!isValidEmail) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.invalid_string,
-            validation: 'email',
-            fatal: true,
-            message: 'Invalid email address',
-          });
-        }
-      }
-    }),
+  propertyOwnerEmail: z
+    .email({
+      error: 'Invalid email address',
+      pattern: emailRegex,
+    })
+    .optional(),
+  // propertyOwnerEmail: z.coerce
+  //   .string()
+  //   .optional()
+  //   .superRefine((data, ctx) => {
+  //     if (data) {
+  //       // const isValidEmail = emailRegex.test(data);
+  //       const isValidEmail = emailRegex.test(data);
+  //       if (!isValidEmail) {
+  //         ctx.addIssue({
+  //           code: 'custom',
+  //           expected: 'string',
+  //           format: 'email',
+  //           message: 'Invalid email address',
+  //         });
+  //       }
+  //     }
+  //   }),
   propertyOwnerPhone: z.coerce
     .string()
     .optional()
@@ -185,18 +188,19 @@ export const addPropertySchema = z.object({
           const phoneNumber = phoneUtil.parse(data);
           if (!phoneUtil.isPossibleNumber(phoneNumber)) {
             ctx.addIssue({
-              code: z.ZodIssueCode.custom,
+              code: 'invalid_format',
+              format: 'phone',
               // validation: 'phone',
-              fatal: true,
+              // fatal: true,
               message: 'Invalid mobile number',
             });
           }
         } catch (error) {
           console.warn(error, "Couldn't validate phone number");
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: 'custom',
             // validation: '',
-            fatal: true,
+            // fatal: true,
             message: 'Invalid mobile number',
           });
         }
@@ -206,16 +210,16 @@ export const addPropertySchema = z.object({
   // 6.
   propertyRentalTypes: z.coerce
     .string()
-    .min(1, { message: 'Property rental type is required' })
-    .max(50, { message: 'Property rental type must be 1 to 50 characters.' }),
+    .min(1, { error: 'Property rental type is required' })
+    .max(50, { error: 'Property rental type must be 1 to 50 characters.' }),
 
   // 7.
   propertyBedRooms: z.coerce.string().superRefine((data, ctx) => {
     if (data.length < 1) {
       ctx.addIssue({
-        code: z.ZodIssueCode.too_small,
+        code: 'too_small',
+        origin: 'string',
         minimum: 1,
-        type: 'string',
         inclusive: true,
         message: 'Bedrooms must be at least 1',
       });
@@ -224,9 +228,9 @@ export const addPropertySchema = z.object({
   propertyBathRooms: z.coerce.string().superRefine((data, ctx) => {
     if (data.length < 1) {
       ctx.addIssue({
-        code: z.ZodIssueCode.too_small,
+        code: 'too_small',
+        origin: 'string',
         minimum: 1,
-        type: 'string',
         inclusive: true,
         message: 'Bathrooms must be at least 1',
       });
@@ -235,9 +239,9 @@ export const addPropertySchema = z.object({
   numberOfGuests: z.coerce.string().superRefine((data, ctx) => {
     if (data.length < 1) {
       ctx.addIssue({
-        code: z.ZodIssueCode.too_small,
+        code: 'too_small',
+        origin: 'string',
         minimum: 1,
-        type: 'string',
         inclusive: true,
         message: 'Guests must be at least 1',
       });
@@ -246,9 +250,9 @@ export const addPropertySchema = z.object({
   numberOfBeds: z.coerce.string().superRefine((data, ctx) => {
     if (data.length < 1) {
       ctx.addIssue({
-        code: z.ZodIssueCode.too_small,
+        code: 'too_small',
+        origin: 'string',
         minimum: 1,
-        type: 'string',
         inclusive: true,
         message: 'Beds must be at least 1',
       });
@@ -256,67 +260,62 @@ export const addPropertySchema = z.object({
   }),
   hostLanguages: z
     .array(z.enum(hostLanguageEnum), {
-      message: 'Please select a valid language.',
+      error: 'Please select a valid language.',
     })
     .min(1, 'At least one language must be selected.'),
 
   // 8.
   propertySurrounding: z.enum(propertySurroundingsEnum, {
-    required_error: 'Please select a room type.',
-    invalid_type_error: 'Please select a valid room surrounding',
-    message: 'Please select a room surrounding',
+    error: 'Please select a valid room surrounding',
   }),
 
   // 9.
   propertyEnvironment: z.enum(propertyEnvironmentsEnum, {
-    required_error: 'Please select a room type.',
-    invalid_type_error: 'Please select a valid room environment',
-    message: 'Please select a room environment',
+    error: 'Please select a valid room environment',
   }),
 
   // 10.
   propertyAccomodationType: z.enum(propertyAccomodationsEnum, {
-    required_error: 'Please select an accomodation type.',
-    invalid_type_error: 'Please select a valid accomodation type',
-    message: 'Please select an accomodation type',
+    error: 'Please select an accomodation type.',
   }),
 
   // 11.
   propertyAmenities: z
     .array(
       z
-        .string({ required_error: 'At least one amenity must be selected.' })
-        .nonempty({ message: 'At least one amenity must be selected.' })
+        .string({ error: 'At least one amenity must be selected.' })
+        .nonempty({ error: 'At least one amenity must be selected.' })
     )
     .refine((amenities) => amenities.length > 0, {
       path: ['propertyAmenities'],
-      message: 'At least one amenity must be selected.',
+      error: 'At least one amenity must be selected.',
     }),
 
   // 12.
   propertyRules: z
     .array(
-      z.string().nonempty({ message: 'At least one rules must be selected.' })
+      z.string().nonempty({ error: 'At least one rules must be selected.' })
     )
     .refine((rules) => rules.length > 0, {
       path: ['propertyRules'],
-      message: 'At least one rules must be selected.',
+      error: 'At least one rules must be selected.',
     }),
 
   // 13.
   propertyAccessibilities: z
     .array(
       z.string().nonempty({
-        message: 'At least one accessibilities must be selected.',
+        error: 'At least one accessibilities must be selected.',
       })
     )
     .refine((accessibilities) => accessibilities.length > 0, {
       path: ['propertyAccessibilities'],
+      error: 'At least one accessibilities must be selected.',
     }),
 
   // 14.
   propertyImages: z
-    .array(z.string())
+    .array(z.url())
     .refine(
       (urls) => urls.some((url) => url !== ''),
       'At least one image is required'
@@ -327,8 +326,8 @@ export const addPropertySchema = z.object({
 
   // 15.
   staysDateRange: z.object({
-    from: z.date({ required_error: 'Start Date is required' }),
-    to: z.date({ required_error: 'End Date is required' }),
+    from: z.date({ error: 'Start Date is required' }),
+    to: z.date({ error: 'End Date is required' }),
   }),
 
   // 16.
