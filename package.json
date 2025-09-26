@@ -6,7 +6,16 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:generate": "npx drizzle-kit generate",
+    "db:migrate": "npx drizzle-kit migrate",
+    "db:push": "npx drizzle-kit push",
+    "db:studio": "npx drizzle-kit studio",
+    "db:dev": "npm run db:generate && npm run db:push",
+    "db:seed": "npx tsx ./drizzle/seed.ts",
+    "db:test": "npx tsx ./drizzle/upload.ts",
+    "tunnel": "ngrok http 3000",
+    "clerk:user": "npx tsx ./scripts/create-fake-profile.ts"
   },
   "dependencies": {
     "@ark-ui/react": "^5.25.0",
