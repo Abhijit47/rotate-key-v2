@@ -1,3 +1,4 @@
+import { Link } from '@/i18n/navigation';
 import { SignedIn, UserButton, useUser } from '@clerk/nextjs';
 import {
   CombineIcon,
@@ -6,7 +7,6 @@ import {
   Rotate3d,
   ShieldUserIcon,
 } from 'lucide-react';
-import { Link } from '@/i18n/navigation';
 import { useState } from 'react';
 
 function DotIcon() {
@@ -39,7 +39,7 @@ export default function CustomUserButton() {
     setIsOpenUserButton((prev) => !prev);
   }
 
-  const isAdmin = user?.publicMetadata.metadata?.role === 'admin';
+  const isAdmin = user?.publicMetadata?.role === 'admin';
 
   // remove or add admin link based on user role
   const linkItems = isAdmin
@@ -58,7 +58,7 @@ export default function CustomUserButton() {
               toggleUserButton();
             }}
           />
-        </UserButton.MenuItems> */}
+          </UserButton.MenuItems> */}
 
         {linkItems.map((userButton) => {
           return (

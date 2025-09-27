@@ -2,6 +2,7 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
 import { Link } from '@/i18n/navigation';
+// import * as pdfjs from 'pdfjs-dist';
 import { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 
@@ -18,10 +19,28 @@ import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatDistance } from 'date-fns';
 import { SquareArrowOutUpRight } from 'lucide-react';
+import { useLocale } from 'next-intl';
 import { toast } from 'sonner';
+// import docUrl from '@/public/Land-Deed.pdf';
+
+// import { GlobalWorkerOptions } from 'pdfjs-dist';
+
+// pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+//   // 'pdfjs-dist/build/pdf.worker.min.mjs',
+//   // import.meta.url
+//   // `node_modules/pdfjs-dist/build/pdf.worker.min.mjs`,
+//   '../../../../../node_modules/pdfjs-dist/build/pdf.worker.min.mjs',
+//   import.meta.url
+// ).href;
 
 console.log('PDFJS Version:', pdfjs.version);
-pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker-5.3.93.mjs`;
+pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker-5.3.31.mjs`;
+// pdfjs.GlobalWorkerOptions.workerSrc = `./pdf.worker-5.3.93.mjs`;
+// pdfjs.GlobalWorkerOptions.workerSrc =
+//   '//unpkg.com/pdfjs-dist@5.3.93/build/pdf.worker.js';
+// pdfjs.GlobalWorkerOptions.workerSrc =
+//   'https://unpkg.com/pdfjs-dist@5.3.93/build/pdf.worker.js';
+// pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 type UploadedDocuments = {
   id: string;
@@ -39,6 +58,7 @@ export default function PDFCard({ doc }: { doc: UploadedDocuments }) {
   const [loading, setLoading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
+  const locale = useLocale();
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
     setLoading(true);
@@ -78,7 +98,8 @@ export default function PDFCard({ doc }: { doc: UploadedDocuments }) {
             noData={<Badge variant='outline'>No Document Loaded</Badge>}
             externalLinkRel='noopener noreferrer'
             externalLinkTarget='_blank'
-            file={doc.docLink}
+            // file={doc.docLink}
+            file={'/Land-Deed.pdf'}
             loading={<Skeleton className='w-full h-[400px] animate-pulse' />}
             onLoadSuccess={onDocumentLoadSuccess}
             onLoadError={(err) => {
@@ -171,6 +192,7 @@ export default function PDFCard({ doc }: { doc: UploadedDocuments }) {
           href={doc.docLink}
           target='_blank'
           rel='noopener noreferrer'
+          locale={locale}
           className={buttonVariants({
             variant: 'link',
             className: 'w-full text-center',
