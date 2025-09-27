@@ -62,6 +62,8 @@ export default function Navbar() {
     { href: '/pricing', label: 'Pricing' },
     { href: '/notifications', label: 'Notifications' },
     { href: '/add-property', label: 'Add Property' },
+    { href: '/terms-and-conditions', label: 'Terms' },
+    { href: '/privacy-policy', label: 'Privacy' },
     // { href: '/matches', label: 'Matches' },
     // { href: '/my-properties', label: 'My Properties' },
     // { href: '/my-matches', label: 'My Matches' },

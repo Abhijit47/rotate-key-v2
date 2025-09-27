@@ -1,11 +1,14 @@
 import { Link } from '@/i18n/navigation';
 import { SignedIn, UserButton, useUser } from '@clerk/nextjs';
+import { IconExchange } from '@tabler/icons-react';
 import {
   CombineIcon,
   FileUser,
+  HouseHeartIcon,
   MessageCircleMore,
   Rotate3d,
   ShieldUserIcon,
+  UserSquare,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -22,12 +25,18 @@ function DotIcon() {
 
 const userButtonLinks = [
   // { href: '/', label: 'Home', active: true, labelIcon: HomeIcon },
+  { href: '/profile', label: 'Profile', labelIcon: UserSquare },
+  { href: '/chat', label: 'Live Chat', labelIcon: MessageCircleMore },
   { href: '/swappings', label: 'Swappings', labelIcon: Rotate3d },
   // { href: '/matches', label: 'Matches', labelIcon: CombineIcon },
   { href: '/my-properties', label: 'My Properties', labelIcon: FileUser },
   { href: '/my-matches', label: 'My Matches', labelIcon: CombineIcon },
-  { href: '/profile', label: 'Profile', labelIcon: CombineIcon },
-  { href: '/chat', label: 'Live Chat', labelIcon: MessageCircleMore },
+  { href: '/my-exchanges', label: 'My Exchanges', labelIcon: IconExchange },
+  {
+    href: '/favourite-homes',
+    label: 'Favourite Homes',
+    labelIcon: HouseHeartIcon,
+  },
   { href: '/admin', label: 'Admin', labelIcon: ShieldUserIcon },
 ];
 
