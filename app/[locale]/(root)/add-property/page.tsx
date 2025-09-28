@@ -1,7 +1,15 @@
-import COMING_SOON_IMG from '@/public/coming-soon.svg';
-import Image from 'next/image';
-
+import SectionWrapper from '@/components/shared/SectionWrapper';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import { routing } from '@/i18n/routing';
+import { HousePlusIcon } from 'lucide-react';
+import CreatePropertyForm from './_components/CreatePropertyForm';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -9,17 +17,34 @@ export function generateStaticParams() {
 
 export default function AddPropertyPage() {
   return (
-    <div className={'h-dvh flex items-center justify-center'}>
-      <Image
-        src={COMING_SOON_IMG}
-        alt='Coming Soon'
-        width={2122}
-        height={2122}
-        className={'w-full h-full object-contain'}
-        priority
-        placeholder='blur'
-        blurDataURL={COMING_SOON_IMG.src}
-      />
-    </div>
+    <main className={'py-16'}>
+      <SectionWrapper className={'space-y-6'}>
+        {/* <h1>Pricing page</h1> */}
+        <Card className={'max-w-5xl mx-auto w-full'}>
+          <CardHeader>
+            <CardTitle>
+              <h1 className={'text-4xl text-center font-primary'}>
+                <span>
+                  <HousePlusIcon className='inline-block size-10 stroke-primary-600' />{' '}
+                </span>
+                Create your own!!!
+              </h1>
+            </CardTitle>
+          </CardHeader>
+
+          <CardDescription>
+            <p className={'text-center text-lg'}>
+              Listed your property is free. You can create your own property and
+              manage it.
+            </p>
+          </CardDescription>
+          <Separator />
+
+          <CardContent>
+            <CreatePropertyForm />
+          </CardContent>
+        </Card>
+      </SectionWrapper>
+    </main>
   );
 }
