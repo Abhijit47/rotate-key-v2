@@ -13,6 +13,7 @@ import { AddPropertyFormValues } from '@/lib/validations/property.schema';
 import axios from 'axios';
 import ExifReader from 'exifreader';
 import { UploadCloudIcon, XIcon } from 'lucide-react';
+import { useLocale } from 'next-intl';
 import Image from 'next/image';
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -36,7 +37,7 @@ interface FileWithPreview extends File {
   cloudinaryUrl?: string;
 }
 
-export type ApiResponse = {
+export type UploadApiResponse = {
   data: string | null;
   message: string;
   success: boolean;
@@ -54,6 +55,8 @@ export default function PropertyImagesUploadField() {
     useFormContext<Pick<AddPropertyFormValues, 'propertyImages'>>();
 
   const [files, setFiles] = React.useState<FileWithPreview[]>([]);
+
+  const locale = useLocale();
 
   const setValuesOptions: SetValueConfig = {
     shouldValidate: true,
@@ -103,26 +106,42 @@ export default function PropertyImagesUploadField() {
           const formData = new FormData();
           formData.append('file', file);
 
-          const response = await axios.post('/api/cloudinary', formData, {
-            onUploadProgress: (progressEvent) => {
-              const percentCompleted = Math.round(
-                (progressEvent.loaded * 100) / (progressEvent.total || 1)
-              );
-              setFiles((prev) =>
-                prev.map((f) =>
-                  f.name === file.name
-                    ? { ...f, progress: percentCompleted }
-                    : f
-                )
-              );
-            },
-          });
+          const response = await axios.post(
+            `/${locale}/api/cloudinary`,
+            formData,
+            {
+              onUploadProgress: (progressEvent) => {
+                const percentCompleted = Math.round(
+                  (progressEvent.loaded * 100) / (progressEvent.total || 1)
+                );
+                setFiles((prev) =>
+                  prev.map((f) =>
+                    f.name === file.name
+                      ? { ...f, progress: percentCompleted }
+                      : f
+                  )
+                );
+              },
+            }
+          );
 
           if (response.status !== 200) {
+            console.log('Response:', response.status);
             throw new Error(response.data.message || 'Upload failed');
           }
 
-          const cloudinaryUrl = response.data.data;
+          console.log('Cloudinary URL:', response.data);
+          const cloudinaryUrl = response.data.data!;
+
+          // if (!cloudinaryUrl) {
+          //   toast.error('Upload failed3', { position: 'top-center' });
+          //   setFiles((prev) =>
+          //     prev.map((f) =>
+          //       f.name === file.name ? { ...f, status: 'error' } : f
+          //     )
+          //   );
+          //   return;
+          // }
 
           // Update form value with new URL
           const currentUrls = getValues('propertyImages');
@@ -140,6 +159,7 @@ export default function PropertyImagesUploadField() {
             )
           );
         } catch (error) {
+          console.error('Upload error:', error);
           setFiles((prev) =>
             prev.map((f) =>
               f.name === file.name ? { ...f, status: 'error' } : f
@@ -173,6 +193,9 @@ export default function PropertyImagesUploadField() {
         (url) => url !== fileToRemove.cloudinaryUrl
       );
       setValue('propertyImages', newUrls, setValuesOptions);
+
+      // Revoke the object URL to free up memory
+      URL.revokeObjectURL(fileToRemove.preview);
     }
   }
 
@@ -210,8 +233,8 @@ export default function PropertyImagesUploadField() {
       {/* Previews */}
       {files.length > 0 && (
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-          {files.map((file) => (
-            <Card key={file.name} className='p-4 relative'>
+          {files.map((file, idx) => (
+            <Card key={idx} className='p-4 relative'>
               <div className='flex items-center justify-between mb-2 absolute top-0 right-0 z-10 backdrop-blur-lg w-full overflow-hidden'>
                 <span className='text-sm font-medium truncate'>
                   {file.name}

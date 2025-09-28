@@ -77,6 +77,10 @@ const nextConfig: NextConfig = {
       'vaul',
       'zod',
     ],
+    serverActions: {
+      bodySizeLimit: isDev ? '2mb' : '10mb',
+    },
+    typedEnv: true,
   },
   images: {
     dangerouslyAllowSVG: true,
