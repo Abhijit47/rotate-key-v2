@@ -6,7 +6,6 @@ import * as React from 'react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import {
   FileUpload,
   FileUploadDropzone,
@@ -14,6 +13,7 @@ import {
   FileUploadItemDelete,
   FileUploadItemMetadata,
   FileUploadItemPreview,
+  FileUploadItemProgress,
   FileUploadList,
   FileUploadProps,
   FileUploadTrigger,
@@ -24,7 +24,7 @@ export function UploadWithValidation() {
   const [files, setFiles] = React.useState<File[]>([]);
 
   const onFileValidate = React.useCallback(
-    (file: File): string | null => {
+    async (file: File): Promise<string | null> => {
       // Validate max files
       if (files.length >= 6) {
         return 'You can only upload up to 6 files';
@@ -44,7 +44,7 @@ export function UploadWithValidation() {
       // Validate EXIF data
       const tags = await ExifReader.load(file);
       if (!tags.Make?.value || !tags.Model?.value) {
-        throw new Error('Lacks camera metadata');
+        return 'Lacks camera metadata, download from web or generated with AI';
       }
 
       // after getting here, the file is valid
@@ -60,10 +60,13 @@ export function UploadWithValidation() {
       try {
         setIsUploading(true);
         // upload on cloud storage
-        const res = (await new Promise((res, rej) => {
+        const res = (await new Promise((res) => {
           setTimeout(() => {
-            res(files);
-          }, 3000);
+            files.forEach((file, index) => {
+              res(files);
+              onProgress(file, Math.round(((index + 1) / files.length) * 100));
+            });
+          }, 5000);
         })) as File[];
 
         toast.success('Uploaded files:', {
@@ -79,7 +82,6 @@ export function UploadWithValidation() {
                   null,
                   2
                 )}
-                <Progress />
               </code>
             </pre>
           ),
@@ -98,7 +100,7 @@ export function UploadWithValidation() {
   );
 
   const onFileReject = React.useCallback((file: File, message: string) => {
-    toast(message, {
+    toast.error(message, {
       description: `"${
         file.name.length > 20 ? `${file.name.slice(0, 20)}...` : file.name
       }" has been rejected`,
@@ -114,8 +116,9 @@ export function UploadWithValidation() {
       onUpload={onUpload}
       accept='image/*'
       maxFiles={6}
-      className='w-full max-w-md'
-      multiple>
+      className='w-full max-w-md mx-auto'
+      multiple
+      disabled={isUploading}>
       <FileUploadDropzone>
         <div className='flex flex-col items-center gap-1'>
           <div className='flex items-center justify-center rounded-full border p-2.5'>
@@ -134,14 +137,17 @@ export function UploadWithValidation() {
       </FileUploadDropzone>
       <FileUploadList>
         {files.map((file) => (
-          <FileUploadItem key={file.name} value={file}>
-            <FileUploadItemPreview />
-            <FileUploadItemMetadata />
-            <FileUploadItemDelete asChild>
-              <Button variant='ghost' size='icon' className='size-7'>
-                <X />
-              </Button>
-            </FileUploadItemDelete>
+          <FileUploadItem key={crypto.randomUUID()} value={file}>
+            <div className='flex w-full items-center gap-2'>
+              <FileUploadItemPreview />
+              <FileUploadItemMetadata />
+              <FileUploadItemDelete asChild>
+                <Button variant='ghost' size='icon' className='size-7'>
+                  <X />
+                </Button>
+              </FileUploadItemDelete>
+            </div>
+            <FileUploadItemProgress />
           </FileUploadItem>
         ))}
       </FileUploadList>

@@ -293,7 +293,9 @@ interface FileUploadRootProps
   onAccept?: (files: File[]) => void;
   onFileAccept?: (file: File) => void;
   onFileReject?: (file: File, message: string) => void;
-  onFileValidate?: (file: File) => string | null | undefined;
+  onFileValidate?: (
+    file: File
+  ) => string | null | undefined | Promise<string | null | undefined>;
   onUpload?: (
     files: File[],
     options: {
@@ -443,7 +445,7 @@ function FileUploadRoot(props: FileUploadRootProps) {
   );
 
   const onFilesChange = React.useCallback(
-    (originalFiles: File[]) => {
+    async (originalFiles: File[]) => {
       if (disabled) return;
 
       let filesToProcess = [...originalFiles];
@@ -463,7 +465,7 @@ function FileUploadRoot(props: FileUploadRootProps) {
             let rejectionMessage = `Maximum ${maxFiles} files allowed`;
 
             if (onFileValidate) {
-              const validationMessage = onFileValidate(file);
+              const validationMessage = await onFileValidate(file);
               if (validationMessage) {
                 rejectionMessage = validationMessage;
               }
@@ -482,7 +484,7 @@ function FileUploadRoot(props: FileUploadRootProps) {
         let rejectionMessage = '';
 
         if (onFileValidate) {
-          const validationMessage = onFileValidate(file);
+          const validationMessage = await onFileValidate(file);
           if (validationMessage) {
             rejectionMessage = validationMessage;
             onFileReject?.(file, rejectionMessage);
@@ -806,8 +808,7 @@ function FileUploadDropzone(props: FileUploadDropzoneProps) {
       role='region'
       id={context.dropzoneId}
       aria-controls={`${context.inputId} ${context.listId}`}
-      aria-disabled={context.disabled}
-      aria-invalid={invalid}
+      /* accessibility: aria-disabled/aria-invalid removed; use data-* attributes for styling/state */
       data-disabled={context.disabled ? '' : undefined}
       data-dragging={dragOver ? '' : undefined}
       data-invalid={invalid ? '' : undefined}
@@ -891,7 +892,6 @@ function FileUploadList(props: FileUploadListProps) {
     <ListPrimitive
       role='list'
       id={context.listId}
-      aria-orientation={orientation}
       data-orientation={orientation}
       data-slot='file-upload-list'
       data-state={shouldRender ? 'active' : 'inactive'}
