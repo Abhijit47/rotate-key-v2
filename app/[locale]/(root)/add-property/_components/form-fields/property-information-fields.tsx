@@ -114,7 +114,7 @@ export default function PropertyInformationFields() {
               </span>
 
               <Badge className={'text-[10px]'}>
-                {watch('propertyDescription').length > 0
+                {watch('propertyDescription')?.length > 0
                   ? watch('propertyDescription').length
                   : 0}
               </Badge>

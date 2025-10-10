@@ -1,48 +1,35 @@
-import axios, { AxiosResponse } from 'axios';
 import ExifReader from 'exifreader';
-import { CloudUploadIcon, ImageOff, X } from 'lucide-react';
+import { FileWarning, Loader2, Upload, XCircle } from 'lucide-react';
 import { useLocale } from 'next-intl';
-import Image from 'next/image';
-import { useState, useTransition } from 'react';
-import { FileError, FileRejection, useDropzone } from 'react-dropzone';
+import { useCallback, useState, useTransition } from 'react';
 import { SetValueConfig, useFormContext } from 'react-hook-form';
 import { toast } from 'sonner';
 
+import {
+  FileUpload,
+  FileUploadDropzone,
+  FileUploadItem,
+  FileUploadItemDelete,
+  FileUploadItemMetadata,
+  FileUploadItemPreview,
+  FileUploadItemProgress,
+  FileUploadList,
+  FileUploadProps,
+  FileUploadTrigger,
+} from '@/components/extension/file-upload';
+
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import {
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Progress } from '@/components/ui/progress';
+import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { AddPropertyFormValues } from '@/lib/validations/property.schema';
-
-// type FormValues = z.infer<typeof formSchema>;
-
-// interface FileWithPreview extends File {
-//   preview: string;
-//   status: 'uploading' | 'success' | 'error';
-//   progress: number;
-//   url: string;
-//   publicId: string;
-//   displayName: string;
-// }
-
-type FilesState = {
-  id: string;
-  file: File | null;
-  status: 'uploading' | 'success' | 'error';
-  progress: number;
-  isUploading: boolean;
-  isDeleting: boolean;
-  error: string;
-  publicId: string;
-  url: string;
-  displayName: string;
-};
 
 export type UploadApiResponse = {
   data: {
@@ -54,378 +41,359 @@ export type UploadApiResponse = {
   success: boolean;
 };
 
+export type DeleteApiResponse = {
+  message: string;
+  success: boolean;
+};
+
+type HandleDeleteFileParams = {
+  name: string;
+  index: number;
+  publicId?: string;
+  type: string;
+};
+
 export default function PropertyImagesUploadField() {
-  // const [files, setFiles] = useState<File[]>([]);
-  const [filesState, setFilesState] = useState<FilesState[]>([
-    {
-      id: '',
-      file: null,
-      status: 'uploading',
-      progress: 0,
-      isUploading: false,
-      isDeleting: false,
-      error: '',
-      publicId: '',
-      url: '',
-      displayName: '',
-    },
-  ]);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  // per-file upload progress holder (ref used because we don't render progress here)
+  const progressRef = useState({ current: 0 })[0] as { current: number };
   const [isDeletePending, startTransition] = useTransition();
 
-  const { control, getValues, setValue } =
-    useFormContext<Pick<AddPropertyFormValues, 'propertyImages'>>();
+  const setProgress = useCallback(
+    (v: number) => {
+      progressRef.current = v;
+    },
+    [progressRef]
+  );
+  const form =
+    useFormContext<Pick<AddPropertyFormValues, 'files' | 'propertyImages'>>();
 
   const locale = useLocale();
+  const UPLOAD_API_URL = `/${locale}/api/cloudinary/upload`;
+  const DELETE_API_URL = `/${locale}/api/cloudinary/delete`;
 
-  const setValuesOptions: SetValueConfig = {
-    shouldValidate: true,
-    shouldDirty: true,
-    shouldTouch: true,
-  };
-
-  async function rejectedFiles(fileRejection: FileRejection[]) {
-    // Handle rejected files
-    // console.error('Rejected files:', fileRejection);
-
-    if (fileRejection.length > 0) {
-      // Too many files
-      const tooManyFiles = fileRejection.some((file) =>
-        file.errors.some((error: FileError) => error.code === 'too-many-files')
-      );
-      if (tooManyFiles) {
-        console.error('Too many files selected. Only one file is allowed.');
-        return toast.error(
-          'Too many files selected. Only one file is allowed.'
-        );
-      }
-      // File too large
-      const tooLargeFiles = fileRejection.some((file) =>
-        file.errors.some((error: FileError) => error.code === 'file-too-large')
-      );
-      if (tooLargeFiles) {
-        console.error('File is too large. Maximum size is 5 MB.');
-        return toast.error('File is too large. Maximum size is 5 MB.');
-      }
-      // File invalid type
-      const invalidFileType = fileRejection.some((file) =>
-        file.errors.some(
-          (error: FileError) => error.code === 'file-invalid-type'
-        )
-      );
-      if (invalidFileType) {
-        console.error('Invalid file type. Only images are allowed.');
-        return toast.error('Invalid file type. Only images are allowed.');
+  // DONE: implement file validation
+  const onFileValidate = useCallback(
+    async (file: File): Promise<string | null> => {
+      // Validate max files using the form current value
+      const currentFiles = form.getValues('files') ?? [];
+      if (currentFiles.length >= 6) {
+        return 'You can only upload up to 6 files';
       }
 
-      const checkExifData = fileRejection.some((file) =>
-        file.errors.some(
-          (error: FileError) => error.message === 'Lacks camera metadata'
-        )
-      );
-      if (checkExifData) {
-        console.error('Image lacks camera metadata.');
-        return toast.error('Image lacks camera metadata.');
+      // Validate file type (only images)
+      if (!file.type.startsWith('image/')) {
+        return 'Only image files are allowed';
       }
+
+      // Validate file size (max 10MB)
+      const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+      if (file.size > MAX_SIZE) {
+        return `File size must be less than ${MAX_SIZE / (1024 * 1024)}MB`;
+      }
+
       // Validate EXIF data
-    } else {
-      // If no files were rejected, we can assume the upload was successful
-      // console.log('File uploaded successfully');
-      // return toast.success('File uploaded successfully');
-    }
-  }
+      const tags = await ExifReader.load(file);
+      if (!tags.Make?.value || !tags.Model?.value) {
+        return 'Downloaded from web or generated with AI 😔';
+      }
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: {
-      'image/*': ['.jpeg', '.jpg', '.png', '.heic', '.heif', '.webp'],
+      return null;
     },
-    multiple: true,
-    maxFiles: 6,
-    maxSize: 10 * 1024 * 1024,
-    onDrop: async (acceptedFiles, rejectedFiles) => {
-      // Handle rejected files
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      rejectedFiles.forEach(({ file, errors }) => {
-        errors.forEach((error) => {
-          if (error.code === 'file-too-large') {
-            toast.error('File size exceeds 10MB limit', {
-              position: 'top-center',
-            });
-          } else if (error.code === 'file-invalid-type') {
-            toast.error('Invalid file type', { position: 'top-center' });
-          }
-        });
-      });
+    [form]
+  );
 
-      // Process accepted files
-      for (const file of acceptedFiles) {
-        try {
-          // const fileWithPreview = Object.assign(file, {
-          //   preview: URL.createObjectURL(file),
-          //   status: 'uploading',
-          //   progress: 0,
-          //   url: '',
-          //   publicId: '',
-          //   displayName: file.name,
-          // }) as FileWithPreview;
+  // DONE: implement file upload to Cloudinary
+  const onUpload: NonNullable<FileUploadProps['onUpload']> = useCallback(
+    async (files, { onProgress, onSuccess, onError }) => {
+      const setValuesOptions: SetValueConfig = {
+        shouldValidate: true,
+        shouldDirty: true,
+        shouldTouch: true,
+      };
 
-          setFilesState((prev) => [
-            ...prev,
-            {
-              id: crypto.randomUUID(),
-              file: file,
-              status: 'uploading',
-              progress: 0,
-              isUploading: true,
-              isDeleting: false,
-              error: '',
-              publicId: '',
-              url: '',
-              displayName: file.name,
-            },
-          ]);
+      setIsUploading(true);
 
-          // Validate EXIF data
-          const tags = await ExifReader.load(file);
-          if (!tags.Make?.value || !tags.Model?.value) {
-            throw new Error('Lacks camera metadata');
-          }
+      try {
+        for (const file of files) {
+          await new Promise<void>((resolve) => {
+            const xhr = new XMLHttpRequest();
+            const fd = new FormData();
+            fd.append('file', file);
 
-          // Upload to Cloudinary
-          const formData = new FormData();
-          formData.append('file', file);
+            xhr.open('POST', UPLOAD_API_URL);
 
-          const response: AxiosResponse<UploadApiResponse> = await axios.post(
-            `/${locale}/api/cloudinary/upload`,
-            formData,
-            {
-              onUploadProgress: (progressEvent) => {
-                const percentCompleted = Math.round(
-                  (progressEvent.loaded * 100) / (progressEvent.total || 1)
-                );
-                setFilesState((prev) =>
-                  prev.map((f) =>
-                    f.displayName === file.name
-                      ? {
-                          ...f,
-                          id: f.id,
-                          file: f.file,
-                          status: 'uploading',
-                          progress: percentCompleted,
-                          isUploading: true,
-                          isDeleting: false,
-                          error: '',
-                          publicId: f.publicId,
-                          url: f.url,
-                          displayName: f.displayName,
-                        }
-                      : f
-                  )
-                );
-              },
-            }
-          );
+            xhr.upload.onprogress = (event) => {
+              if (event.lengthComputable) {
+                const pct = Math.round((event.loaded / event.total) * 100);
+                // update local progress state if you want a global bar
+                setProgress(pct);
+                // notify the FileUpload component about per-file progress
+                onProgress?.(file, pct);
+              }
+            };
 
-          if (response.status !== 200) {
-            console.log('Response:', response.status);
-            throw new Error(response.data.message || 'Upload failed');
-          }
+            xhr.onload = async () => {
+              try {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                  const json = JSON.parse(
+                    xhr.responseText
+                  ) as UploadApiResponse;
+                  if (json?.data?.url) {
+                    // append returned URL to form images
+                    const currentUrls = form.getValues('propertyImages');
+                    form.setValue(
+                      'propertyImages',
+                      [...currentUrls, json.data.url],
+                      setValuesOptions
+                    );
 
-          console.log('Cloudinary URL:', response.data);
-          const data = response.data.data;
+                    // add the publicId to to the current file to enable deletion later
+                    form.setValue(
+                      'files',
+                      files.map((f) =>
+                        f === file
+                          ? Object.assign(f, { publicId: json.data?.publicId })
+                          : f
+                      ),
+                      { ...setValuesOptions, shouldTouch: false }
+                    );
 
-          if (!data) {
-            toast.error('No Url for image', { position: 'top-center' });
-            setFilesState((prev) =>
-              prev.map((f) =>
-                f.displayName === file.name
-                  ? {
-                      ...f,
-                      id: f.id,
-                      file: f.file,
-                      status: 'error',
-                      isUploading: false,
-
-                      error: 'No URL',
-                      progress: 0,
-                      url: '',
-                      publicId: '',
-                      displayName: f.displayName,
-                    }
-                  : f
-              )
-            );
-            return;
-          }
-
-          // Update form value with new URL
-          const currentUrls = getValues('propertyImages');
-          setValue(
-            'propertyImages',
-            [...currentUrls, data.url],
-            setValuesOptions
-          );
-          setFilesState((prev) =>
-            prev.map((f) =>
-              f.displayName === file.name
-                ? {
-                    ...f,
-                    id: f.id,
-                    file: f.file,
-                    status: 'success',
-                    progress: 100,
-                    isUploading: false,
-                    url: data.url,
-                    publicId: data.publicId,
-                    displayName: data.displayName,
+                    onSuccess?.(file);
+                    resolve();
+                  } else {
+                    const msg =
+                      json?.message ?? 'Upload succeeded but no data returned';
+                    onError?.(file, new Error(msg));
+                    toast.error(msg);
+                    resolve();
                   }
-                : f
-            )
-          );
-          toast.success('File uploaded successfully', {
-            position: 'top-center',
+                } else {
+                  const msg = `Upload failed: ${xhr.status} ${xhr.statusText}`;
+                  onError?.(file, new Error(msg));
+                  toast.error(msg);
+                  resolve();
+                }
+              } catch (err) {
+                const e = err instanceof Error ? err : new Error(String(err));
+                onError?.(file, e);
+                toast.error(e.message);
+                resolve();
+              }
+            };
+
+            xhr.onerror = () => {
+              const msg = 'Network error occurred during file upload.';
+              onError?.(file, new Error(msg));
+              toast.error(msg);
+              resolve();
+            };
+
+            xhr.send(fd);
           });
-        } catch (error) {
-          console.error('Upload error:', error);
-          setFilesState((prev) =>
-            prev.map((f) =>
-              f.displayName === file.name
-                ? {
-                    ...f,
-                    id: f.id,
-                    file: f.file,
-                    status: 'error',
-                    progress: 0,
-                    isUploading: false,
-                    error: (error as Error).message,
-                    url: '',
-                    publicId: '',
-                    displayName: f.displayName,
-                  }
-                : f
-            )
-          );
-
-          if (error instanceof Error) {
-            toast.error(
-              error.message === 'Lacks camera metadata'
-                ? 'Image lacks camera metadata'
-                : 'Upload failed',
-              { position: 'top-center' }
-            );
-          }
         }
+
+        toast.success('Uploaded files');
+      } finally {
+        setIsUploading(false);
       }
     },
-    onDropRejected: async (files) => await rejectedFiles(files),
-    disabled: isDeletePending, // Disable while dragging
-  });
+    [form, setProgress, UPLOAD_API_URL]
+  );
 
-  function removeFile(publicId: string) {
-    // Find the file to remove
-    // const fileToRemove = files.find((file) => file.publicId === publicId);
-    const fileToRemove = filesState.find((file) => file.publicId === publicId);
-    console.log('Removing file:', publicId);
-    console.log('File to remove:', fileToRemove);
-
-    if (fileToRemove) {
-      startTransition(async () => {
-        const formData = new FormData();
-        formData.append('publicId', fileToRemove.publicId);
-        // Call API to delete from Cloudinary
-        const response = await fetch(`/${locale}/api/cloudinary/delete`, {
-          method: 'DELETE',
-          body: formData,
-        });
-        console.log('Delete response status:', response.status);
+  // DONE: implement file rejection handling
+  const onFileReject = useCallback(
+    (file: File, message: string) => {
+      form.setError('files', {
+        message,
       });
+      toast.error(message, {
+        description: `"${
+          file.name.length > 20 ? `${file.name.slice(0, 20)}...` : file.name
+        }" has been rejected`,
+      });
+    },
+    [form]
+  );
 
-      // Remove from local state
-      // setFiles((prev) => prev.filter((file) => file.publicId !== publicId));
-      setFilesState((prev) =>
-        prev.filter((file) => file.publicId !== publicId)
+  // DONE: implement file deletion both locally and from Cloudinary
+  function handleDeleteFile(params: HandleDeleteFileParams) {
+    const { name, index, publicId, type } = params;
+
+    startTransition(async () => {
+      const currentFiles = form.getValues('files') ?? [];
+      if (index < 0 || index >= currentFiles.length) {
+        toast.error('Invalid file index');
+        return;
+      }
+
+      // remove the local file
+      form.setValue(
+        'files',
+        currentFiles.filter((file, i) => {
+          // filter out the file at the given index
+          return i !== index;
+        }),
+        {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true,
+        }
       );
 
-      // Remove from form values
-      const currentUrls = getValues('propertyImages');
-      console.log('Current URLs before removal:', currentUrls);
-      const newUrls = currentUrls.filter((url) => url !== fileToRemove.url);
-      console.log('New URLs after removal:', newUrls);
-      setValue('propertyImages', newUrls, setValuesOptions);
+      // remove the corresponding image URL if exists
+      const imageUrls = form.getValues('propertyImages') ?? [];
 
-      // Revoke the object URL to free up memory
-      // URL.revokeObjectURL(fileToRemove.preview);
-    }
-  }
+      form.setValue(
+        'propertyImages',
+        imageUrls.filter((url) => !url.includes(name)),
+        {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true,
+        }
+      );
+      // "https://res.cloudinary.com/rotate-key/image/upload/v1760100227/rotate-key/user_32XbNhKzVwexApprNx11AmR6T9d/my-property/20241223_152021.jpg.jpg"
 
-  function handleRemoveFile() {
-    return Promise.resolve();
-  }
+      const formData = new FormData();
+      formData.append('publicId', publicId ?? '');
+      formData.append('resourceType', type);
 
-  function renderContent() {
-    for (const fileState of filesState) {
-      if (fileState.isUploading) {
-        return (
-          <RenderUploadingState
-            progress={fileState.progress}
-            file={fileState.file}
-          />
-        );
+      const res = await fetch(DELETE_API_URL, {
+        method: 'DELETE',
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const err: DeleteApiResponse = await res.json();
+        toast.error(err?.message || 'Failed to delete file from server');
+        return;
+      } else {
+        const json: DeleteApiResponse = await res.json();
+        if (!json.success) {
+          toast.error(json?.message || 'Failed to delete file from server');
+          return;
+        }
+        toast.success(json?.message || 'File deleted from server');
       }
-
-      if (fileState.error) {
-        return <RenderErrorState />;
-      }
-      if (fileState.url) {
-        return (
-          <RenderUploadedState
-            previewUrl={fileState.url}
-            isDeleting={fileState.isDeleting}
-            onDelete={handleRemoveFile}
-            fileType='image'
-          />
-        );
-      }
-      return <RenderEmptyState isDragActive={isDragActive} />;
-    }
+    });
   }
 
   return (
     <div className='space-y-4'>
       <FormField
-        control={control}
-        name='propertyImages'
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        disabled={isUploading || isDeletePending}
+        control={form.control}
+        name='files'
         render={({ field }) => (
           <FormItem>
+            <FormLabel>Property Images</FormLabel>
             <FormControl>
-              <Card
-                {...getRootProps()}
-                className={cn(
-                  'relative border-2 border-dashed transition-colors w-full h-64',
-                  isDragActive
-                    ? 'border-primary/10 bg-primary/10 border-solid'
-                    : 'border-border hover:border-primary'
-                )}>
-                <CardContent
-                  className={
-                    'flex items-center justify-center w-full h-full p-4 relative'
-                  }>
-                  <input {...getInputProps()} id='thumbnail' />
-                  {renderContent()}
-                </CardContent>
-              </Card>
-              {/* <div
-                {...getRootProps()}
-                className='border-2 border-dashed rounded-lg p-8 text-center cursor-pointer group group-hover:ring-2 group-hover:ring-primary-500 hover:border-primary transition-colors duration-150 ease-in-out'>
-                <input {...getInputProps()} />
-                <UploadCloudIcon className='mx-auto mb-4 h-8 w-8 stroke-muted-foreground group-hover:stroke-primary-500' />
-                <p>
-                  Drag & drop images here, or click to select (max 6 files, 10MB
-                  each)
-                </p>
-              </div> */}
+              <FileUpload
+                value={field.value}
+                onValueChange={field.onChange}
+                onFileValidate={onFileValidate}
+                accept='image/*'
+                maxFiles={6}
+                maxSize={10 * 1024 * 1024}
+                onUpload={onUpload}
+                onFileReject={onFileReject}
+                multiple
+                disabled={isUploading || isDeletePending}>
+                <FileUploadDropzone
+                  className={cn(
+                    'border-2 border-dotted text-center border-primary/50 bg-primary/5 hover:bg-primary/10 focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+                    'data-error:border-destructive data-error:text-destructive',
+                    'data-error:hover:bg-destructive/10 data-error:bg-destructive/5',
+                    'transition-colors',
+                    isUploading || isDeletePending ? 'pointer-events-none' : ''
+                  )}>
+                  {form.formState.errors.files ? (
+                    <UploadImageErrorState />
+                  ) : (
+                    <UploadImageEmptyState />
+                  )}
+
+                  {!form.formState.errors.files && (
+                    <FileUploadTrigger asChild>
+                      <Button variant='link' size='sm' className='p-1.5'>
+                        choose files
+                      </Button>
+                    </FileUploadTrigger>
+                  )}
+                </FileUploadDropzone>
+                <FileUploadList>
+                  {field.value?.map((file, idx) => (
+                    <FileUploadItem key={crypto.randomUUID()} value={file}>
+                      <div className='flex w-full items-center gap-2'>
+                        <FileUploadItemPreview />
+                        <FileUploadItemMetadata />
+                        <FileUploadItemDelete asChild>
+                          <Button
+                            disabled={isUploading || isDeletePending}
+                            type='button'
+                            variant='destructive'
+                            size='icon'
+                            className='size-7'
+                            onClick={() =>
+                              handleDeleteFile({
+                                name: file.name,
+                                index: idx,
+                                publicId: file.publicId,
+                                type: file.type.split('/')[0],
+                              })
+                            }>
+                            {isDeletePending ? <Loader2 /> : <XCircle />}
+                            <span className='sr-only'>Delete</span>
+                          </Button>
+                        </FileUploadItemDelete>
+                      </div>
+                      <FileUploadItemProgress />
+                    </FileUploadItem>
+                  ))}
+                </FileUploadList>
+              </FileUpload>
             </FormControl>
-            <FormMessage className={'text-xs font-medium text-destructive'} />
+            {form.formState.errors.files ? (
+              <>
+                <FormMessage className={'text-xs'} />
+              </>
+            ) : (
+              <>
+                <FormDescription className={'text-xs'}>
+                  Upload up to 6 images up to 10 MB each.
+                </FormDescription>
+              </>
+            )}
+          </FormItem>
+        )}
+      />
+      <FormField
+        disabled={isUploading || isDeletePending}
+        control={form.control}
+        name='propertyImages'
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Urls</FormLabel>
+            <FormControl>
+              <Textarea
+                readOnly
+                value={field.value?.length ? field.value.join('\n') : ''}
+                placeholder='Uploaded image URLs will appear here...'
+                className='font-mono h-24 resize-none'
+              />
+            </FormControl>
+            {form.formState.errors.files ? (
+              <>
+                <FormMessage className={'text-xs'} />
+              </>
+            ) : (
+              <>
+                <FormDescription className={'text-xs'}>
+                  These URLs will be submitted with the form.
+                </FormDescription>
+              </>
+            )}
           </FormItem>
         )}
       />
@@ -433,123 +401,45 @@ export default function PropertyImagesUploadField() {
   );
 }
 
-interface RenderEmptyStateProps {
-  isDragActive: boolean;
-}
-
-export function RenderEmptyState(props: RenderEmptyStateProps) {
-  const { isDragActive } = props;
-
+function UploadImageEmptyState() {
   return (
-    <div className={'text-center'}>
-      <div
-        className={
-          'flex items-center justify-center size-12 mx-auto rounded-full bg-muted mb-4'
-        }>
-        <CloudUploadIcon
-          className={cn(
-            'size-6 text-muted-foreground',
-            isDragActive && 'text-primary'
-          )}
-        />
+    <div className='flex flex-col items-center gap-1'>
+      <div className='flex items-center justify-center rounded-full border p-2.5'>
+        <Upload className='size-6 text-muted-foreground' />
       </div>
-
-      <p className={'text-base font-semibold text-foreground'}>
-        Drop the files here{' '}
-        <span className={'text-primary font-bold cursor-pointer'}>
-          Click to upload
-        </span>
+      <p className='font-medium text-sm'>Drag & drop files here</p>
+      <p className='text-muted-foreground text-xs'>
+        Or click to browse (max 6 files)
       </p>
-
-      <Button type='button' className={'mt-4'}>
-        Select file
-      </Button>
     </div>
   );
 }
 
-export function RenderErrorState() {
+function UploadImageErrorState() {
+  const form =
+    useFormContext<Pick<AddPropertyFormValues, 'files' | 'propertyImages'>>();
+
   return (
-    <div className={'text-center text-destructive'}>
-      <div
-        className={
-          'flex items-center justify-center size-12 mx-auto rounded-full bg-destructive/75 mb-4'
-        }>
-        <ImageOff className={cn('size-6 text-destructive-foreground')} />
+    <div className='flex flex-col items-center gap-1'>
+      <div className='flex items-center justify-center rounded-full border p-2.5'>
+        <FileWarning className='size-6 text-muted-foreground' />
       </div>
-
-      <p className={'text-sm font-semibold text-muted-foreground'}>
-        An error occurred while uploading the file.
+      <p className='font-medium text-sm'>
+        There was an error uploading your files.
       </p>
-      <Button type='button' variant={'destructive'} className={'mt-4'}>
-        Try Again
-      </Button>
-    </div>
-  );
-}
-
-interface RenderUploadedStateProps {
-  previewUrl: string;
-  isDeleting: boolean;
-  onDelete: () => Promise<void>;
-  fileType: 'image' | 'video';
-}
-
-export function RenderUploadedState(props: RenderUploadedStateProps) {
-  const { previewUrl } = props;
-  console.log('Preview URL:', previewUrl);
-
-  return (
-    <div
-      className={
-        'relative group w-full h-full flex items-center justify-center'
-      }>
-      <Image
-        src={previewUrl}
-        alt='uploaded file'
-        fill
-        sizes='(max-width: 640px) 100vw, 640px'
-        className={'object-contain p-2'}
-      />
-
+      {form.formState.errors.files?.message && (
+        <p className='text-muted-foreground text-xs'>
+          Please try again. {form.formState.errors.files.message}
+        </p>
+      )}
       <Button
-        onClick={props.onDelete}
-        disabled={props.isDeleting}
         type='button'
-        variant={'destructive'}
-        size={'icon'}
-        className={cn(
-          'absolute -top-2 right-4 z-10 bg-muted hover:bg-muted/80 transition-colors'
-        )}>
-        <X className={'size-4 text-destructive-foreground'} />
-        <span className={'sr-only'}>Remove file</span>
+        variant='secondary'
+        size='sm'
+        className='mt-1'
+        onClick={() => form.reset({ files: [] }, { keepDirty: true })}>
+        Reset
       </Button>
-    </div>
-  );
-}
-
-interface RenderUploadingStateProps {
-  progress: number;
-  file: File | null;
-}
-
-export function RenderUploadingState(props: RenderUploadingStateProps) {
-  const { progress, file } = props;
-
-  return (
-    <div
-      className={'text-center flex items-center justify-center flex-col gap-2'}>
-      <p>{progress}</p>
-      <Progress
-        value={progress}
-        className={cn(
-          'bg-muted transition-all duration-300 ease-in-out',
-          `w-${progress}% h-2 rounded-full overflow-hidden`
-        )}
-      />
-      <p className={'text-sm font-medium text-foreground truncate max-w-xs'}>
-        Uploading {file?.name}...
-      </p>
     </div>
   );
 }

@@ -192,7 +192,7 @@ export const addPropertySchema = z.object({
     .optional()
     .superRefine((data, ctx) => {
       if (data) {
-        const phoneNumber = phoneUtil.parse(data);
+        const phoneNumber = phoneUtil?.parse(data);
         try {
           if (!phoneUtil.isPossibleNumber(phoneNumber)) {
             ctx.addIssue({
@@ -342,6 +342,16 @@ export const addPropertySchema = z.object({
     }),
   }),
   staysDurationInDays: z.string(),
+
+  /* Temp. Local files store for performing upload */
+  files: z
+    .array(z.custom<File & { publicId?: string }>())
+    .min(1, 'Please select at least one file')
+    .max(6, 'Please select up to 6 files')
+    .refine((files) => files.every((file) => file.size <= 10 * 1024 * 1024), {
+      message: 'File size must be less than 10MB',
+      path: ['files'],
+    }),
 
   /* Property Images */
   propertyImages: z

@@ -1,5 +1,15 @@
+import axios, { AxiosResponse } from 'axios';
+import ExifReader from 'exifreader';
+import { CloudUploadIcon, ImageOff, X } from 'lucide-react';
+import { useLocale } from 'next-intl';
+import Image from 'next/image';
+import { useState, useTransition } from 'react';
+import { FileError, FileRejection, useDropzone } from 'react-dropzone';
+import { SetValueConfig, useFormContext } from 'react-hook-form';
+import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   FormControl,
   FormField,
@@ -9,45 +19,20 @@ import {
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 import { AddPropertyFormValues } from '@/lib/validations/property.schema';
-// import { AddPropertyFormValues } from '@/lib/validations/property.schema';
-// import { zodResolver } from '@hookform/resolvers/zod';
-import axios, { AxiosResponse } from 'axios';
-import ExifReader from 'exifreader';
-import {
-  CloudUploadIcon,
-  ImageOff,
-  UploadCloudIcon,
-  X,
-  XIcon,
-} from 'lucide-react';
-import { useLocale } from 'next-intl';
-import Image from 'next/image';
-import { useState, useTransition } from 'react';
-import { FileError, FileRejection, useDropzone } from 'react-dropzone';
-import { SetValueConfig, useFormContext } from 'react-hook-form';
-import { toast } from 'sonner';
-// import { z } from 'zod';
-
-// // Form schema validation
-// const formSchema = z.object({
-//   uploadedUrls: z
-//     .array(z.string().url())
-//     .min(1, 'At least one file is required'),
-// });
 
 // type FormValues = z.infer<typeof formSchema>;
 
-interface FileWithPreview extends File {
-  preview: string;
-  status: 'uploading' | 'success' | 'error';
-  progress: number;
-  url: string;
-  publicId: string;
-  displayName: string;
-}
+// interface FileWithPreview extends File {
+//   preview: string;
+//   status: 'uploading' | 'success' | 'error';
+//   progress: number;
+//   url: string;
+//   publicId: string;
+//   displayName: string;
+// }
 
 type FilesState = {
-  id: null;
+  id: string;
   file: File | null;
   status: 'uploading' | 'success' | 'error';
   progress: number;
@@ -69,11 +54,23 @@ export type UploadApiResponse = {
   success: boolean;
 };
 
+export type DeleteApiResponse = {
+  message: string;
+  success: boolean;
+};
+
+type HandleDeleteFileParams = {
+  name: string;
+  index: number;
+  publicId?: string;
+  type: string;
+};
+
 export default function PropertyImagesUploadField() {
   // const [files, setFiles] = useState<File[]>([]);
   const [filesState, setFilesState] = useState<FilesState[]>([
     {
-      id: null,
+      id: '',
       file: null,
       status: 'uploading',
       progress: 0,
@@ -88,7 +85,7 @@ export default function PropertyImagesUploadField() {
   const [isDeletePending, startTransition] = useTransition();
 
   const { control, getValues, setValue } =
-    useFormContext<Pick<AddPropertyFormValues, 'propertyImages'>>();
+    useFormContext<Pick<AddPropertyFormValues, 'files' | 'propertyImages'>>();
 
   const locale = useLocale();
 
@@ -97,8 +94,6 @@ export default function PropertyImagesUploadField() {
     shouldDirty: true,
     shouldTouch: true,
   };
-
-  // const currentUrls = getValues('propertyImages');
 
   async function rejectedFiles(fileRejection: FileRejection[]) {
     // Handle rejected files
@@ -176,20 +171,19 @@ export default function PropertyImagesUploadField() {
       // Process accepted files
       for (const file of acceptedFiles) {
         try {
-          const fileWithPreview = Object.assign(file, {
-            preview: URL.createObjectURL(file),
-            status: 'uploading',
-            progress: 0,
-            url: '',
-            publicId: '',
-            displayName: file.name,
-          }) as FileWithPreview;
+          // const fileWithPreview = Object.assign(file, {
+          //   preview: URL.createObjectURL(file),
+          //   status: 'uploading',
+          //   progress: 0,
+          //   url: '',
+          //   publicId: '',
+          //   displayName: file.name,
+          // }) as FileWithPreview;
 
-          // setFiles((prev) => [...prev, fileWithPreview]);
           setFilesState((prev) => [
             ...prev,
             {
-              id: null,
+              id: crypto.randomUUID(),
               file: file,
               status: 'uploading',
               progress: 0,
@@ -220,30 +214,21 @@ export default function PropertyImagesUploadField() {
                 const percentCompleted = Math.round(
                   (progressEvent.loaded * 100) / (progressEvent.total || 1)
                 );
-                // setFiles((prev) =>
-                //   prev.map((f) =>
-                //     f.displayName === file.name
-                //       ? {
-                //           ...f,
-                //           progress: percentCompleted,
-                //           publicId: f.publicId,
-                //         }
-                //       : f
-                //   )
-                // );
                 setFilesState((prev) =>
                   prev.map((f) =>
                     f.displayName === file.name
                       ? {
                           ...f,
+                          id: f.id,
+                          file: f.file,
+                          status: 'uploading',
                           progress: percentCompleted,
                           isUploading: true,
+                          isDeleting: false,
+                          error: '',
                           publicId: f.publicId,
                           url: f.url,
                           displayName: f.displayName,
-                          error: '',
-                          isDeleting: false,
-                          status: 'uploading',
                         }
                       : f
                   )
@@ -262,18 +247,16 @@ export default function PropertyImagesUploadField() {
 
           if (!data) {
             toast.error('No Url for image', { position: 'top-center' });
-            // setFiles((prev) =>
-            //   prev.map((f) =>
-            //     f.name === file.name ? { ...f, status: 'error' } : f
-            //   )
-            // );
             setFilesState((prev) =>
               prev.map((f) =>
                 f.displayName === file.name
                   ? {
                       ...f,
+                      id: f.id,
+                      file: f.file,
                       status: 'error',
                       isUploading: false,
+
                       error: 'No URL',
                       progress: 0,
                       url: '',
@@ -293,26 +276,13 @@ export default function PropertyImagesUploadField() {
             [...currentUrls, data.url],
             setValuesOptions
           );
-
-          // setFiles((prev) =>
-          //   prev.map((f) =>
-          //     f.name === file.name
-          //       ? {
-          //           ...f,
-          //           status: 'success',
-          //           progress: 100,
-          //           url: data.url,
-          //           publicId: data.publicId,
-          //           displayName: data.displayName,
-          //         }
-          //       : f
-          //   )
-          // );
           setFilesState((prev) =>
             prev.map((f) =>
               f.displayName === file.name
                 ? {
                     ...f,
+                    id: f.id,
+                    file: f.file,
                     status: 'success',
                     progress: 100,
                     isUploading: false,
@@ -328,20 +298,17 @@ export default function PropertyImagesUploadField() {
           });
         } catch (error) {
           console.error('Upload error:', error);
-          // setFiles((prev) =>
-          //   prev.map((f) =>
-          //     f.name === file.name ? { ...f, status: 'error' } : f
-          //   )
-          // );
           setFilesState((prev) =>
             prev.map((f) =>
               f.displayName === file.name
                 ? {
                     ...f,
+                    id: f.id,
+                    file: f.file,
                     status: 'error',
+                    progress: 0,
                     isUploading: false,
                     error: (error as Error).message,
-                    progress: 0,
                     url: '',
                     publicId: '',
                     displayName: f.displayName,
@@ -367,7 +334,8 @@ export default function PropertyImagesUploadField() {
 
   function removeFile(publicId: string) {
     // Find the file to remove
-    const fileToRemove = files.find((file) => file.publicId === publicId);
+    // const fileToRemove = files.find((file) => file.publicId === publicId);
+    const fileToRemove = filesState.find((file) => file.publicId === publicId);
     console.log('Removing file:', publicId);
     console.log('File to remove:', fileToRemove);
 
@@ -384,7 +352,10 @@ export default function PropertyImagesUploadField() {
       });
 
       // Remove from local state
-      setFiles((prev) => prev.filter((file) => file.publicId !== publicId));
+      // setFiles((prev) => prev.filter((file) => file.publicId !== publicId));
+      setFilesState((prev) =>
+        prev.filter((file) => file.publicId !== publicId)
+      );
 
       // Remove from form values
       const currentUrls = getValues('propertyImages');
@@ -394,7 +365,7 @@ export default function PropertyImagesUploadField() {
       setValue('propertyImages', newUrls, setValuesOptions);
 
       // Revoke the object URL to free up memory
-      URL.revokeObjectURL(fileToRemove.preview);
+      // URL.revokeObjectURL(fileToRemove.preview);
     }
   }
 
@@ -439,7 +410,23 @@ export default function PropertyImagesUploadField() {
         render={({ field }) => (
           <FormItem>
             <FormControl>
-              <div
+              <Card
+                {...getRootProps()}
+                className={cn(
+                  'relative border-2 border-dashed transition-colors w-full h-64',
+                  isDragActive
+                    ? 'border-primary/10 bg-primary/10 border-solid'
+                    : 'border-border hover:border-primary'
+                )}>
+                <CardContent
+                  className={
+                    'flex items-center justify-center w-full h-full p-4 relative'
+                  }>
+                  <input {...getInputProps()} id='thumbnail' />
+                  {renderContent()}
+                </CardContent>
+              </Card>
+              {/* <div
                 {...getRootProps()}
                 className='border-2 border-dashed rounded-lg p-8 text-center cursor-pointer group group-hover:ring-2 group-hover:ring-primary-500 hover:border-primary transition-colors duration-150 ease-in-out'>
                 <input {...getInputProps()} />
@@ -448,92 +435,12 @@ export default function PropertyImagesUploadField() {
                   Drag & drop images here, or click to select (max 6 files, 10MB
                   each)
                 </p>
-                <div className={'text-center'}>
-                  <div
-                    className={
-                      'flex items-center justify-center size-12 mx-auto rounded-full bg-muted mb-4'
-                    }>
-                    <CloudUploadIcon
-                      className={cn(
-                        'size-6 text-muted-foreground',
-                        isDragActive && 'text-primary'
-                      )}
-                    />
-                  </div>
-
-                  <p className={'text-base font-semibold text-foreground'}>
-                    Drop the files here{' '}
-                    <span className={'text-primary font-bold cursor-pointer'}>
-                      Click to upload
-                    </span>
-                  </p>
-
-                  <Button type='button' className={'mt-4'}>
-                    Select file
-                  </Button>
-                </div>
-              </div>
+              </div> */}
             </FormControl>
             <FormMessage className={'text-xs font-medium text-destructive'} />
           </FormItem>
         )}
       />
-
-      {/* Previews */}
-      {filesState.length > 0 && (
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-          {filesState.map((file, idx) => (
-            <Card key={idx} className='p-4 relative'>
-              <div className='flex items-center justify-between mb-2 absolute top-0 right-0 z-10 backdrop-blur-lg w-full overflow-hidden'>
-                <span className='text-sm font-medium truncate'>
-                  {file.displayName}
-                </span>
-                <Button
-                  disabled={isDeletePending}
-                  variant='destructive'
-                  size='icon'
-                  onClick={() => removeFile(file.publicId)}>
-                  <XIcon className='h-4 w-4' />
-                </Button>
-              </div>
-
-              <div className={'aspect-video w-full h-full'}>
-                <Image
-                  src={file.url}
-                  alt={file.displayName || `Preview of ${file.displayName}`}
-                  width={300}
-                  height={200}
-                  className='h-full w-full object-cover rounded mb-2'
-                  // onLoad={() => URL.revokeObjectURL(file.preview)}
-                />
-              </div>
-
-              {file.status === 'uploading' && (
-                <Progress value={file.progress} className='h-2' />
-              )}
-
-              {file.status === 'error' && (
-                <div className='text-red-500 text-sm mt-2'>
-                  <Button
-                    variant='outline'
-                    size='sm'
-                    onClick={() => {
-                      /* Add retry logic here */
-                    }}>
-                    Retry
-                  </Button>
-                </div>
-              )}
-
-              {file.status === 'success' && (
-                <div className='text-green-500 text-sm mt-2'>
-                  Uploaded successfully
-                </div>
-              )}
-            </Card>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
