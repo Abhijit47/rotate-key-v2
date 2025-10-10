@@ -47,4 +47,5 @@ next-env.d.ts
 /locales/*.d.json.ts
 
 # temporary
+/public/temp
 /test-images

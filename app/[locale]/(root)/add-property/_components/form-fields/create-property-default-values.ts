@@ -73,7 +73,8 @@ const defaultValues = {
     to: isDev ? addDays(new Date(), 30) : undefined,
   },
   staysDurationInDays: isDev ? '30' : '',
-  propertyImages: isDev ? Array(6).fill('') : [],
+  // propertyImages: isDev ? Array(6).fill('') : [],
+  propertyImages: isDev ? [] : [],
 };
 
 export default defaultValues;

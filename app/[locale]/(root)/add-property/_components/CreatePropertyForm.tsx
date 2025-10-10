@@ -49,7 +49,7 @@ export default function CreatePropertyForm() {
     // ✅ This will be type-safe and validated.
     console.log(values);
     toast(
-      <pre className='text-xs max-w-md bg-slate-800 p-2 rounded-md text-white overflow-y-scroll text-wrap'>
+      <pre className='text-xs max-w-md bg-slate-800 p-2 rounded-md text-white overflow-scroll text-wrap h-96'>
         {JSON.stringify(values, null, 2)}
       </pre>
     );
