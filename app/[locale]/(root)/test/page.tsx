@@ -12,11 +12,13 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { cn } from '@/lib/utils';
+import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CloudUpload, Loader2, XCircle } from 'lucide-react';
+import { FileWarning, Loader2, Upload, XCircle } from 'lucide-react';
 import { useLocale } from 'next-intl';
 import { useCallback, useState, useTransition } from 'react';
-import { type SetValueConfig, useForm } from 'react-hook-form';
+import { type SetValueConfig, useForm, useFormContext } from 'react-hook-form';
 import { toast } from 'sonner';
 import z from 'zod';
 import {
@@ -113,11 +115,8 @@ export default function TestPage() {
       // Validate EXIF data
       const tags = await ExifReader.load(file);
       if (!tags.Make?.value || !tags.Model?.value) {
-        return 'Lacks camera metadata, download from web or generated with AI';
+        return 'Downloaded from web or generated with AI 😔';
       }
-
-      // after getting here, the file is valid
-      // we can return null to indicate no error
 
       return null;
     },
@@ -227,7 +226,7 @@ export default function TestPage() {
   // DONE: implement file rejection handling
   const onFileReject = useCallback(
     (file: File, message: string) => {
-      form.setError('images', {
+      form.setError('files', {
         message,
       });
       toast.error(message, {
@@ -316,7 +315,7 @@ export default function TestPage() {
   return (
     <div className={'max-w-xl mx-auto py-16'}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
           <FormField
             disabled={isUploading || isDeletePending}
             control={form.control}
@@ -336,15 +335,28 @@ export default function TestPage() {
                     onFileReject={onFileReject}
                     multiple
                     disabled={isUploading || isDeletePending}>
-                    <FileUploadDropzone className='flex-row flex-wrap border-2 border-dotted text-center border-primary/50 bg-primary/5 hover:bg-primary/10 focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'>
-                      <CloudUpload className='size-4' />
-                      Drag and drop or
-                      <FileUploadTrigger asChild>
-                        <Button variant='link' size='sm' className='p-0'>
-                          choose files
-                        </Button>
-                      </FileUploadTrigger>
-                      to upload
+                    <FileUploadDropzone
+                      className={cn(
+                        'border-2 border-dotted text-center border-primary/50 bg-primary/5 hover:bg-primary/10 focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+                        'data-error:border-destructive data-error:text-destructive',
+                        'transition-colors',
+                        isUploading || isDeletePending
+                          ? 'pointer-events-none'
+                          : ''
+                      )}>
+                      {form.formState.errors.files ? (
+                        <UploadImageErrorState />
+                      ) : (
+                        <UploadImageEmptyState />
+                      )}
+
+                      {!form.formState.errors.files && (
+                        <FileUploadTrigger asChild>
+                          <Button variant='link' size='sm' className='p-1.5'>
+                            choose files
+                          </Button>
+                        </FileUploadTrigger>
+                      )}
                     </FileUploadDropzone>
                     <FileUploadList>
                       {field.value?.map((file, idx) => (
@@ -378,16 +390,66 @@ export default function TestPage() {
                     </FileUploadList>
                   </FileUpload>
                 </FormControl>
-                <FormDescription>
-                  Upload up to 6 images up to 10 MB each.
-                </FormDescription>
-                <FormMessage />
+                {form.formState.errors.files ? (
+                  <>
+                    <FormMessage className={'text-xs'} />
+                  </>
+                ) : (
+                  <>
+                    <FormDescription className={'text-xs'}>
+                      Upload up to 6 images up to 10 MB each.
+                    </FormDescription>
+                  </>
+                )}
               </FormItem>
             )}
           />
           <Button type='submit'>Submit</Button>
         </form>
+        <DevTool control={form.control} />
       </Form>
+    </div>
+  );
+}
+
+function UploadImageEmptyState() {
+  return (
+    <div className='flex flex-col items-center gap-1'>
+      <div className='flex items-center justify-center rounded-full border p-2.5'>
+        <Upload className='size-6 text-muted-foreground' />
+      </div>
+      <p className='font-medium text-sm'>Drag & drop files here</p>
+      <p className='text-muted-foreground text-xs'>
+        Or click to browse (max 6 files)
+      </p>
+    </div>
+  );
+}
+
+function UploadImageErrorState() {
+  const form = useFormContext<Pick<FormValues, 'files' | 'images'>>();
+
+  return (
+    <div className='flex flex-col items-center gap-1'>
+      <div className='flex items-center justify-center rounded-full border p-2.5'>
+        <FileWarning className='size-6 text-muted-foreground' />
+      </div>
+      <p className='font-medium text-sm'>
+        There was an error uploading your files.
+      </p>
+      {form.formState.errors.files?.message && (
+        <p className='text-muted-foreground text-xs'>
+          Please try again. {form.formState.errors.files.message}
+        </p>
+      )}
+      <Button
+        type='button'
+        variant='secondary'
+        size='sm'
+        className='mt-1'
+        onClick={() => form.reset({ files: [] }, { keepDirty: true })}>
+        Reset
+      </Button>
     </div>
   );
 }
