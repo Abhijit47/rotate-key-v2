@@ -1,10 +1,10 @@
-// import cloudinary from '@/configs/cloudinary';
-import { env } from '@/env';
+import cloudinary from '@/configs/cloudinary';
+// import { env } from '@/env';
 import { auth, currentUser } from '@clerk/nextjs/server';
 // import { UploadApiResponse } from 'cloudinary';
 import { NextRequest, NextResponse } from 'next/server';
 
-const isDev = process.env.NODE_ENV === 'development' ? true : false;
+// const isDev = process.env.NODE_ENV === 'development' ? true : false;
 
 export async function DELETE(request: NextRequest) {
   // Use Clerk to get the session claims for the current user.
@@ -25,25 +25,40 @@ export async function DELETE(request: NextRequest) {
 
   try {
     // await new Promise((resolve) => setTimeout(resolve, 3000));
-    const BASE_URL = isDev
-      ? env.NEXT_PUBLIC_DEV_BASE_URL
-      : env.NEXT_PUBLIC_PROD_BASE_URL;
+    // const BASE_URL = isDev
+    //   ? env.NEXT_PUBLIC_DEV_BASE_URL
+    //   : env.NEXT_PUBLIC_PROD_BASE_URL;
 
     // TODO: ARCJET checks
     // console.log(await request.json());
 
     const payload = await request.formData();
-    console.log('Request data:', Object.fromEntries(payload.entries()));
+    // console.log('Request data:', Object.fromEntries(payload.entries()));
 
-    // console.log('File:', file);
+    const publicId = payload.get('publicId')?.toString();
+    const resourceType = payload.get('resourceType')?.toString() || 'image';
+
+    // console.log('publicId:', publicId);
+    // console.log('resourceType:', resourceType);
+    if (!publicId || typeof publicId !== 'string') {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Invalid publicId',
+        },
+        {
+          status: 400,
+          statusText: 'Bad Request',
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+    }
 
     // TODO: Delete from Cloudinary
-    // const result = await cloudinary.uploader.destroy(
-    //   payload.publicId,
-    //   {
-    //     resource_type: 'image', // or 'video' if you're deleting a video
-    //   }
-    // );
+    await cloudinary.uploader.destroy(publicId, {
+      resource_type: resourceType, // or 'video' if you're deleting a video
+      invalidate: true, // to invalidate the cached versions
+    });
 
     //TODO: notify user of successful upload
 
@@ -51,7 +66,6 @@ export async function DELETE(request: NextRequest) {
       {
         success: true,
         message: 'Image deleted successfully',
-        // data: result.secure_url,
       },
       {
         status: 200,
@@ -65,7 +79,6 @@ export async function DELETE(request: NextRequest) {
       {
         success: false,
         message: 'Internal Server Error',
-        data: null,
       },
       {
         status: 500,

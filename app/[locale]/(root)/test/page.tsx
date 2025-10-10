@@ -13,9 +13,9 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CloudUpload, XCircle } from 'lucide-react';
+import { CloudUpload, Loader2, XCircle } from 'lucide-react';
 import { useLocale } from 'next-intl';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useTransition } from 'react';
 import { type SetValueConfig, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import z from 'zod';
@@ -34,7 +34,7 @@ import {
 
 const formSchema = z.object({
   files: z
-    .array(z.custom<File>())
+    .array(z.custom<File & { publicId?: string }>())
     .min(1, 'Please select at least one file')
     .max(6, 'Please select up to 6 files')
     .refine((files) => files.every((file) => file.size <= 10 * 1024 * 1024), {
@@ -56,10 +56,24 @@ export type UploadApiResponse = {
   success: boolean;
 };
 
+export type DeleteApiResponse = {
+  message: string;
+  success: boolean;
+};
+
+type HandleDeleteFileParams = {
+  name: string;
+  index: number;
+  publicId?: string;
+  type: string;
+};
+
 export default function TestPage() {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   // per-file upload progress holder (ref used because we don't render progress here)
   const progressRef = useState({ current: 0 })[0] as { current: number };
+  const [isDeletePending, startTransition] = useTransition();
+
   const setProgress = useCallback(
     (v: number) => {
       progressRef.current = v;
@@ -110,7 +124,7 @@ export default function TestPage() {
     [form]
   );
 
-  // PENDING: implement file upload to Cloudinary
+  // DONE: implement file upload to Cloudinary
   const onUpload: NonNullable<FileUploadProps['onUpload']> = useCallback(
     async (files, { onProgress, onSuccess, onError }) => {
       const setValuesOptions: SetValueConfig = {
@@ -143,7 +157,6 @@ export default function TestPage() {
             };
 
             xhr.onload = async () => {
-              await new Promise((r) => setTimeout(r, 10000));
               try {
                 if (xhr.status >= 200 && xhr.status < 300) {
                   const json = JSON.parse(
@@ -157,6 +170,18 @@ export default function TestPage() {
                       [...currentUrls, json.data.url],
                       setValuesOptions
                     );
+
+                    // add the publicId to to the current file to enable deletion later
+                    form.setValue(
+                      'files',
+                      files.map((f) =>
+                        f === file
+                          ? Object.assign(f, { publicId: json.data?.publicId })
+                          : f
+                      ),
+                      { ...setValuesOptions, shouldTouch: false }
+                    );
+
                     onSuccess?.(file);
                     resolve();
                   } else {
@@ -224,11 +249,76 @@ export default function TestPage() {
     });
   }, []);
 
+  // DONE: implement file deletion both locally and from Cloudinary
+  function handleDeleteFile(params: HandleDeleteFileParams) {
+    const { name, index, publicId, type } = params;
+
+    startTransition(async () => {
+      const currentFiles = form.getValues('files') ?? [];
+      if (index < 0 || index >= currentFiles.length) {
+        toast.error('Invalid file index');
+        return;
+      }
+
+      // remove the local file
+      form.setValue(
+        'files',
+        currentFiles.filter((file, i) => {
+          // filter out the file at the given index
+          return i !== index;
+        }),
+        {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true,
+        }
+      );
+
+      // remove the corresponding image URL if exists
+      const imageUrls = form.getValues('images') ?? [];
+
+      form.setValue(
+        'images',
+        imageUrls.filter((url) => !url.includes(name)),
+        {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true,
+        }
+      );
+      // "https://res.cloudinary.com/rotate-key/image/upload/v1760100227/rotate-key/user_32XbNhKzVwexApprNx11AmR6T9d/my-property/20241223_152021.jpg.jpg"
+
+      const API_URL = `/${locale}/api/cloudinary/delete`;
+      const formData = new FormData();
+      formData.append('publicId', publicId ?? '');
+      formData.append('resourceType', type);
+
+      const res = await fetch(API_URL, {
+        method: 'DELETE',
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const err: DeleteApiResponse = await res.json();
+        toast.error(err?.message || 'Failed to delete file from server');
+        return;
+      } else {
+        const json: DeleteApiResponse = await res.json();
+        if (!json.success) {
+          toast.error(json?.message || 'Failed to delete file from server');
+          return;
+        }
+        toast.success(json?.message || 'File deleted from server');
+      }
+    });
+  }
+
   return (
     <div className={'max-w-xl mx-auto py-16'}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
           <FormField
+            disabled={isUploading || isDeletePending}
             control={form.control}
             name='files'
             render={({ field }) => (
@@ -245,7 +335,7 @@ export default function TestPage() {
                     onUpload={onUpload}
                     onFileReject={onFileReject}
                     multiple
-                    disabled={isUploading}>
+                    disabled={isUploading || isDeletePending}>
                     <FileUploadDropzone className='flex-row flex-wrap border-2 border-dotted text-center border-primary/50 bg-primary/5 hover:bg-primary/10 focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'>
                       <CloudUpload className='size-4' />
                       Drag and drop or
@@ -257,17 +347,27 @@ export default function TestPage() {
                       to upload
                     </FileUploadDropzone>
                     <FileUploadList>
-                      {field.value?.map((file) => (
+                      {field.value?.map((file, idx) => (
                         <FileUploadItem key={crypto.randomUUID()} value={file}>
                           <div className='flex w-full items-center gap-2'>
                             <FileUploadItemPreview />
                             <FileUploadItemMetadata />
                             <FileUploadItemDelete asChild>
                               <Button
+                                disabled={isUploading || isDeletePending}
+                                type='button'
                                 variant='destructive'
                                 size='icon'
-                                className='size-7'>
-                                <XCircle />
+                                className='size-7'
+                                onClick={() =>
+                                  handleDeleteFile({
+                                    name: file.name,
+                                    index: idx,
+                                    publicId: file.publicId,
+                                    type: file.type.split('/')[0],
+                                  })
+                                }>
+                                {isDeletePending ? <Loader2 /> : <XCircle />}
                                 <span className='sr-only'>Delete</span>
                               </Button>
                             </FileUploadItemDelete>
