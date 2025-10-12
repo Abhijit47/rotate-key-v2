@@ -1,4 +1,3 @@
-import { ThemeModeToggle } from '@/components/shared/theme-mode-toggle';
 import { Button } from '@/components/ui/button';
 import {
   FormControl,
@@ -31,6 +30,8 @@ export default function CreateAccountForm() {
   const {
     control,
     // register,
+    getValues,
+    setValue,
     formState: { errors },
   } = useFormContext<UserRegistrationValues>();
 
@@ -38,40 +39,142 @@ export default function CreateAccountForm() {
     // <div className={'inline-grid content-center w-full h-full'}>
     <fieldset className='space-y-4'>
       <div className={'space-y-2'}>
-        <legend className='text-4xl font-semibold text-foreground'>
-          Create an Account
+        <legend className='text-lg sm:text-xl md:text-2xl lg:text-3xl 2xl:text-4xl font-semibold text-foreground'>
+          Create an Account?
         </legend>
         <p className={'text-sm font-medium'}>
           Kindly fill the credential to proceed
         </p>
       </div>
 
-      <ThemeModeToggle />
+      {/* <div className={'space-y-4'}>
+        <div className={'grid grid-cols-1 sm:grid-cols-2 gap-4'}>
+          <div className={'space-y-2'}>
+            <Skeleton className='h-3 w-3/12 animate-pulse' />
+            <Skeleton className='h-9 w-full animate-pulse' />
+          </div>
+          <div className={'space-y-2'}>
+            <Skeleton className='h-3 w-3/12 animate-pulse' />
+            <Skeleton className='h-9 w-full animate-pulse' />
+          </div>
+        </div>
+        <div className={'space-y-2'}>
+          <Skeleton className='h-3 w-3/12 animate-pulse' />
+          <Skeleton className='h-9 w-full animate-pulse' />
+        </div>
+        <div className={'space-y-2'}>
+          <Skeleton className='h-3 w-3/12 animate-pulse' />
+          <Skeleton className='h-9 w-full animate-pulse' />
+          <Skeleton className='h-1.5 w-4/12 animate-pulse' />
+        </div>
+        <div className={'space-y-2'}>
+          <Skeleton className='h-3 w-3/12 animate-pulse' />
+          <Skeleton className='h-9 w-full animate-pulse' />
+          <Skeleton className='h-1.5 w-4/12 animate-pulse' />
+        </div>
+        <div className={'space-y-2'}>
+          <Skeleton className='h-3 w-3/12 animate-pulse' />
+          <Skeleton className='h-9 w-full animate-pulse' />
+          <Skeleton className='h-1.5 w-4/12 animate-pulse' />
+        </div>
+      </div> */}
+
+      <div className={'grid grid-cols-1 sm:grid-cols-2 gap-4'}>
+        <FormField
+          control={control}
+          name='firstName'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>First name</FormLabel>
+              <FormControl>
+                <Input
+                  type='text'
+                  autoComplete='given-name'
+                  placeholder='John'
+                  {...field}
+                  onChange={(e) => {
+                    // complete the fullname with lastname
+                    setValue('firstName', e.target.value);
+                    setValue(
+                      'fullName',
+                      `${e.target.value} ${getValues('lastName')}`
+                    );
+                    field.onChange(e);
+                  }}
+                />
+              </FormControl>
+              <ErrorMessage
+                errors={errors}
+                name='firstName'
+                render={({ message }) => (
+                  <p className='text-xs text-destructive'>{message}</p>
+                )}
+              />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name='lastName'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Last name</FormLabel>
+              <FormControl>
+                <Input
+                  type='text'
+                  autoComplete='additional-name'
+                  placeholder='Doe'
+                  {...field}
+                  onChange={(e) => {
+                    // complete the fullname with firstname
+                    setValue('lastName', e.target.value);
+                    setValue(
+                      'fullName',
+                      `${getValues('firstName')} ${e.target.value}`
+                    );
+                    field.onChange(e);
+                  }}
+                />
+              </FormControl>
+
+              <ErrorMessage
+                errors={errors}
+                name='lastName'
+                render={({ message }) => (
+                  <p className='text-xs text-destructive'>{message}</p>
+                )}
+              />
+            </FormItem>
+          )}
+        />
+      </div>
 
       <FormField
         control={control}
         name='fullName'
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Full name</FormLabel>
+            <FormLabel className={'flex flex-wrap items-center gap-1'}>
+              <span className={'block'}>Full name</span>
+              <FormDescription className={'text-xs'}>
+                (This is your public display name.)
+              </FormDescription>
+            </FormLabel>
             <FormControl>
               <Input
                 type='text'
                 autoComplete='given-name'
                 placeholder='John Doe'
                 {...field}
+                readOnly
+                disabled
               />
             </FormControl>
-            {!errors?.fullName?.message ? (
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
-            ) : null}
             <ErrorMessage
               errors={errors}
               name='fullName'
               render={({ message }) => (
-                <p className='text-xs text-red-500'>{message}</p>
+                <p className='text-xs text-destructive'>{message}</p>
               )}
             />
           </FormItem>
@@ -93,7 +196,7 @@ export default function CreateAccountForm() {
               />
             </FormControl>
             {!errors?.email?.message ? (
-              <FormDescription>
+              <FormDescription className={'text-xs'}>
                 We never share your email with anyone else.
               </FormDescription>
             ) : null}
@@ -101,7 +204,7 @@ export default function CreateAccountForm() {
               errors={errors}
               name='email'
               render={({ message }) => (
-                <p className='text-xs text-red-500'>{message}</p>
+                <p className='text-xs text-destructive'>{message}</p>
               )}
             />
           </FormItem>
@@ -158,7 +261,7 @@ export default function CreateAccountForm() {
               </div>
             </FormControl>
             {!errors?.password?.message ? (
-              <FormDescription>
+              <FormDescription className={'text-xs'}>
                 Password must be at least 8 characters long.
               </FormDescription>
             ) : null}
@@ -166,7 +269,7 @@ export default function CreateAccountForm() {
               errors={errors}
               name='password'
               render={({ message }) => (
-                <p className='text-xs text-red-500'>{message}</p>
+                <p className='text-xs text-destructive'>{message}</p>
               )}
             />
           </FormItem>
@@ -224,7 +327,7 @@ export default function CreateAccountForm() {
               </div>
             </FormControl>
             {!errors?.confirmPassword?.message ? (
-              <FormDescription>
+              <FormDescription className={'text-xs'}>
                 Password must be match with the above password.
               </FormDescription>
             ) : null}
@@ -232,7 +335,7 @@ export default function CreateAccountForm() {
               errors={errors}
               name='confirmPassword'
               render={({ message }) => (
-                <p className='text-xs text-red-500'>{message}</p>
+                <p className='text-xs text-destructive'>{message}</p>
               )}
             />
           </FormItem>

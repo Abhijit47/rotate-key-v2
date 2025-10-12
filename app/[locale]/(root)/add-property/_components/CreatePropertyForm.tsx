@@ -4,11 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Form } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
+import { createProperty } from '@/lib/property-actions';
 import {
   AddPropertyFormValues,
   addPropertySchema,
 } from '@/lib/validations/property.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import {
@@ -35,6 +37,7 @@ const isDev = process.env.NODE_ENV === 'development' ? true : false;
 
 export default function CreatePropertyForm() {
   // const [phoneNumber, setPhoneNumber] = useState('');
+  const [isPending, startTransition] = useTransition();
 
   // 1. Define your form.
   const form = useForm<AddPropertyFormValues>({
@@ -45,14 +48,35 @@ export default function CreatePropertyForm() {
 
   // 2. Define a submit handler.
   function onSubmit(values: AddPropertyFormValues) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-    toast(
-      <pre className='text-xs max-w-md bg-slate-800 p-2 rounded-md text-white overflow-scroll text-wrap h-96'>
-        {JSON.stringify(values, null, 2)}
-      </pre>
-    );
+    startTransition(async () => {
+      // console.log(values);
+      // toast(
+      //   <pre className='text-xs max-w-md bg-slate-800 p-2 rounded-md text-white overflow-scroll text-wrap h-96'>
+      //     {JSON.stringify(values, null, 2)}
+      //   </pre>
+      // );
+
+      const { data, success, error } = addPropertySchema
+        .omit({ files: true })
+        .safeParse(values);
+
+      if (!success) {
+        toast.error('Please fix the errors in the form.');
+        console.log(error);
+        return;
+      }
+
+      const result = await createProperty(data);
+      console.log('Validated data:', result);
+
+      if (!result.success) {
+        toast.error(result.message || 'Failed to create property.');
+        return;
+      } else {
+        form.reset();
+        toast.success(result.message || 'Property created successfully!');
+      }
+    });
   }
 
   return (
@@ -107,16 +131,18 @@ export default function CreatePropertyForm() {
             <div className={'flex w-full items-center justify-end gap-4'}>
               <Button
                 type='reset'
-                disabled={form.formState.isSubmitting}
+                disabled={form.formState.isSubmitting || isPending}
                 onClick={() => form.reset()}
                 className={'cursor-pointer'}
                 variant='destructive'>
                 Reset
               </Button>
               <Button
-                // disabled={
-                //   !form.formState.isValid || form.formState.isSubmitting
-                // }
+                disabled={
+                  !form.formState.isValid ||
+                  form.formState.isSubmitting ||
+                  isPending
+                }
                 type='submit'
                 className={'cursor-pointer'}>
                 {form.formState.isLoading ? 'Submitting...' : 'Submit'}

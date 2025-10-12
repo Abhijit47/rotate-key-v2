@@ -1,6 +1,6 @@
 {
-  "id": "a0e14708-e6b6-4748-9834-ca2acaa4ae3d",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "8a2d28cf-b5cf-4e15-a06c-ba40c376214a",
+  "prevId": "a0e14708-e6b6-4748-9834-ca2acaa4ae3d",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -1865,6 +1865,12 @@
           "notNull": true,
           "default": "'https://www.gravatar.com/avatar?d=mp'"
         },
+        "username": {
+          "name": "username",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
         "role": {
           "name": "role",
           "type": "role",
@@ -1955,7 +1961,7 @@
           "name": "birthdate",
           "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "bio": {
           "name": "bio",
@@ -2399,6 +2405,13 @@
           "nullsNotDistinct": false,
           "columns": [
             "email"
+          ]
+        },
+        "users_username_unique": {
+          "name": "users_username_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "username"
           ]
         }
       },

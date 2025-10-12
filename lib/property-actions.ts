@@ -1,8 +1,13 @@
 'use server';
 
 import { db } from '@/drizzle/db';
+import { DrizzleError } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { requireAuth } from './require-auth';
+import {
+  AddPropertyFormValues,
+  addPropertySchema,
+} from './validations/property.schema';
 
 export async function clearCache(
   pathName: string,
@@ -11,6 +16,52 @@ export async function clearCache(
   console.log(`Revalidating cache for tag: ${pathName}`);
   revalidatePath(pathName, type);
   return;
+}
+
+export async function createProperty(
+  unsafeData: Omit<AddPropertyFormValues, 'files'>
+) {
+  const user = await requireAuth();
+
+  // console.log(
+  //   'Creating property with formData:',
+  //   Object.fromEntries(formData.entries())
+  // );
+
+  /*
+  const additionalInfoSchema = z.object({
+    info: z.string().min(1).max(500),
+  })
+  
+  const mergeWithSchema = addPropertySchema.extend({
+    additionalInformation: z.array(additionalInfoSchema).min(1).max(10),
+  })
+  
+  const val = addPropertySchema.omit({ files: true }).safeParse({})
+  
+  type MergedSchema = z.infer<typeof mergeWithSchema>
+  */
+
+  try {
+    // Extract and transform form data
+    const values = addPropertySchema
+      .omit({ files: true })
+      .safeParse(unsafeData);
+
+    console.log('Parsed values:', values);
+
+    return { success: true, message: 'Property created successfully' };
+  } catch (err) {
+    if (err instanceof Error) {
+      return { success: false, message: err.message };
+    }
+
+    if (err instanceof DrizzleError) {
+      return { success: false, message: err.message };
+    }
+    console.error('Unknown error creating property:', err);
+    return { success: false, message: 'Failed to create property' };
+  }
 }
 
 export async function getProperties() {

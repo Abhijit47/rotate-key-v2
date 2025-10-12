@@ -7,8 +7,7 @@ declare global {
   interface CustomJwtSessionClaims {
     metadata: {
       role?: Roles;
-      gender?: GenderPreference;
-      birthdate?: string; // 1990-01-01
+      isOnboarded?: boolean;
       plan?: Plans;
     };
   }
@@ -16,8 +15,8 @@ declare global {
   interface UserPublicMetadata {
     metadata: {
       role?: Roles;
-      gender?: GenderPreference | (string & {});
-      birthdate?: string; // 1990-01-01
+      isOnboarded?: boolean;
+      plan?: Plans;
     };
   }
 }

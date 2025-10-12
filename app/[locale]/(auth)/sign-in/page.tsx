@@ -1,17 +1,18 @@
+import { currentUser } from '@clerk/nextjs/server';
+import { Metadata } from 'next';
 import Image from 'next/image';
+import { permanentRedirect } from 'next/navigation';
 
-import OAuthSignInButtons from '@/components/forms/sign-in/OAuthSignInButtons';
-import SignInButton from '@/components/forms/sign-in/SignInButton';
-import SignInForm from '@/components/forms/sign-in/SignInForm';
-import SignInFormProvider from '@/components/forms/sign-in/SignInFormProvider';
+import SignUpImagePNG from '@/public/sign-up/sign-up.png';
+import SignUpImageSVG from '@/public/sign-up/sign-up.svg';
+
 import SectionOverlay from '@/components/shared/SectionOverlay';
 import SectionWrapper from '@/components/shared/SectionWrapper';
 import { Card } from '@/components/ui/card';
-import SignUpImagePNG from '@/public/sign-up/sign-up.png';
-import SignUpImageSVG from '@/public/sign-up/sign-up.svg';
-import { currentUser } from '@clerk/nextjs/server';
-import { Metadata } from 'next';
-import { permanentRedirect } from 'next/navigation';
+import OAuthSignInButtons from './_components/OAuthSignInButtons';
+import SignInButton from './_components/SignInButton';
+import SignInForm from './_components/SignInForm';
+import SignInFormProvider from './_components/SignInFormProvider';
 
 export const metadata: Metadata = {
   title: 'Rotate Key | Login',

@@ -1,17 +1,18 @@
-import ForgotPasswordFormProvider from '@/components/forms/forgot-password/ForgotPasswordFormProvider';
-import ForgotPasswordFormStep from '@/components/forms/forgot-password/ForgotPasswordFormStep';
+import { currentUser } from '@clerk/nextjs/server';
+import { Metadata } from 'next';
+import Image from 'next/image';
+import { permanentRedirect } from 'next/navigation';
+
+import SignUpImagePNG from '@/public/sign-up/sign-up.png';
+import SignUpImageSVG from '@/public/sign-up/sign-up.svg';
+
 import SectionOverlay from '@/components/shared/SectionOverlay';
 import SectionWrapper from '@/components/shared/SectionWrapper';
 import { ThemeModeToggle } from '@/components/shared/theme-mode-toggle';
 import { Card } from '@/components/ui/card';
 import { AuthContextProvider } from '@/contexts/auth-context';
-import SignUpImagePNG from '@/public/sign-up/sign-up.png';
-import SignUpImageSVG from '@/public/sign-up/sign-up.svg';
-import { currentUser } from '@clerk/nextjs/server';
-import { Metadata } from 'next';
-
-import Image from 'next/image';
-import { permanentRedirect } from 'next/navigation';
+import ForgotPasswordFormProvider from './_components/ForgotPasswordFormProvider';
+import ForgotPasswordFormStep from './_components/ForgotPasswordFormStep';
 
 export const metadata: Metadata = {
   title: 'Rotate Key | Forgot Password',

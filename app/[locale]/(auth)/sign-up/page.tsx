@@ -1,17 +1,18 @@
-import SectionOverlay from '@/components/shared/SectionOverlay';
-import SectionWrapper from '@/components/shared/SectionWrapper';
-
-import Image from 'next/image';
-
-import RegistrationFormStep from '@/components/forms/sign-up/RegistrationFormStep';
-import SignUpFormProvider from '@/components/forms/sign-up/SignUpFormProvider';
-import { Card } from '@/components/ui/card';
-import { AuthContextProvider } from '@/contexts/auth-context';
-import SignUpImagePNG from '@/public/sign-up/sign-up.png';
-import SignUpImageSVG from '@/public/sign-up/sign-up.svg';
 import { currentUser } from '@clerk/nextjs/server';
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { permanentRedirect } from 'next/navigation';
+
+import SignUpImagePNG from '@/public/sign-up/sign-up.png';
+import SignUpImageSVG from '@/public/sign-up/sign-up.svg';
+
+import SectionOverlay from '@/components/shared/SectionOverlay';
+import SectionWrapper from '@/components/shared/SectionWrapper';
+import { Card } from '@/components/ui/card';
+import { AuthContextProvider } from '@/contexts/auth-context';
+import { cn } from '@/lib/utils';
+import RegistrationFormStep from './_components/registratio-form-step';
+import SignUpFormProvider from './_components/sign-up-form-provider';
 
 export const metadata: Metadata = {
   title: 'Rotate Key | Sign Up',
@@ -27,13 +28,16 @@ export default async function SignUpPage() {
   }
 
   return (
-    <section>
+    <section className={cn('h-dvh w-full')}>
       <SectionWrapper className={'py-20'}>
-        <Card className={'grid grid-cols-2 gap-4 rounded-lg p-0'}>
-          <div className={'col-span-full lg:col-span-1 relative'}>
+        <Card
+          className={
+            'grid grid-cols-2 gap-4 items-center h-full rounded-lg p-0'
+          }>
+          <div className={'col-span-full md:col-span-1 h-full w-full relative'}>
             <div
               className={
-                'aspect-square overflow-hidden rounded-tl-lg rounded-bl-lg relative'
+                'aspect-square overflow-hidden h-full w-full rounded-t-lg md:rounded-t-none md:rounded-tl-lg md:rounded-bl-lg relative'
               }>
               <Image
                 src={SignUpImageSVG}
@@ -53,7 +57,7 @@ export default async function SignUpPage() {
 
           <div
             className={
-              'col-span-full lg:col-span-1 p-4 md:p-6 inline-grid h-full relative'
+              'col-span-full md:col-span-1 p-4 lg:p-6 inline-grid h-full relative'
             }>
             <AuthContextProvider>
               <SignUpFormProvider>

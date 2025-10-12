@@ -136,9 +136,9 @@ declare type Pricelist = {
   cta: string;
 };
 
-declare type Roles = 'admin' | 'user' | 'guest';
+declare type Roles = 'admin' | 'moderator' | 'guest';
 
-declare type Plans = 'semi_subscribe' | 'free' | 'premium' | 'gold';
+declare type Plans = 'basic' | 'pro' | 'enterprise' | 'free';
 
 // Data Types
 declare type RoomsCategoryData = {

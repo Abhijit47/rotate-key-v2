@@ -1,17 +1,16 @@
+import { currentUser } from '@clerk/nextjs/server';
+import { ArrowUpRightSquareIcon, PlusCircleIcon } from 'lucide-react';
+import Image from 'next/image';
+import { permanentRedirect } from 'next/navigation';
+
 import OnboardingImagePNG from '@/public/onboarding/onboarding-img.png';
 import OnboardingImageSVG from '@/public/onboarding/onboarding-img.svg';
 
 import SectionWrapper from '@/components/shared/SectionWrapper';
-
 import { Button } from '@/components/ui/button';
-import { currentUser } from '@clerk/nextjs/server';
-import { ArrowUpRightSquareIcon, PlusCircleIcon } from 'lucide-react';
-import Image from 'next/image';
-
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Link } from '@/i18n/navigation';
-import { permanentRedirect } from 'next/navigation';
 
 export default async function OnboardingPage() {
   const user = await currentUser();

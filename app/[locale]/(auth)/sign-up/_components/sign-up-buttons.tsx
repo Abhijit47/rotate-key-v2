@@ -11,18 +11,20 @@ import { cn } from '@/lib/utils';
 
 export default function SignUpButtons() {
   const { setCurrentStep } = useAuthContext();
-  const { handleSignIn, loading } = useOAuthSignIn();
+  const { handleSignIn, isLoginPending, isSignInLoaded, isSignUpLoaded } =
+    useOAuthSignIn();
 
-  // className={'grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6'}
   return (
-    <div>
-      <RadioGroup.Root className='w-full grid grid-cols-3 gap-4'>
+    <div className={'w-full'}>
+      <RadioGroup.Root
+        disabled={isLoginPending || !isSignInLoaded || !isSignUpLoaded}
+        className='w-full grid grid-cols-1 lg:grid-cols-3 gap-4'>
         <RadioGroup.Item
-          disabled={loading}
+          disabled={isLoginPending || !isSignInLoaded || !isSignUpLoaded}
           onClick={() => handleSignIn('oauth_facebook')}
           value={'Continue with Facebook'}
           className={cn(
-            'relative group ring-[1px] ring-border rounded py-2 px-3 text-start',
+            'relative group ring-[1px] w-full ring-border rounded py-2 px-3 text-start',
             'data-[state=checked]:ring-2 data-[state=checked]:ring-primary-500 disabled:border-gray-300 disabled:bg-gray-200 disabled:text-gray-500 disabled:ring-gray-300 disabled:cursor-not-allowed',
             'data-[state=unchecked]:hover:ring-2 data-[state=unchecked]:hover:ring-primary-500 data-[state=unchecked]:hover:bg-primary-50 data-[state=unchecked]:hover:text-primary-500 data-[state=unchecked]:hover:cursor-pointer'
           )}>
@@ -32,6 +34,7 @@ export default function SignUpButtons() {
           <p className='text-xs'>Continue with Facebook</p>
         </RadioGroup.Item>
         <RadioGroup.Item
+          disabled={isLoginPending || !isSignInLoaded || !isSignUpLoaded}
           onClick={() => handleSignIn('oauth_google')}
           value={'Continue with Google'}
           className={cn(
@@ -45,6 +48,7 @@ export default function SignUpButtons() {
           <p className='text-xs'>Continue with Google</p>
         </RadioGroup.Item>
         <RadioGroup.Item
+          disabled={isLoginPending || !isSignInLoaded || !isSignUpLoaded}
           onClick={() => setCurrentStep(1)}
           value={'Continue with Email'}
           className={cn(

@@ -1,16 +1,15 @@
+import { Metadata } from 'next';
+import Image from 'next/image';
+
+import SignUpImagePNG from '@/public/sign-up/sign-up.png';
+import SignUpImageSVG from '@/public/sign-up/sign-up.svg';
+
 import SectionOverlay from '@/components/shared/SectionOverlay';
 import SectionWrapper from '@/components/shared/SectionWrapper';
 
-import Image from 'next/image';
-
-import SignUpCompleteForm from '@/components/forms/sign-up/SignUpCompleteForm';
-// import { SignUpWithSSO } from '@/lib/actions/auth.actions';
-import SignUpImagePNG from '@/public/sign-up/sign-up.png';
-import SignUpImageSVG from '@/public/sign-up/sign-up.svg';
-// import { currentUser, User } from '@clerk/nextjs/server';
-import { Metadata } from 'next';
-
+import { Card } from '@/components/ui/card';
 import { routing } from '@/i18n/routing';
+import { LazySignUpCompleteForm } from './_components';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -45,19 +44,13 @@ export default function SignUpComplete() {
   // console.log('result', result);
 
   return (
-    <section
-      className={
-        'bg-gradient-to-b from-primary-500 via-primary-400 to-primary-600'
-      }>
+    <section>
       <SectionWrapper className={'py-20'}>
-        <div
-          className={
-            'grid grid-cols-4 gap-4 bg-tertiary-50 shadow-xl rounded-lg'
-          }>
+        <Card className={'grid grid-cols-4 gap-4 shadow-xl rounded-lg p-0'}>
           <div className={'col-span-full md:col-span-2 relative'}>
             <div
               className={
-                'aspect-square overflow-hidden rounded-tl-lg rounded-bl-lg relative'
+                'aspect-square overflow-hidden h-full w-full rounded-t-lg md:rounded-t-none md:rounded-tl-lg md:rounded-bl-lg relative'
               }>
               <Image
                 src={SignUpImageSVG}
@@ -78,9 +71,20 @@ export default function SignUpComplete() {
             className={
               'col-span-full md:col-span-2 p-4 md:p-6 inline-grid content-center h-full'
             }>
-            <SignUpCompleteForm />
+            <div className='space-y-6'>
+              <div className={'space-y-2'}>
+                <h2 className='text-xl sm:text-2xl md:text-2xl lg:text-3xl 2xl:text-4xl font-semibold text-foreground'>
+                  Let&apos;s get to know each other!
+                </h2>
+                <p className={'text-sm font-medium text-muted-foreground'}>
+                  We need to know a little bit about you before we can get
+                  started.
+                </p>
+              </div>
+              <LazySignUpCompleteForm />
+            </div>
           </div>
-        </div>
+        </Card>
       </SectionWrapper>
     </section>
   );
