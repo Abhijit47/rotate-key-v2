@@ -15,7 +15,7 @@ export default function PropertyAuthorCard({
     fullName: string;
     username: string;
     email: string;
-    avatarUrl: string | null;
+    avatar: string | null;
   };
 }) {
   return (
@@ -23,7 +23,7 @@ export default function PropertyAuthorCard({
       <div className={'flex items-center gap-4 px-4'}>
         <div className={'size-16'}>
           <Image
-            src={ownerDetails.avatarUrl!}
+            src={ownerDetails.avatar!}
             alt={ownerDetails.username}
             height={40}
             width={40}

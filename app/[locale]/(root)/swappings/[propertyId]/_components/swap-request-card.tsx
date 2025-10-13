@@ -11,7 +11,7 @@ type SwappingRequestCardProps = {
     fullName: string;
     username: string;
     email: string;
-    avatarUrl: string | null;
+    avatar: string | null;
   };
   isMatched: boolean;
   iLikedThisProperty: boolean;
