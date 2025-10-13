@@ -4,6 +4,7 @@ import FeaturesSection from '@/components/home/FeaturesSection';
 import HeroSection from '@/components/home/HeroSection';
 import LikedProperty from '@/components/home/LikedProperty';
 import ReadyToSwap from '@/components/home/ReadyToSwap';
+import TrendingHomeSection from '@/components/home/TrendingHomeSection';
 import { Separator } from '@/components/ui/separator';
 // import TestimonialSection from '@/components/home/TestimonialSection';
 // import TrendingHomeSection from '@/components/home/TrendingHomeSection';
@@ -58,6 +59,8 @@ export default function Home() {
       {/* <Suspense fallback={<DynamicLoader />}>
           <TrendingHomeSection />
         </Suspense> */}
+
+      <TrendingHomeSection />
 
       <ReadyToSwap />
 

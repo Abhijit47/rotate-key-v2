@@ -13,11 +13,13 @@ import { rooms } from '@/constants';
 import CarouselDetails from './carousel-details';
 import CarouselOverlay from './carousel-overlay';
 
+const isDev = process.env.NODE_ENV === 'development' ? true : false;
+
 export default function SwappingCarousel() {
   return (
     <section>
       <Carousel
-        plugins={[AutoPlay({ delay: 3000 })]}
+        plugins={isDev ? undefined : [AutoPlay({ delay: 3000 })]}
         opts={{
           loop: true,
           direction: 'ltr',

@@ -3,6 +3,7 @@
 // import { cache } from 'react';
 // import { unstable_cache as cache } from 'next/cache';
 // import { TrendingHomeCarousel } from '../dynamic';
+import { TrendingHomeCarousel } from '../dynamic';
 import SectionBadge from '../shared/SectionBadge';
 import SectionHeading from '../shared/SectionHeading';
 import SectionWrapper from '../shared/SectionWrapper';
@@ -24,7 +25,7 @@ import SectionWrapper from '../shared/SectionWrapper';
 //   }
 // );
 
-export default async function TrendingHomeSection() {
+export default function TrendingHomeSection() {
   // const { success, data } = await getCachedMostViewedProperties();
 
   // if (!success || !data) {
@@ -34,7 +35,7 @@ export default async function TrendingHomeSection() {
   // const trendingProperties = data;
 
   return (
-    <section>
+    <section className={'py-16'}>
       <SectionWrapper
         className={
           'space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10 xl:space-y-12'
@@ -44,7 +45,7 @@ export default async function TrendingHomeSection() {
             Top trending home of the week!
           </SectionBadge>
 
-          <SectionHeading align='left' className={'text-secondary-700'}>
+          <SectionHeading align='left' className={'text-foreground'}>
             <span className={'block'}>Have your eye on these,</span>
             <span className={'inline lg:block'}>
               Most liked Home of the Week
@@ -53,7 +54,7 @@ export default async function TrendingHomeSection() {
         </div>
 
         <div>
-          {/* <TrendingHomeCarousel trendingProperties={trendingProperties} /> */}
+          <TrendingHomeCarousel />
         </div>
       </SectionWrapper>
     </section>
