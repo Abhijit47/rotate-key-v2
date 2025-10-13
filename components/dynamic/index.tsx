@@ -37,39 +37,6 @@ export const TrendingHomeCarousel = dynamic(
   }
 );
 
-// export const RoomsCategoryTab = dynamic(
-//   () => import('../shared/RoomsCategoryTab'),
-//   {
-//     ssr: false,
-//     loading: () => <DynamicLoader />,
-//   }
-// );
-
-// export const SwappingCarousel = dynamic(
-//   () => import('../../app/(root)/swapping-places/_components/SwappingCarousel'),
-//   {
-//     ssr: false,
-//     loading: () => <DynamicLoader />,
-//   }
-// );
-
-// export const SwappingPagination = dynamic(
-//   () =>
-//     import('../../app/(root)/swapping-places/_components/SwappingPagination'),
-//   {
-//     ssr: false,
-//     loading: () => <DynamicLoader />,
-//   }
-// );
-
-// export const AboutCounter = dynamic(
-//   () => import('../../app/(root)/about/_components/AboutCounter'),
-//   {
-//     ssr: false,
-//     loading: () => <DynamicLoader />,
-//   }
-// );
-
 export const CustomerFeedbackTestimonials = dynamic(
   () => import('../home/Testimonials'),
   {
@@ -78,14 +45,6 @@ export const CustomerFeedbackTestimonials = dynamic(
   }
 );
 
-// export const MyExchangeCarousel = dynamic(
-//   () => import('../../app/(root)/my-exchanges/_components/MyExchangeCarousel'),
-//   {
-//     ssr: false,
-//     loading: () => <DynamicLoader />,
-//   }
-// );
-
 export const NewRoomsCategoryTab = dynamic(
   () => import('../shared/NewRoomsCategoryTab'),
   {
@@ -93,29 +52,3 @@ export const NewRoomsCategoryTab = dynamic(
     loading: () => <DynamicLoader />,
   }
 );
-
-// export const LazyJOTFormWidget = dynamic(() => import('../jot-widget'), {
-//   ssr: false,
-//   loading: () => (
-//     <div className={''}>
-//       <DynamicLoader />
-//     </div>
-//   ),
-// });
-
-// export const LazySwappingsLimit = dynamic(
-//   () => import('../../app/(root)/swapping-places/_components/SwappingsLimit'),
-//   {
-//     ssr: false,
-//     loading: () => <DynamicLoader />,
-//   }
-// );
-
-// export const LazySwappingFilterByType = dynamic(
-//   () =>
-//     import('../../app/(root)/swapping-places/_components/SwappingFilterByType'),
-//   {
-//     ssr: false,
-//     loading: () => <DynamicLoader />,
-//   }
-// );

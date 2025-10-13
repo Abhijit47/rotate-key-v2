@@ -102,7 +102,7 @@ export default function UpdatePreferenceModal({
   return (
     <Dialog open={isOpen} onOpenChange={toggleModal}>
       <DialogTrigger asChild>
-        <Button>Update Preferences</Button>
+        <Button size={'sm'}>Update Preferences</Button>
       </DialogTrigger>
 
       <LazyUpdatePreferenceForm

@@ -2,16 +2,20 @@ import { Badge } from '@/components/ui/badge';
 // import { Button } from '@/components/ui/button';
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import { getUserLocationPreference } from '@/lib/user-actions';
 
-import { LazyUpdatePreferenceModal } from '.';
+import { Separator } from '@/components/ui/separator';
+import {
+  LazySwappingFilterByType,
+  LazySwappingFilterReset,
+  LazySwappingsLimit,
+  LazyUpdatePreferenceModal,
+} from '.';
 
 export default async function UserPreferenceCard() {
   const userPreferences = await getUserLocationPreference();
@@ -37,6 +41,7 @@ export default async function UserPreferenceCard() {
             Your current preferred swap location
           </CardDescription>
         </CardHeader>
+        <Separator />
         <CardContent className={'flex items-center flex-wrap gap-4'}>
           <Badge variant={'outline'}>
             <span>City :</span> {userPreferences.preferences?.toLocation.city}
@@ -51,13 +56,21 @@ export default async function UserPreferenceCard() {
           </Badge>
         </CardContent>
 
-        <CardFooter>
-          <CardAction>
+        <CardContent>
+          <div className={'flex flex-wrap items-center justify-between gap-4'}>
             <LazyUpdatePreferenceModal
               preference={userPreferences.preferences}
             />
-          </CardAction>
-        </CardFooter>
+            <div className={'flex flex-wrap items-center gap-2'}>
+              <LazySwappingFilterReset />
+              <LazySwappingsLimit />
+            </div>
+          </div>
+        </CardContent>
+        <Separator />
+        <CardContent>
+          <LazySwappingFilterByType />
+        </CardContent>
       </Card>
     </section>
   );

@@ -2889,9 +2889,11 @@ export const roomIds = [
 export const rooms = [
   {
     id: crypto.randomUUID(),
-    title: '4 BHK Villa + Swimming Pool',
+    type: '4 BHK Villa + Swimming Pool',
     description:
       'Location is Huahin soi 88. Hua Hin vacation home style minimalist. private Suitable for guests who are couples up to 4 couples and can also sleep up to 8-12 persons (Maximum 12 persons)',
+    state: 'Goa',
+    country: 'India',
     roomlocation: 'Goa, India',
     userLocation: '150 Km away',
     date: '7-12 Jan',
@@ -2905,9 +2907,11 @@ export const rooms = [
   },
   {
     id: crypto.randomUUID(),
-    title: 'Mansion',
+    type: 'Mansion',
     description:
       'Location is Huahin soi 88. Hua Hin vacation home style minimalist. private Suitable for guests who are couples up to 4 couples and can also sleep up to 8-12 persons (Maximum 12 persons)',
+    state: 'Kerala',
+    country: 'India',
     roomlocation: 'Kerala, India',
     userLocation: '2300 Km away',
     date: '7-12 Jan',
@@ -2921,9 +2925,11 @@ export const rooms = [
   },
   {
     id: crypto.randomUUID(),
-    title: '2 BHK Bungalow',
+    type: '2 BHK Bungalow',
     description:
       'Location is Huahin soi 88. Hua Hin vacation home style minimalist. private Suitable for guests who are couples up to 4 couples and can also sleep up to 8-12 persons (Maximum 12 persons)',
+    state: 'Kerala',
+    country: 'India',
     roomlocation: 'Kerala, India',
     userLocation: '750 Km away',
     date: '7-12 Jan',
@@ -2937,9 +2943,11 @@ export const rooms = [
   },
   {
     id: crypto.randomUUID(),
-    title: 'Mansion',
+    type: 'Mansion',
     description:
       'Location is Huahin soi 88. Hua Hin vacation home style minimalist. private Suitable for guests who are couples up to 4 couples and can also sleep up to 8-12 persons (Maximum 12 persons)',
+    state: 'Kerala',
+    country: 'India',
     roomlocation: 'Kerala, India',
     userLocation: '2300 Km away',
     date: '7-12 Jan',
