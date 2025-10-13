@@ -1,10 +1,3 @@
-import { footerLinks } from '@/constants';
-import { Link } from '@/i18n/navigation';
-import Logo from '@/public/logos/logo-landscape-2.webp';
-import Image from 'next/image';
-// import { BsArrowRight } from 'react-icons/bs';
-// import { FaEnvelope, FaPhone, FaRegMap } from 'react-icons/fa6';
-// import { HiChevronDoubleDown } from 'react-icons/hi2';
 import {
   ArrowRight,
   ChevronsDownIcon,
@@ -12,6 +5,11 @@ import {
   MapPinned,
   PhoneCall,
 } from 'lucide-react';
+import Image from 'next/image';
+
+import { footerLinks } from '@/constants';
+import { Link } from '@/i18n/navigation';
+import Logo from '@/public/logos/logo-landscape-2.webp';
 import { Separator } from '../ui/separator';
 import SectionWrapper from './SectionWrapper';
 
@@ -20,11 +18,11 @@ export default function Footer() {
     <footer className='py-20 bg-foreground dark:bg-background'>
       <SectionWrapper>
         <div className={'space-y-6 md:space-y-8 lg:space-y-10 xl:space-y-12'}>
-          <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 md:gap-6 lg:gap-8'>
+          <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-6 lg:gap-8'>
             <div className='inline-grid gap-8'>
               <Link
                 href='/'
-                className='flex items-center w-auto h-16 xs:w-48 sm:w-72 justify-self-start lg:w-full'>
+                className='flex items-center h-28 sm:h-36 lg:h-24 justify-self-start w-full'>
                 <Image
                   className='object-cover w-full h-full'
                   src={Logo}
