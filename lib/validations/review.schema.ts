@@ -5,7 +5,7 @@ export const reviewFormSchema = z.object({
     .string()
     .min(1, 'Title must be at least 1 character long')
     .max(100, 'Title must be at most 100 characters long'),
-  rating: z.coerce
+  rating: z
     .number()
     .int()
     .positive()

@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -28,7 +29,9 @@ import {
   Tag,
 } from 'lucide-react';
 import { after } from 'next/server';
+import ReviewDrawer from './_components/review-drawer';
 import SwappingRequestCard from './_components/swap-request-card';
+import WhatWeOffered from './_components/what-we-offered';
 
 type PageProps = {
   params: Promise<{ propertyId: string }>;
@@ -42,6 +45,8 @@ const getCachedProperty = cache(async (id: string) => {
 });
 
 export const revalidate = 3600; // Revalidate this page every hour
+
+const isDev = process.env.NODE_ENV === 'development';
 
 export default async function PropertyPage({ params }: PageProps) {
   const id = (await params).propertyId;
@@ -66,14 +71,21 @@ export default async function PropertyPage({ params }: PageProps) {
   // const isMatched = true; // TODO: check if current user has already matched with this property
 
   return (
-    <div className={'container mx-auto px-4 2xl:px-0 max-w-7xl py-4'}>
-      <form
-        action={async () => {
-          'use server';
-          await clearCache(`property-${id}`);
-        }}>
-        <Button variant={'destructive'}>Clear cache</Button>
-      </form>
+    <div
+      className={
+        'container mx-auto px-4 2xl:px-0 max-w-7xl py-4 space-y-4 relative'
+      }>
+      {isDev ? (
+        <div className={'absolute top-0 right-0'}>
+          <form
+            action={async () => {
+              'use server';
+              await clearCache(`property-${id}`);
+            }}>
+            <Button variant={'destructive'}>Clear cache</Button>
+          </form>
+        </div>
+      ) : null}
       <Card className={'gap-4 w-full'}>
         <CardHeader>
           <CardTitle>
@@ -176,6 +188,13 @@ export default async function PropertyPage({ params }: PageProps) {
             matchId={property.matchId}
           />
         </div>
+      </Card>
+
+      <Card>
+        <WhatWeOffered property={property} />
+        <CardFooter>
+          <ReviewDrawer propertyId={property.id} />
+        </CardFooter>
       </Card>
     </div>
   );
