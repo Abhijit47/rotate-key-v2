@@ -19,7 +19,7 @@ export async function getStreamUserToken(userId: string) {
         id: true,
         email: true,
         fullName: true,
-        avatarUrl: true,
+        avatar: true,
       },
     });
 
@@ -50,7 +50,7 @@ export async function getStreamUserToken(userId: string) {
       token,
       userId: userId,
       userName: existingUser.fullName,
-      userImage: existingUser.avatarUrl,
+      userImage: existingUser.avatar,
     };
   } catch (error) {
     console.error('failed to get stream user token', error);

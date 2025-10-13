@@ -24,19 +24,12 @@ export function useOAuthSignIn() {
     return signIn.authenticateWithRedirect({
       strategy,
       redirectUrl: '/sign-in/sso-callback',
-      redirectUrlComplete: '/',
+      redirectUrlComplete: '/sign-up-sso-complete',
+
+      // continueSignUp: true,
+      // continueSignIn: true,
     });
   }
-
-  // function signUpWith(strategy: OAuthStrategy) {
-  //   if (!isSignInLoaded || !isSignUpLoaded) return null;
-
-  //   return signUp.authenticateWithRedirect({
-  //     strategy,
-  //     redirectUrl: '/auth/sign-up/sso-callback',
-  //     redirectUrlComplete: '/auth/sign-up-complete',
-  //   });
-  // }
 
   function handleSignIn(strategy: OAuthStrategy) {
     if (!isSignInLoaded || !isSignUpLoaded) {
@@ -56,7 +49,7 @@ export function useOAuthSignIn() {
         signUp.verifications.externalAccount.status === 'transferable' &&
         signUp.verifications.externalAccount.error?.code ===
           'external_account_exists_code';
-      // console.log('userExistsButNeedsToSignIn', userExistsButNeedsToSignIn);
+      console.log('userExistsButNeedsToSignIn', userExistsButNeedsToSignIn);
 
       if (userExistsButNeedsToSignIn) {
         const res = await signIn.create({ transfer: true });
@@ -82,17 +75,22 @@ export function useOAuthSignIn() {
       // If the user has an OAuth account but does not yet
       // have an account in your app, you can create an account
       // for them using the OAuth information.
-      // console.log(
-      //   'signIn.firstFactorVerification.status',
-      //   signIn.firstFactorVerification.status
-      // );
+      console.log(
+        'signIn.firstFactorVerification.status',
+        signIn.firstFactorVerification.status
+      );
+      console.log(
+        'signIn.secondFactorVerification.status',
+        signIn.secondFactorVerification.status
+      );
       // console.log(
       //   'signIn.secondFactorVerification.status',
       //   signIn.secondFactorVerification.status
       // );
+
       const userNeedsToBeCreated =
-        signIn.firstFactorVerification.status === 'transferable';
-      // console.log('userNeedsToBeCreated', userNeedsToBeCreated);
+        signIn.firstFactorVerification.status === 'unverified';
+      console.log('userNeedsToBeCreated', userNeedsToBeCreated);
 
       if (userNeedsToBeCreated) {
         // const res1 = await signUp.authenticateWithRedirect({
@@ -102,14 +100,15 @@ export function useOAuthSignIn() {
         // });
         // alert(JSON.stringify(res1));
         const res = await signUp.create({
-          transfer: true,
+          transfer: false,
           // strategy: strategy,
-          // redirectUrl: '/auth/sign-up/sso-callback',
+          redirectUrl: '/sign-up-sso-complete',
           // actionCompleteRedirectUrl: '/auth/sign-up-complete',
           // externalAccountStrategy: strategy,
           // externalAccountRedirectUrl: '/auth/sign-up/sso-callback',
           // externalAccountActionCompleteRedirectUrl: '/auth/sign-up-complete',
         });
+        console.log('signUp create res', res);
         // alert(JSON.stringify(res));
         if (res.status === 'complete') {
           setActive({
@@ -127,6 +126,7 @@ export function useOAuthSignIn() {
           // router.push('/auth/sign-up-complete');
         }
       } else {
+        console.log('134: Signing in with', strategy);
         // If the user has an account in your application
         // and has an OAuth account connected to it, you can sign them in.
         toast.loading('signing in', { id: 'sign-in' });

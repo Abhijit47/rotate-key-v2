@@ -214,7 +214,14 @@ export async function POST(req: NextRequest) {
     // Handle user.deleted event
     if (eventType === 'user.deleted') {
       console.log('user.deleted', evt.data.id);
-      if (evt.data.id) {
+      const existingUser = await db.query.users.findFirst({
+        where(fields, { eq }) {
+          return eq(fields.id, evt.data.id!);
+        },
+        columns: { id: true, clerkId: true },
+      });
+      console.log('Existing user to delete:', existingUser);
+      if (evt.data.id && existingUser?.id) {
         const [[account], [info]] = await Promise.all([
           db.delete(users).where(eq(users.clerkId, evt.data.id)).returning({
             id: users.id,

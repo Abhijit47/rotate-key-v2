@@ -17,11 +17,14 @@ export default function SSOCallback() {
       <AuthenticateWithRedirectCallback
         signInFallbackRedirectUrl={'/sign-in'}
         signUpFallbackRedirectUrl={'/sign-up'}
-        continueSignUpUrl={'/sign-up-complete'}
+        // forceRedirectUrl={'/sign-up-sso-complete'}
+        // signUpForceRedirectUrl={'/sign-up-sso-complete'}
+        // signInForceRedirectUrl={'/'}
+        // continueSignUpUrl={'/sign-up-sso-complete'}
       />
       <div className='flex flex-col items-center justify-center h-dvh gap-4 md:gap-6'>
         <h1 className='text-lg md:text-xl lg:text-2xl font-bold text-primary-500'>
-          Redirecting...
+          Sign In Redirecting...
         </h1>
         <p className='mt-4 text-gray-600 text-sm md:text-base lg:text-lg'>
           Please wait while we redirect you.

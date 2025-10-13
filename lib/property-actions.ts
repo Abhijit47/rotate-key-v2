@@ -1,6 +1,7 @@
 'use server';
 
 import { db } from '@/drizzle/db';
+import { properties } from '@/drizzle/schemas';
 import { DrizzleError } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { requireAuth } from './require-auth';
@@ -23,32 +24,56 @@ export async function createProperty(
 ) {
   const user = await requireAuth();
 
-  // console.log(
-  //   'Creating property with formData:',
-  //   Object.fromEntries(formData.entries())
-  // );
-
-  /*
-  const additionalInfoSchema = z.object({
-    info: z.string().min(1).max(500),
-  })
-  
-  const mergeWithSchema = addPropertySchema.extend({
-    additionalInformation: z.array(additionalInfoSchema).min(1).max(10),
-  })
-  
-  const val = addPropertySchema.omit({ files: true }).safeParse({})
-  
-  type MergedSchema = z.infer<typeof mergeWithSchema>
-  */
-
   try {
     // Extract and transform form data
-    const values = addPropertySchema
+    const { data, success, error } = addPropertySchema
       .omit({ files: true })
       .safeParse(unsafeData);
 
-    console.log('Parsed values:', values);
+    if (!success) {
+      console.error('Validation errors:', error);
+      return { success: false, message: 'Invalid form data' };
+    }
+
+    const [newProperty] = await db
+      .insert(properties)
+      .values({
+        address: data.streetAddress,
+        country: data.countryOrNation.name,
+        state: data.stateOrProvince.name,
+        city: data.cityOrTown.name,
+        zipcode: data.zipcode,
+        area: data.propertyArea,
+        areaUnit: data.propertyAreaUnit,
+        description: data.propertyDescription,
+        type: data.propertyType,
+        ownership: data.propertyOwnership,
+        swapping: data.propertySwapping,
+        rentalPeriod: data.propertyRentalTypes,
+        surrounding: data.propertySurrounding,
+        environment: data.propertyEnvironment,
+        ownerName: data.propertyOwnerName,
+        ownerEmail: data.propertyOwnerEmail,
+        ownerPhone: data.propertyOwnerPhone,
+        bedRooms: Number(data.propertyBedRooms),
+        bathRooms: Number(data.propertyBathRooms),
+        beds: Number(data.numberOfBeds),
+        guests: Number(data.numberOfGuests),
+        hostLanguages: data.hostLanguages,
+        accomodation: data.propertyAccomodationType,
+        amenities: data.propertyAmenities,
+        rules: data.propertyRules,
+        accessibilities: data.propertyAccessibilities,
+        startDate: data.staysDateRange.from,
+        endDate: data.staysDateRange.to,
+        staysDurationInDays: Number(data.staysDurationInDays),
+        images: data.propertyImages,
+        isAvailable: true,
+        authorId: user.id,
+      })
+      .returning({ id: properties.id });
+
+    console.log('New property created with ID:', newProperty.id);
 
     return { success: true, message: 'Property created successfully' };
   } catch (err) {
@@ -74,7 +99,7 @@ export async function getProperties() {
             id: true,
             username: true,
             email: true,
-            avatarUrl: true,
+            avatar: true,
           },
         },
         receivedLikes: {
@@ -109,7 +134,7 @@ export async function getMyProperties() {
             fullName: true,
             username: true,
             email: true,
-            avatarUrl: true,
+            avatar: true,
           },
         },
       },

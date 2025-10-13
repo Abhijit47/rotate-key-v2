@@ -8,6 +8,9 @@ import { useAuthContext } from '@/contexts/auth-context';
 import { useOAuthSignIn } from '@/hooks/useOAuthSignIn';
 
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
+
+const isDev = process.env.NODE_ENV === 'development';
 
 export default function SignUpButtons() {
   const { setCurrentStep } = useAuthContext();
@@ -21,7 +24,15 @@ export default function SignUpButtons() {
         className='w-full grid grid-cols-1 lg:grid-cols-3 gap-4'>
         <RadioGroup.Item
           disabled={isLoginPending || !isSignInLoaded || !isSignUpLoaded}
-          onClick={() => handleSignIn('oauth_facebook')}
+          onClick={
+            //  FIXME: Disable OAuth in production until we have a proper redirect URI setup
+            !isDev
+              ? () => toast.info('Coming soon!!!')
+              : () => {
+                  handleSignIn('oauth_facebook');
+                  debugger;
+                }
+          }
           value={'Continue with Facebook'}
           className={cn(
             'relative group ring-[1px] w-full ring-border rounded py-2 px-3 text-start',
@@ -35,7 +46,15 @@ export default function SignUpButtons() {
         </RadioGroup.Item>
         <RadioGroup.Item
           disabled={isLoginPending || !isSignInLoaded || !isSignUpLoaded}
-          onClick={() => handleSignIn('oauth_google')}
+          onClick={
+            // FIXME: Disable OAuth in production until we have a proper redirect URI setup
+            !isDev
+              ? () => toast.info('Coming soon!!!')
+              : () => {
+                  handleSignIn('oauth_google');
+                  debugger;
+                }
+          }
           value={'Continue with Google'}
           className={cn(
             'relative group ring-[1px] ring-border rounded py-2 px-3 text-start',
