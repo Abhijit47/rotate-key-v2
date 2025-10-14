@@ -1,4 +1,7 @@
 procs:
+  inngest:
+    shell: 'npm run inngest:dev'
+
   ngrok:
     cmd: ['ngrok', 'http', '3000']
 
