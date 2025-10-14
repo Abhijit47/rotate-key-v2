@@ -1,0 +1,6 @@
+procs:
+  ngrok:
+    cmd: ['ngrok', 'http', '3000']
+
+  next:
+    shell: 'npm run dev'
