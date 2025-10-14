@@ -1,45 +1,105 @@
 'use client';
 
-import { UserProfile } from '@clerk/nextjs';
+import { UserProfile, useUser } from '@clerk/nextjs';
+import {
+  BookOpenCheck,
+  ListFilterPlusIcon,
+  LogOut,
+  PauseCircle,
+  ShieldCheckIcon,
+  UserRoundPen,
+} from 'lucide-react';
+import { useLocale } from 'next-intl';
+import { useRouter } from 'next/navigation';
 
-function DotIcon() {
-  return (
-    <svg
-      xmlns='http://www.w3.org/2000/svg'
-      viewBox='0 0 512 512'
-      fill='currentColor'>
-      <path d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z' />
-    </svg>
-  );
-}
-
-function CustomPage() {
-  return (
-    <div>
-      <h1>Custom page</h1>
-      <p>This is the content of the custom page.</p>
-    </div>
-  );
-}
+import { Spinner } from '@/components/ui/spinner';
+import PropertiesOnHolds from './properties-on-holds';
+import UpdateProfilePage from './update-profile';
+import YourRecentListings from './YourRecentListings';
 
 export default function CustomProfile() {
+  const router = useRouter();
+  const { isLoaded, isSignedIn, user } = useUser();
+  const locale = useLocale();
+
+  if (!isSignedIn) {
+    router.push(`/${locale}/sign-in`);
+    return;
+  }
+
+  if (!isLoaded) {
+    <div>Loading...</div>;
+    return;
+  }
+
   return (
-    <UserProfile path='/profile' routing='path'>
-      {/* You can pass the content as a component */}
+    <UserProfile
+      fallback={
+        <div>
+          <Spinner className={'size-8'} />
+        </div>
+      }
+      appearance={{
+        elements: {
+          rootBox: {
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+          },
+          cardBox: {
+            width: '100%',
+          },
+        },
+      }}
+      path={`/profile`}
+      routing='path'>
       <UserProfile.Page
-        label='Custom Page'
-        labelIcon={<DotIcon />}
-        url='custom-page'>
-        <CustomPage />
+        label='Update Profile'
+        labelIcon={<UserRoundPen className={'size-4'} />}
+        url={`${user.id}/update-profile`}>
+        <UpdateProfilePage />
+      </UserProfile.Page>
+
+      <UserProfile.Page
+        label='Recent Listings'
+        labelIcon={<ListFilterPlusIcon className={'size-4'} />}
+        url={`recent-listings`}>
+        <YourRecentListings />
+      </UserProfile.Page>
+
+      <UserProfile.Page
+        label='Properties on Hold'
+        labelIcon={<PauseCircle className={'size-4'} />}
+        url={`properties-on-hold`}>
+        <PropertiesOnHolds />
       </UserProfile.Page>
 
       {/* You can also pass the content as direct children */}
-      <UserProfile.Page label='Terms' labelIcon={<DotIcon />} url='terms'>
+      <UserProfile.Page
+        label='Terms'
+        labelIcon={<BookOpenCheck className={'size-4'} />}
+        url='terms'>
         <div>
           <h1>Custom Terms Page</h1>
           <p>This is the content of the custom terms page.</p>
         </div>
       </UserProfile.Page>
+
+      <UserProfile.Page
+        label='Privacy'
+        labelIcon={<ShieldCheckIcon className={'size-4'} />}
+        url='privacy'>
+        <div>
+          <h1>Custom Terms Page</h1>
+          <p>This is the content of the custom terms page.</p>
+        </div>
+      </UserProfile.Page>
+
+      <UserProfile.Link
+        label='Back to Home'
+        url='/'
+        labelIcon={<LogOut className='mr-3 size-4 -rotate-180' />}
+      />
     </UserProfile>
   );
 }

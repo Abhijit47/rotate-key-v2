@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Rotate Key | User Profile',
+  title: 'Rotate Key | My Profile',
   description:
     'Your Profile - Manage Your Account and Preferences on Rotate Keys',
   keywords: [
@@ -26,7 +26,7 @@ export default function ProfileLayout({
   return (
     <section
       className={
-        'bg-gradient-to-b from-primary-500 via-primary-400 to-primary-600 aspect-video dark:bg-gradient-to-b dark:from-primary-800 dark:via-primary-900 dark:to-primary-950'
+        'bg-gradient-to-b from-primary-500 via-primary-400 to-primary-600 dark:bg-gradient-to-b dark:from-primary-800 dark:via-primary-900 dark:to-primary-950'
       }>
       {children}
     </section>
