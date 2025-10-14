@@ -12,6 +12,8 @@ import {
   CarouselPrevious,
 } from '../ui/carousel';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 export default function PropertyCardCarousel({
   images,
   type,
@@ -37,7 +39,7 @@ export default function PropertyCardCarousel({
       return (
         <CardContent>
           <Carousel
-            plugins={[AutoPlay({ delay: 3000 })]}
+            plugins={isDev ? undefined : [AutoPlay({ delay: 3000 })]}
             opts={{
               loop: true,
               direction: 'ltr',
@@ -77,7 +79,7 @@ export default function PropertyCardCarousel({
       }
       return (
         <Carousel
-          // plugins={[AutoPlay({ delay: 3000 })]}
+          plugins={isDev ? undefined : [AutoPlay({ delay: 3000 })]}
           opts={{
             loop: true,
             direction: 'ltr',
