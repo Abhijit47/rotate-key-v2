@@ -48,6 +48,7 @@ export default function PropertyCheckinAndCheckOutField({
     control,
     formState: { errors },
     setValue,
+    watch,
   } = useFormContext<
     Pick<AddPropertyFormValues, 'staysDateRange' | 'staysDurationInDays'>
   >();
@@ -86,10 +87,18 @@ export default function PropertyCheckinAndCheckOutField({
                       <IconCalendarWeek className='mr-2 h-4 w-4' />
                       {field.value.from ? (
                         field.value.to ? (
-                          <>
-                            {format(field.value.from, 'LLL dd, y')} -{' '}
-                            {format(field.value.to, 'LLL dd, y')}
-                          </>
+                          <span
+                            className={
+                              'w-full flex items-center justify-between'
+                            }>
+                            <span className={'block'}>
+                              {format(field.value.from, 'LLL dd, y')} -{' '}
+                              {format(field.value.to, 'LLL dd, y')}
+                            </span>
+                            <Badge className={'block text-xs sm:text-sm'}>
+                              ({watch('staysDurationInDays')} days)
+                            </Badge>
+                          </span>
                         ) : (
                           format(field.value.from, 'LLL dd, y')
                         )

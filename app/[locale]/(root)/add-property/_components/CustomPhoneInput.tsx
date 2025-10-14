@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 
+import { ErrorMessage } from '@hookform/error-message';
 import { CircleFlag } from 'react-circle-flags';
 import { useFormContext } from 'react-hook-form';
 import {
@@ -28,7 +29,6 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { AddPropertyFormValues } from '@/lib/validations/property.schema';
-import { ErrorMessage } from '@hookform/error-message';
 
 export default function CustomPhoneInput() {
   const [open, setOpen] = React.useState(false);
@@ -48,18 +48,21 @@ export default function CustomPhoneInput() {
     // phone,
   } = usePhoneInput({
     defaultCountry: 'in',
-    value: watch('propertyOwnerPhone'),
+    value: watch('propertyOwnerPhone') || '+91 99999-11111',
+    // value: watch('propertyOwnerPhone'),
     // charAfterDialCode: ' ',
     defaultMask: '(...)-...-....',
     forceDialCode: true,
     countries: defaultCountries,
     onChange: (data) => {
       // console.log(data);
-      setValue('propertyOwnerPhone', data.phone, {
-        shouldValidate: true,
-        shouldDirty: true,
-        shouldTouch: true,
-      });
+      if (data) {
+        setValue('propertyOwnerPhone', data.phone, {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true,
+        });
+      }
     },
   });
 

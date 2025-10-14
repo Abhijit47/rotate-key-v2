@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Form } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
+import { Spinner } from '@/components/ui/spinner';
 import { createProperty } from '@/lib/property-actions';
 import {
   AddPropertyFormValues,
@@ -13,6 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { treeifyError } from 'zod';
 import {
   LazyDevtool,
   LazyPropertyAccessibilities,
@@ -62,12 +64,12 @@ export default function CreatePropertyForm() {
 
       if (!success) {
         toast.error('Please fix the errors in the form.');
-        console.log(error);
+        console.log(treeifyError(error));
         return;
       }
 
       const result = await createProperty(data);
-      console.log('Validated data:', result);
+      console.log('result:', result);
 
       if (!result.success) {
         toast.error(result.message || 'Failed to create property.');
@@ -130,6 +132,7 @@ export default function CreatePropertyForm() {
 
             <div className={'flex w-full items-center justify-end gap-4'}>
               <Button
+                size={'sm'}
                 type='reset'
                 disabled={form.formState.isSubmitting || isPending}
                 onClick={() => form.reset()}
@@ -138,6 +141,7 @@ export default function CreatePropertyForm() {
                 Reset
               </Button>
               <Button
+                size={'sm'}
                 disabled={
                   !form.formState.isValid ||
                   form.formState.isSubmitting ||
@@ -145,7 +149,15 @@ export default function CreatePropertyForm() {
                 }
                 type='submit'
                 className={'cursor-pointer'}>
-                {form.formState.isLoading ? 'Submitting...' : 'Submit'}
+                {form.formState.isLoading ||
+                form.formState.isSubmitting ||
+                isPending ? (
+                  <span className={'inline-flex items-center gap-1'}>
+                    Creating... <Spinner />
+                  </span>
+                ) : (
+                  'Create Property'
+                )}
               </Button>
             </div>
 

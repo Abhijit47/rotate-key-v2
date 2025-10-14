@@ -78,11 +78,13 @@ export async function createProperty(
     return { success: true, message: 'Property created successfully' };
   } catch (err) {
     if (err instanceof Error) {
-      return { success: false, message: err.message };
+      console.error('err instanceof Error:', err);
+      return { success: false, message: 'Unknown Error.' };
     }
 
     if (err instanceof DrizzleError) {
-      return { success: false, message: err.message };
+      console.error('DrizzleError creating property:', err);
+      return { success: false, message: 'Internal server error...' };
     }
     console.error('Unknown error creating property:', err);
     return { success: false, message: 'Failed to create property' };

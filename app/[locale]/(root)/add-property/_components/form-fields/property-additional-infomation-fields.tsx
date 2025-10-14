@@ -228,7 +228,7 @@ export default function PropertyAdditionalInfomationFields() {
             </FormLabel>
             <FormControl>
               <MultiSelect
-                commandClassName='min-w-4xl'
+                commandClassName='min-w-4xl capitalize'
                 options={languages}
                 onValueChange={field.onChange}
                 defaultValue={field.value}

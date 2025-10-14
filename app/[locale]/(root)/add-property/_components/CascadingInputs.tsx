@@ -190,7 +190,11 @@ export default function CascadingInputs() {
                     );
                   }}>
                   <SelectTrigger className='w-full disabled:cursor-not-allowed'>
-                    <SelectValue placeholder='Select a country / nation' />
+                    {watch('countryOrNation.name') ? (
+                      watch('countryOrNation.name')
+                    ) : (
+                      <SelectValue placeholder='Select a country / nation' />
+                    )}
                   </SelectTrigger>
                   <SelectContent>
                     {countriesList?.map((group) => (
@@ -266,7 +270,11 @@ export default function CascadingInputs() {
                     );
                   }}>
                   <SelectTrigger className='w-full disabled:cursor-not-allowed'>
-                    <SelectValue placeholder='Select a state / province' />
+                    {watch('stateOrProvince.name') ? (
+                      watch('stateOrProvince.name')
+                    ) : (
+                      <SelectValue placeholder='Select a state / province' />
+                    )}
                   </SelectTrigger>
                   <SelectContent>
                     {stateList?.map((_state) => (
@@ -330,7 +338,11 @@ export default function CascadingInputs() {
                     field.onChange(value);
                   }}>
                   <SelectTrigger className='w-full disabled:cursor-not-allowed'>
-                    <SelectValue placeholder='Select a city / town' />
+                    {watch('cityOrTown.name') ? (
+                      watch('cityOrTown.name')
+                    ) : (
+                      <SelectValue placeholder='Select a city / town' />
+                    )}
                   </SelectTrigger>
                   <SelectContent>
                     {citiesList?.map((_city) => (

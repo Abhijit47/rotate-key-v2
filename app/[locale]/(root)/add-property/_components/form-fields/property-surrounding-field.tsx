@@ -1,5 +1,8 @@
-import { AddPropertyFormValues } from '@/lib/validations/property.schema';
+import { ErrorMessage } from '@hookform/error-message';
+import { useTheme } from 'next-themes';
 import { useFormContext } from 'react-hook-form';
+
+import { AddPropertyFormValues } from '@/lib/validations/property.schema';
 
 import {
   FormControl,
@@ -20,13 +23,12 @@ import {
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { propertySurroundings } from '@/constants';
-import { ErrorMessage } from '@hookform/error-message';
-import { useTheme } from 'next-themes';
 
 export default function PropertySurroundingField() {
   const {
     control,
     formState: { errors },
+    watch,
   } = useFormContext<Pick<AddPropertyFormValues, 'propertySurrounding'>>();
 
   const { systemTheme } = useTheme();
@@ -47,7 +49,13 @@ export default function PropertySurroundingField() {
           <Select onValueChange={field.onChange}>
             <FormControl>
               <SelectTrigger className='w-full'>
-                <SelectValue placeholder='Select a surrounding type' />
+                {watch('propertySurrounding') ? (
+                  <span className={'capitalize'}>
+                    {watch('propertySurrounding')}
+                  </span>
+                ) : (
+                  <SelectValue placeholder='Select a surrounding type' />
+                )}
               </SelectTrigger>
             </FormControl>
             <SelectContent>

@@ -437,7 +437,7 @@ function UploadImageErrorState() {
         variant='secondary'
         size='sm'
         className='mt-1'
-        onClick={() => form.reset({ files: [] }, { keepDirty: true })}>
+        onClick={() => form.reset({ files: [] })}>
         Reset
       </Button>
     </div>

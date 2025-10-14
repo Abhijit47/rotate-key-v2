@@ -28,6 +28,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 import SelectedItems from '../SelectedItems';
 
 export default function PropertyAmenitiesField() {
@@ -60,15 +61,25 @@ export default function PropertyAmenitiesField() {
                 <PopoverTrigger asChild>
                   <Button
                     variant='outline'
-                    className='w-full justify-between font-normal'>
-                    <span>Select Amenities</span>
-                    <span>
-                      <ChevronsUpDownIcon className='ml-auto h-4 w-4 opacity-50' />
-                    </span>
+                    className={cn(
+                      'w-full justify-between font-normal text-ellipsis overflow-hidden'
+                    )}>
+                    {watch('propertyAmenities')?.length ? (
+                      <span className={'capitalize text-xs sm:text-sm'}>
+                        {watch('propertyAmenities').join(' | ')}
+                      </span>
+                    ) : (
+                      <>
+                        <span>Select Amenities</span>
+                        <span>
+                          <ChevronsUpDownIcon className='ml-auto h-4 w-4 opacity-50' />
+                        </span>
+                      </>
+                    )}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className='w-full p-0' align='start'>
-                  <Command className='rounded-lg border shadow-md md:min-w-4xl'>
+                  <Command className='rounded-lg border shadow-md min-w-auto sm:min-w-md md:min-w-2xl'>
                     <CommandInput placeholder='Type a command or search...' />
                     <CommandList className={'w-full p-2'}>
                       <CommandEmpty>No results found.</CommandEmpty>

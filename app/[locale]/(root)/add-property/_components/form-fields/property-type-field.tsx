@@ -1,5 +1,7 @@
-import { AddPropertyFormValues } from '@/lib/validations/property.schema';
+import { useTheme } from 'next-themes';
 import { useFormContext } from 'react-hook-form';
+
+import { AddPropertyFormValues } from '@/lib/validations/property.schema';
 
 import {
   FormControl,
@@ -21,10 +23,9 @@ import {
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { propertyTypes } from '@/constants';
-import { useTheme } from 'next-themes';
 
 export default function PropertyTypeField() {
-  const { control } =
+  const { control, watch } =
     useFormContext<Pick<AddPropertyFormValues, 'propertyType'>>();
   const { systemTheme } = useTheme();
 
@@ -44,7 +45,11 @@ export default function PropertyTypeField() {
           <Select onValueChange={field.onChange}>
             <FormControl>
               <SelectTrigger className='w-full'>
-                <SelectValue placeholder='Select a property type' />
+                {watch('propertyType') ? (
+                  <span className={'capitalize'}>{watch('propertyType')}</span>
+                ) : (
+                  <SelectValue placeholder='Select a property type' />
+                )}
               </SelectTrigger>
             </FormControl>
             <SelectContent>

@@ -1,5 +1,9 @@
-import { AddPropertyFormValues } from '@/lib/validations/property.schema';
+import { ErrorMessage } from '@hookform/error-message';
+import { Separator } from '@radix-ui/react-separator';
+import { useTheme } from 'next-themes';
 import { useFormContext } from 'react-hook-form';
+
+import { AddPropertyFormValues } from '@/lib/validations/property.schema';
 
 import {
   FormControl,
@@ -19,14 +23,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { propertyOwnerships } from '@/constants';
-import { ErrorMessage } from '@hookform/error-message';
-import { Separator } from '@radix-ui/react-separator';
-import { useTheme } from 'next-themes';
 
 export default function PropertyOwnershipField() {
   const {
     control,
     formState: { errors },
+    watch,
   } = useFormContext<Pick<AddPropertyFormValues, 'propertyOwnership'>>();
 
   const { systemTheme } = useTheme();
@@ -47,7 +49,13 @@ export default function PropertyOwnershipField() {
           <Select onValueChange={field.onChange}>
             <FormControl>
               <SelectTrigger className='w-full'>
-                <SelectValue placeholder='Select a ownership type' />
+                {watch('propertyOwnership') ? (
+                  <span className={'capitalize'}>
+                    {watch('propertyOwnership')}
+                  </span>
+                ) : (
+                  <SelectValue placeholder='Select a ownership type' />
+                )}
               </SelectTrigger>
             </FormControl>
             <SelectContent>

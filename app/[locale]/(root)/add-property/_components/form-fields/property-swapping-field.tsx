@@ -1,5 +1,8 @@
-import { AddPropertyFormValues } from '@/lib/validations/property.schema';
+import { ErrorMessage } from '@hookform/error-message';
+import { useTheme } from 'next-themes';
 import { useFormContext } from 'react-hook-form';
+
+import { AddPropertyFormValues } from '@/lib/validations/property.schema';
 
 import {
   FormControl,
@@ -20,13 +23,12 @@ import {
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { propertySwappings } from '@/constants';
-import { ErrorMessage } from '@hookform/error-message';
-import { useTheme } from 'next-themes';
 
 export default function PropertySwappingField() {
   const {
     control,
     formState: { errors },
+    watch,
   } = useFormContext<Pick<AddPropertyFormValues, 'propertySwapping'>>();
 
   const { systemTheme } = useTheme();
@@ -47,7 +49,13 @@ export default function PropertySwappingField() {
           <Select onValueChange={field.onChange}>
             <FormControl>
               <SelectTrigger className='w-full'>
-                <SelectValue placeholder='Select a property type' />
+                {watch('propertySwapping') ? (
+                  <span className={'capitalize'}>
+                    {watch('propertySwapping')}
+                  </span>
+                ) : (
+                  <SelectValue placeholder='Select a property type' />
+                )}
               </SelectTrigger>
             </FormControl>
             <SelectContent>

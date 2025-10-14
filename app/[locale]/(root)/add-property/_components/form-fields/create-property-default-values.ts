@@ -33,7 +33,8 @@ const defaultValues = {
   // Optional fields
   propertyOwnerName: '',
   propertyOwnerEmail: '',
-  propertyOwnerPhone: '+91 99999-11111 ', // dont make undefined or ''
+  // propertyOwnerPhone:isDev? '+91 99999-11111 ', // dont make undefined or ''
+  propertyOwnerPhone: undefined,
 
   propertyBedRooms: isDev ? '4' : '', // dont make undefined
   propertyBathRooms: isDev ? '2' : '', // dont make undefined,
@@ -74,7 +75,14 @@ const defaultValues = {
   },
   staysDurationInDays: isDev ? '30' : '',
   // propertyImages: isDev ? Array(6).fill('') : [],
-  propertyImages: isDev ? [] : [],
+  files: isDev ? [] : undefined, // temp. local files store for upload
+  propertyImages: isDev
+    ? [
+        'https://res.cloudinary.com/rotate-key/image/upload/v1760424431/rotate-key/user_33y1OUU6Ie6UeFnYoaqZepY8H5V/my-property/IMG_20241226_155036.jpg.jpg',
+        'https://res.cloudinary.com/rotate-key/image/upload/v1760424435/rotate-key/user_33y1OUU6Ie6UeFnYoaqZepY8H5V/my-property/IMG_20241226_155041.jpg.jpg',
+        'https://res.cloudinary.com/rotate-key/image/upload/v1760424438/rotate-key/user_33y1OUU6Ie6UeFnYoaqZepY8H5V/my-property/IMG_20241226_155225.jpg.jpg',
+      ]
+    : [],
 };
 
 export default defaultValues;

@@ -1,3 +1,8 @@
+import { ErrorMessage } from '@hookform/error-message';
+import { useTheme } from 'next-themes';
+import { Fragment } from 'react';
+import { useFormContext } from 'react-hook-form';
+
 import { Badge } from '@/components/ui/badge';
 import {
   FormControl,
@@ -17,15 +22,12 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { propertyRentalPeriods } from '@/constants';
 import { AddPropertyFormValues } from '@/lib/validations/property.schema';
-import { ErrorMessage } from '@hookform/error-message';
-import { useTheme } from 'next-themes';
-import { Fragment } from 'react';
-import { useFormContext } from 'react-hook-form';
 
 export default function PropertyRentalPeriodField() {
   const {
     control,
     formState: { errors },
+    watch,
   } = useFormContext<Pick<AddPropertyFormValues, 'propertyRentalTypes'>>();
 
   const { systemTheme } = useTheme();
@@ -46,7 +48,13 @@ export default function PropertyRentalPeriodField() {
           <Select onValueChange={field.onChange}>
             <FormControl>
               <SelectTrigger className='w-full'>
-                <SelectValue placeholder='Select a property type' />
+                {watch('propertyRentalTypes') ? (
+                  <span className={'capitalize'}>
+                    {watch('propertyRentalTypes')}
+                  </span>
+                ) : (
+                  <SelectValue placeholder='Select a property type' />
+                )}
               </SelectTrigger>
             </FormControl>
             <SelectContent>

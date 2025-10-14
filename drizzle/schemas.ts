@@ -210,8 +210,8 @@ export const properties = pgTable(
       t.state,
       t.country
     ),
-    uniqueIndex('uniq_property_owner_email').on(t.ownerEmail),
-    uniqueIndex('uniq_property_owner_phone').on(t.ownerPhone),
+    // uniqueIndex('uniq_property_owner_email').on(t.ownerEmail),
+    // uniqueIndex('uniq_property_owner_phone').on(t.ownerPhone),
     index('idx_properties_address').on(t.address),
     index('idx_properties_country').on(t.country),
     index('idx_properties_state').on(t.state),
