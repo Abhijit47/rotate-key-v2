@@ -3,6 +3,7 @@ import { InsertUser, userInfo, users } from '@/drizzle/schemas';
 import { env } from '@/env';
 // import { insertToDB, updateToDB } from '@/lib/user-actions';
 import { EmailData } from '@/types/clerk';
+import { clerkClient } from '@clerk/nextjs/server';
 import { verifyWebhook } from '@clerk/nextjs/webhooks';
 import { format } from 'date-fns';
 import { eq } from 'drizzle-orm';
@@ -17,6 +18,7 @@ export async function POST(req: NextRequest) {
     env.NEXT_PUBLIC_STREAM_API_KEY,
     env.STREAM_API_SECRET
   );
+  const authClient = await clerkClient();
   try {
     const evt = await verifyWebhook(req);
 
@@ -26,7 +28,7 @@ export async function POST(req: NextRequest) {
         (e) => e.id === evt.data.primary_email_address_id
       )?.email_address;
 
-      const { metadata } = evt.data.public_metadata;
+      // const { metadata } = evt.data.public_metadata;
       // console.log('metadata', metadata);
       // eslint-disable-next-line
       const newUser = {
@@ -75,11 +77,11 @@ export async function POST(req: NextRequest) {
 
       const committed = await db.transaction(async (tx) => {
         // generate a token for the user with id 'john'
-        // const token = serverClient.createToken(
-        //   evt.data.id,
-        //   expireTime,
-        //   issuedAt
-        // );
+        const token = serverClient.createToken(
+          evt.data.id,
+          expireTime,
+          issuedAt
+        );
         // Create user in Stream
         const streamUser = {
           id: evt.data.id,
@@ -104,7 +106,7 @@ export async function POST(req: NextRequest) {
         } as UserResponse;
         console.log('streamUser', streamUser);
 
-        // await serverClient.upsertUsers([streamUser]);
+        await serverClient.upsertUsers([streamUser]);
 
         const [newUser] = await tx
           .insert(users)
@@ -153,7 +155,7 @@ export async function POST(req: NextRequest) {
 
             // stream related fields
             isOnline: false,
-            streamToken: 'token',
+            streamToken: token,
             expireTime: expireTime,
             issuedAt: issuedAt,
           })
@@ -161,14 +163,30 @@ export async function POST(req: NextRequest) {
           .onConflictDoNothing();
 
         if (newUser) {
-          // initialize userInfo row
-          await tx
-            .insert(userInfo)
-            .values({
-              id: evt.data.id,
-              userId: evt.data.id,
-            })
-            .onConflictDoNothing();
+          const [authUser, info] = await Promise.all([
+            authClient.users.updateUserMetadata(newUser.id, {
+              publicMetadata: {
+                metadata: {
+                  role: 'guest',
+                  plan: 'free',
+                  isOnboarded: false,
+                },
+              },
+            }),
+            tx
+              .insert(userInfo)
+              .values({
+                id: evt.data.id,
+                userId: evt.data.id,
+              })
+              .onConflictDoNothing()
+              .returning({ id: userInfo.id }),
+          ]);
+          console.log(
+            'Clerk auth user updated:',
+            authUser.publicMetadata.metadata
+          );
+          console.log('User info created:', info);
         }
 
         return newUser;
@@ -235,12 +253,12 @@ export async function POST(req: NextRequest) {
         console.log('Deleted user info:', info);
         // await db.delete(users).where(eq(users.clerkId, evt.data.id));
         // await db.delete(userInfo).where(eq(userInfo.userId, evt.data.id));
-        // const destroy = await serverClient.deleteUser(evt.data.id, {
-        //   mark_messages_deleted: true,
-        //   delete_conversation_channels: true,
-        //   hard_delete: true,
-        // });
-        // console.log('Clerk user deleted from Stream:', destroy);
+        const destroy = await serverClient.deleteUser(evt.data.id, {
+          mark_messages_deleted: true,
+          delete_conversation_channels: true,
+          hard_delete: true,
+        });
+        console.log('Clerk user deleted from Stream:', destroy);
         // return new Response('User with all credentials Deleted', {
         //   status: 200,
         // });
