@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
           //   : 'user_' + crypto.getRandomValues(new Uint32Array(1))[0],
           // updated_at: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'"),
         } as UserResponse;
-        console.log('streamUser', streamUser);
+        // console.log('streamUser', streamUser);
 
         await serverClient.upsertUsers([streamUser]);
 
