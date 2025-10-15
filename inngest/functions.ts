@@ -41,3 +41,57 @@ export const syncUser = inngest.createFunction(
     return { success: true };
   }
 );
+
+export const deleteUser = inngest.createFunction(
+  { id: 'delete-user-from-clerk' },
+  { event: 'clerk/user.deleted' },
+  async ({ event }) => {
+    const deletedUser = event.data; // The event payload's data will be the Clerk DeletedObject json
+    console.log('Clerk user deleted:', deletedUser);
+    // const userId = deletedUser.id;
+    // await database.users.delete({ id: userId });
+    // console.log('Deleted user from database:', { id: userId });
+    return { success: true };
+  }
+);
+
+export const updateUser = inngest.createFunction(
+  { id: 'update-user-from-clerk' },
+  { event: 'clerk/user.updated' },
+  async ({ event }) => {
+    const user = event.data; // The event payload's data will be the Clerk User json object
+    console.log('Clerk user updated:', user);
+    // const { id, first_name, last_name } = user;
+    // const email = user.email_addresses.find(
+    //   (e) => e.id === user.primary_email_address_id
+    // )?.email_address;
+    // await database.users.update({ id, email, first_name, last_name });
+    // console.log('Updated user in database:', {
+    //   id,
+    //   email,
+    //   first_name,
+    //   last_name,
+    // });
+    return { success: true };
+  }
+);
+
+export const createSession = inngest.createFunction(
+  { id: 'create-session-from-clerk' },
+  { event: 'clerk/session.created' },
+  async ({ event }) => {
+    const session = event.data; // The event payload's data will be the Clerk Session json object
+    console.log('Clerk session created:', session);
+    return { success: true };
+  }
+);
+
+export const createEmailInClerk = inngest.createFunction(
+  { id: 'create-email-from-clerk' },
+  { event: 'clerk/email.created' },
+  async ({ event }) => {
+    const email = event.data; // The event payload's data will be the Clerk Email json object
+    console.log('Clerk email created:', email);
+    return { success: true };
+  }
+);

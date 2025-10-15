@@ -1,5 +1,6 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import createMiddleware from 'next-intl/middleware';
+import { getLocale } from 'next-intl/server';
 import { NextResponse } from 'next/server';
 import { routing } from './i18n/routing';
 
@@ -22,8 +23,15 @@ const isProtectedRoute = createRouteMatcher([
 const isAdminRoute = createRouteMatcher(['/admin(.*)']);
 
 export default clerkMiddleware(async (auth, req) => {
+  const locale = await getLocale();
   // api/novu is a public API route, so we skip Clerk middleware for it
   // if (req.nextUrl.pathname.startsWith('/api/novu')) NextResponse.next();
+
+  // exclude inngest routes from authentication
+  if (req.nextUrl.pathname.startsWith(`/${locale}/api/inngest`)) {
+    // console.log('Skipping authentication for Inngest API route');
+    return NextResponse.next();
+  }
 
   if (isProtectedRoute(req)) await auth.protect();
 

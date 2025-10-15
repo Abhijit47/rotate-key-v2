@@ -7,7 +7,12 @@ import {
   type GetEvents,
 } from 'inngest';
 
-import { UserJSON } from '@clerk/nextjs/server';
+import {
+  DeletedObjectJSON,
+  EmailJSON,
+  SessionJSON,
+  UserJSON,
+} from '@clerk/nextjs/server';
 
 type UserSignup = {
   data: {
@@ -22,15 +27,35 @@ type UserAccountSetupCompleted = {
   };
 };
 
-type DatabaseUser = {
+type CreateUser = {
   data: UserJSON;
+};
+
+type UpdateUser = {
+  data: UserJSON;
+};
+
+type DeletedUser = {
+  data: DeletedObjectJSON;
+};
+
+type SessionUser = {
+  data: SessionJSON;
+};
+
+type EmailData = {
+  data: EmailJSON;
 };
 
 type Events = {
   'test/hello.world': { data: { email: string } };
   'user/new.signup': UserSignup;
   'user/account.setup.completed': UserAccountSetupCompleted;
-  'clerk/user.created': DatabaseUser;
+  'clerk/user.created': CreateUser;
+  'clerk/user.updated': UpdateUser;
+  'clerk/user.deleted': DeletedUser;
+  'clerk/session.created': SessionUser;
+  'clerk/email.created': EmailData;
 };
 
 // By default, the returned events do not include internal events prefixed with inngest/, such as inngest/function.finished.
