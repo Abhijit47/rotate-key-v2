@@ -103,13 +103,13 @@ export const connectionsDataSchema = z.object({
     id: z.string(),
     fullName: z.string(),
     email: z.string(),
-    avatarUrl: z.string().nullable(),
+    avatar: z.string().nullable(),
   }),
   author: z.object({
     id: z.string(),
     fullName: z.string(),
     email: z.string(),
-    avatarUrl: z.string().nullable(),
+    avatar: z.string().nullable(),
   }),
   property: z.object({
     id: z.string(),

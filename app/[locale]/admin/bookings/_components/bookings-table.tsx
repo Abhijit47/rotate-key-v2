@@ -123,7 +123,7 @@ export const bookingsDataSchema = z.object({
     id: z.string(),
     fullName: z.string(),
     email: z.string(),
-    avatarUrl: z.string().nullable(),
+    avatar: z.string().nullable(),
     createdAt: z.string(),
   }),
 });

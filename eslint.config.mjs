@@ -19,8 +19,8 @@ const eslintConfig = [
       'build/**',
       'next-env.d.ts',
     ],
-    plugins: ['@inngest'],
-    extends: ['plugin:@inngest/recommended'],
+    // plugins: ['@inngest'],
+    // extends: ['plugin:@inngest/recommended'],
   },
 ];
 

@@ -24,8 +24,8 @@ const preparedUsers = db.query.users
       email: true,
       role: true,
       createdAt: true,
-      avatarUrl: true,
-      gender: true,
+      avatar: true,
+      // gender: true,
       // attchedImages: true,
       // attchedFiles: true,
       // messagesSent: true,
@@ -73,7 +73,7 @@ export default async function UsersList() {
             <CardContent className={'grid grid-cols-6 gap-4'}>
               <div className={'col-span-1 aspect-square'}>
                 <Image
-                  src={user.avatarUrl ?? 'https://placehold.co/400x400.png'}
+                  src={user.avatar ?? 'https://placehold.co/400x400.png'}
                   alt={user.fullName}
                   width={300}
                   height={300}
@@ -84,7 +84,7 @@ export default async function UsersList() {
                 <div className={'grid grid-cols-1 md:grid-cols-2 gap-4'}>
                   <div className={'space-y-1'}>
                     <p>Email: {user.email}</p>
-                    <p>Gender: {user.gender}</p>
+                    {/* <p>Gender: {user.gender}</p> */}
                     <p>
                       Role: <Badge className={'capitalize'}>{user.role}</Badge>
                     </p>

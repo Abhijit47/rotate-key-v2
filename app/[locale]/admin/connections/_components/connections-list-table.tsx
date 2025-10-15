@@ -21,7 +21,7 @@ const preparedConnections = db.query.connectionRequests
           id: true,
           fullName: true,
           email: true,
-          avatarUrl: true,
+          avatar: true,
         },
       },
       author: {
@@ -29,7 +29,7 @@ const preparedConnections = db.query.connectionRequests
           id: true,
           fullName: true,
           email: true,
-          avatarUrl: true,
+          avatar: true,
         },
       },
       // match: {

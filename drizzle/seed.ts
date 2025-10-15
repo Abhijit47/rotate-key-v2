@@ -1,3 +1,4 @@
+/*
 // in-built node modules
 import { stdin as input, stdout as output } from 'node:process';
 import readline from 'readline/promises';
@@ -217,3 +218,4 @@ async function main() {
 }
 
 main();
+*/

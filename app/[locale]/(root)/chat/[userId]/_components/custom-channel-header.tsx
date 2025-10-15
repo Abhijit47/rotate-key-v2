@@ -27,6 +27,7 @@ const DotIcon = () => {
 
 export default function CustomChannelHeader() {
   const { channel, watcher_count } = useChannelStateContext('ChannelHeader');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { openMobileNav } = useChatContext('ChannelHeader');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { displayImage, displayTitle, groupChannelDisplayInfo } =

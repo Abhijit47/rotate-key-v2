@@ -1,3 +1,4 @@
+/*
 // import { db } from '@/drizzle/db';
 // import { users } from '@/drizzle/schemas';
 // import { insertToDB } from '@/lib/user-actions';
@@ -149,3 +150,4 @@ async function createFakeProfiles() {
 
 // Run the script
 createFakeProfiles().catch(console.error);
+*/

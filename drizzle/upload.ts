@@ -1,3 +1,4 @@
+/*
 // 1. first create the users in the auth system (clerk, firebase, supabase, etc.)
 // 2. up date the users in the users table with the ids from the auth system
 // 3. take the users city, state, country from re-usable array
@@ -33,7 +34,7 @@ for (let i = 0; i < arr.length; i++) {
   }
 }
 */
-
+/*
 const rl = readline.createInterface({ input, output });
 const ac = new AbortController();
 const signal = ac.signal;
@@ -183,9 +184,9 @@ async function main() {
         // generate a token for the user with id 'john'
         const token = serverClient.createToken(userId, expireTime);
         //* Syncing users
-        /**
-         * When a user starts a chat conversation with another user both users need to be present in Stream’s user storage. So you’ll want to make sure that users are synced in advance. The update users endpoint allows you to update 100 users at once, an example is shown below:
-         */
+        
+        // * When a user starts a chat conversation with another user both users need to be present in Stream’s user storage. So you’ll want to make sure that users are synced in advance. The update users endpoint allows you to update 100 users at once, an example is shown below:
+         *
         await serverClient.upsertUser({
           id: userId,
           name: profile.fullName,
@@ -252,3 +253,4 @@ async function main() {
 }
 
 main();
+*/

@@ -91,7 +91,7 @@ export default function StreamChatInterface(props: Props) {
       console.error('tokenProvider error', err);
       throw err;
     }
-  }, [user.id, user.streamToken, user.expireTime]);
+  }, [user.id, user.streamToken, user.expireTime, locale]);
 
   const chatClient = useCreateChatClient({
     apiKey: env.NEXT_PUBLIC_STREAM_API_KEY,

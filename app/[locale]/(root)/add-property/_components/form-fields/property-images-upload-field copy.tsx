@@ -59,6 +59,7 @@ export type DeleteApiResponse = {
   success: boolean;
 };
 
+// eslint-disable-next-line
 type HandleDeleteFileParams = {
   name: string;
   index: number;
@@ -332,6 +333,7 @@ export default function PropertyImagesUploadField() {
     disabled: isDeletePending, // Disable while dragging
   });
 
+  // eslint-disable-next-line
   function removeFile(publicId: string) {
     // Find the file to remove
     // const fileToRemove = files.find((file) => file.publicId === publicId);

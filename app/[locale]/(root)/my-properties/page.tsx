@@ -33,8 +33,8 @@ import {
 } from 'lucide-react';
 // import { cache } from 'react';
 // import { unstable_cache as cache } from 'next/cache';
-import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
+import Image from 'next/image';
 import { cache, Suspense } from 'react';
 import PropertyInteractions from '../swappings/_components/property-interactions';
 
@@ -297,14 +297,14 @@ export default async function MyProperties() {
                       'flex items-center gap-2 ring-muted-foreground ring-1 rounded-full px-3 py-0.5 w-fit text-xs font-semibold'
                     }>
                     <Bed className={'size-4'} />
-                    {property.bedrooms}
+                    {property.bedRooms}
                   </p>
                   <p
                     className={
                       'flex items-center gap-2 ring-muted-foreground ring-1 rounded-full px-3 py-0.5 w-fit text-xs font-semibold'
                     }>
                     <Bath className={'size-4'} />
-                    {property.bathrooms}
+                    {property.bathRooms}
                   </p>
                 </div>
               </CardDescription>

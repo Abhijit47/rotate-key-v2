@@ -9,6 +9,8 @@ import { useSignUpForm } from '@/hooks/useSignUp';
 import { Link } from '@/i18n/navigation';
 import { UserRegistrationValues } from '@/lib/validations/auth.schema';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 export default function SignUpButtonHandler() {
   const { currentStep, setCurrentStep } = useAuthContext();
   const form = useFormContext<UserRegistrationValues>();
@@ -88,28 +90,33 @@ export default function SignUpButtonHandler() {
           }
           type='submit'
           className={'w-full hover:cursor-pointer disabled:cursor-not-allowed'}
-          onClick={() =>
-            onGenerateOTP(
-              form.getValues('firstName'),
-              form.getValues('lastName'),
-              // form.getValues('userName'),
-              form.getValues('email'),
-              form.getValues('password')
-              // setCurrentStep
-            )
-          }
+          {...(isDev && {
+            onClick: () => {
+              onGenerateOTP(
+                form.getValues('firstName'),
+                form.getValues('lastName'),
+                // form.getValues('userName'),
+                form.getValues('email'),
+                form.getValues('password')
+                // setCurrentStep
+              );
+            },
+          })}
           // TODO: enable only when all fields are dirty in production
-          // {...(isName &&
-          //   isEmail &&
-          //   isPassword && {
-          //     onClick: () =>
-          //       onGenerateOTP(
-          //         getValues('email'),
-          //         getValues('password'),
-          //         setCurrentStep
-          //       ),
-          // })}
-        >
+          {...(isName &&
+            isEmail &&
+            isPassword &&
+            !isDev && {
+              onClick: () =>
+                onGenerateOTP(
+                  form.getValues('firstName'),
+                  form.getValues('lastName'),
+                  // form.getValues('userName'),
+                  form.getValues('email'),
+                  form.getValues('password')
+                  // setCurrentStep
+                ),
+            })}>
           {isPendingOTP ||
           form.formState.isSubmitting ||
           form.formState.isLoading ? (

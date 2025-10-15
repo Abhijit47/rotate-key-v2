@@ -103,9 +103,9 @@ export const propertyDataSchema = z.object({
   country: z.string(),
   zipcode: z.string(),
   images: z.array(z.string()),
-  area: z.number(),
-  bedrooms: z.number(),
-  bathrooms: z.number(),
+  area: z.string(),
+  bedRooms: z.number(),
+  bathRooms: z.number(),
   ownerName: z.string().nullable(),
   ownerEmail: z.string().nullable(),
   isAvailable: z.boolean(),
@@ -135,7 +135,7 @@ export const propertyDataSchema = z.object({
     id: z.string(),
     fullName: z.string(),
     email: z.string(),
-    avatarUrl: z.string().nullable(),
+    avatar: z.string().nullable(),
   }),
 
   receivedLikes: z.array(
@@ -258,7 +258,7 @@ const columns: ColumnDef<PropertyDataInferred>[] = [
     header: 'Bedrooms',
     cell: ({ row }) => (
       <div className='text-muted-foreground px-1.5 text-wrap'>
-        <span> {row.original.bedrooms}</span>
+        <span> {row.original.bedRooms}</span>
       </div>
     ),
   },
@@ -267,7 +267,7 @@ const columns: ColumnDef<PropertyDataInferred>[] = [
     header: 'Bathrooms',
     cell: ({ row }) => (
       <div className='text-muted-foreground px-1.5 text-wrap'>
-        <span> {row.original.bathrooms}</span>
+        <span> {row.original.bathRooms}</span>
       </div>
     ),
   },

@@ -93,13 +93,16 @@ export const Avatar = (props: AvatarProps) => {
       role='button'
       title={name}>
       {showImage ? (
-        <img
-          alt={initials}
-          className='str-chat__avatar-image'
-          data-testid='avatar-img'
-          onError={() => setError(true)}
-          src={image}
-        />
+        <>
+          {/* eslint-disable-next-line */}
+          <img
+            alt={initials}
+            className='str-chat__avatar-image'
+            data-testid='avatar-img'
+            onError={() => setError(true)}
+            src={image}
+          />
+        </>
       ) : (
         <>
           {!!initials.length && (

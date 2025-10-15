@@ -18,7 +18,6 @@ import { cn } from '@/lib/utils';
 import { SignedOut } from '@clerk/nextjs';
 import { BellOff } from 'lucide-react';
 import { useLocale } from 'next-intl';
-import { useSelectedLayoutSegment } from 'next/navigation';
 import { useState } from 'react';
 import CustomUserButton from './custom-user-button';
 import LanguageSwitcher from './language-switcher';
@@ -53,7 +52,6 @@ const navigationLinks = [
 // Navigation links array to be used in both desktop and mobile menus
 
 export default function Navbar() {
-  const selectedLayoutSegment = useSelectedLayoutSegment();
   const locale = useLocale();
   // const t = useTranslations();
   const pathname = usePathname();
@@ -152,9 +150,8 @@ export function MobileMenu() {
   function toggleMenu() {
     setIsOpen((prev) => !prev);
   }
-  const selectedLayoutSegment = useSelectedLayoutSegment();
   const locale = useLocale();
-  const pathname = selectedLayoutSegment ? `/${selectedLayoutSegment}` : '/';
+  const pathname = usePathname();
 
   return (
     <Popover open={isOpen} onOpenChange={toggleMenu}>

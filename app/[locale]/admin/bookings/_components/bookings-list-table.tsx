@@ -22,7 +22,7 @@ const preparedBookings = db.query.bookings
           id: true,
           fullName: true,
           email: true,
-          avatarUrl: true,
+          avatar: true,
           createdAt: true,
         },
       },
