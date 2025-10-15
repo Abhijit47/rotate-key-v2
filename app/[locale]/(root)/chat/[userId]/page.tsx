@@ -3,6 +3,8 @@ import './chat-layout.css';
 
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
+
+import { Card } from '@/components/ui/card';
 import { LazyStreamChatInterface } from './_components';
 import { startConversationWithMatchedUser } from './action';
 
@@ -60,12 +62,12 @@ export default async function ChatWithMatchedUser({ params }: PageProps) {
   // console.log('matchedUserDetails', myDetails, matchedRecord);
 
   return (
-    <div>
+    <Card className={'py-0 p-2'}>
       <LazyStreamChatInterface
         user={myDetails}
         matchedRecord={matchedRecord}
         matchedUserId={matchedUserId}
       />
-    </div>
+    </Card>
   );
 }

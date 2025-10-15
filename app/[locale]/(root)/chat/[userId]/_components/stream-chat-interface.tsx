@@ -1,12 +1,13 @@
 'use client';
 
-import { env } from '@/env';
+import data from '@emoji-mart/data';
+import { init, SearchIndex } from 'emoji-mart';
+import { Loader } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useCallback } from 'react';
 import { ChannelFilters, ChannelOptions, ChannelSort } from 'stream-chat';
 import {
   Channel,
-  ChannelHeader,
   // ChannelList,
   Chat,
   // LoadingIndicator,
@@ -18,11 +19,10 @@ import {
 } from 'stream-chat-react';
 import { EmojiPicker } from 'stream-chat-react/emojis';
 
-import data from '@emoji-mart/data';
-import { init, SearchIndex } from 'emoji-mart';
+import { env } from '@/env';
 
-import { Loader } from 'lucide-react';
-import CustomMenuIcon from './custom-menu-icon';
+import { useLocale } from 'next-intl';
+import CustomChannelHeader from './custom-channel-header';
 import FreeTierMessage from './free-tier-message';
 import UserActivity from './user-activity';
 // import CustomInput from './custom-input';
@@ -31,7 +31,7 @@ type Props = {
   user: {
     id: string;
     fullName: string;
-    avatarUrl: string | null;
+    avatar: string | null;
     streamToken: string | null;
     expireTime: number | null;
     issuedAt: number | null;
@@ -48,12 +48,19 @@ init({ data });
 export default function StreamChatInterface(props: Props) {
   const { user, matchedRecord, matchedUserId } = props;
 
+  const locale = useLocale();
+
   // token provider: called by stream client to fetch (and refresh) tokens
   // Behavior: if the user already has a valid token (expireTime in the future), return it.
   // Otherwise call the server endpoint to create/refresh a token and return the new token.
   const tokenProvider = useCallback(async () => {
     try {
       const now = Math.floor(Date.now() / 1000);
+
+      const API_URL =
+        locale === 'en'
+          ? '/api/stream/refresh-token'
+          : `/${locale}/api/stream/refresh-token`;
 
       // If we already have a token and it's not expired, return it.
       if (user.streamToken && user.expireTime && user.expireTime > now + 10) {
@@ -62,7 +69,7 @@ export default function StreamChatInterface(props: Props) {
       }
 
       // call our server endpoint to refresh or get a token
-      const res = await fetch('/api/stream/refresh-token', {
+      const res = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.id }),
@@ -134,11 +141,12 @@ export default function StreamChatInterface(props: Props) {
           EmojiPicker={EmojiPicker}
           emojiSearchIndex={SearchIndex}>
           <Window>
-            <ChannelHeader
+            {/* <ChannelHeader
               live={true}
               MenuIcon={CustomMenuIcon}
               // title='Chating...'
-            />
+            /> */}
+            <CustomChannelHeader />
             <MessageList head={<UserActivity />} />
             <MessageInput
               audioRecordingEnabled={true}

@@ -1,3 +1,5 @@
+'use client';
+
 import {
   ArrowRight,
   ChevronsDownIcon,
@@ -8,12 +10,27 @@ import {
 import Image from 'next/image';
 
 import { footerLinks } from '@/constants';
-import { Link } from '@/i18n/navigation';
+import { Link, usePathname } from '@/i18n/navigation';
 import Logo from '@/public/logos/logo-landscape-2.webp';
 import { Separator } from '../ui/separator';
 import SectionWrapper from './SectionWrapper';
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  // Regex to match /chat/[userId] paths
+  const chatSlugRegex = /^\/chat\/[^/]+$/;
+  const profileSlugRegex = /^\/profile(\/.*)?$/;
+
+  if (pathname && chatSlugRegex.test(pathname)) {
+    return null;
+  }
+
+  // Hide navbar on specific routes
+  if (pathname && profileSlugRegex.test(pathname)) {
+    return null;
+  }
+
   return (
     <footer className='py-20 bg-foreground dark:bg-background'>
       <SectionWrapper>

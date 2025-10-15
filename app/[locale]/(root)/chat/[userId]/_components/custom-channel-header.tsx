@@ -1,10 +1,29 @@
-import { MenuIcon } from 'lucide-react';
+import CustomUserButton from '@/components/shared/custom-user-button';
+import { MobileMenu } from '@/components/shared/navbar';
+import { ThemeModeToggle } from '@/components/shared/theme-mode-toggle';
+// import { MenuIcon } from 'lucide-react';
+import { buttonVariants } from '@/components/ui/button';
+import { Link } from '@/i18n/navigation';
+import { ArrowLeftCircle } from 'lucide-react';
 import {
-  Avatar,
+  // Avatar,
   useChannelPreviewInfo,
   useChannelStateContext,
   useChatContext,
 } from 'stream-chat-react';
+import { Avatar } from './avatar';
+
+const DotIcon = () => {
+  return (
+    <svg
+      className={'fill-green-500 size-2.5'}
+      xmlns='http://www.w3.org/2000/svg'
+      viewBox='0 0 512 512'
+      fill='currentColor'>
+      <path d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z' />
+    </svg>
+  );
+};
 
 export default function CustomChannelHeader() {
   const { channel, watcher_count } = useChannelStateContext('ChannelHeader');
@@ -26,12 +45,29 @@ export default function CustomChannelHeader() {
 
   return (
     <div className='str-chat__channel-header'>
-      <button
+      {/* <Button
+        variant={'ghost'}
+        size={'icon'}
         // aria-label={t('aria/Menu')}
-        className='str-chat__header-hamburger'
+        // className='str-chat__header-hamburger'
         onClick={openMobileNav}>
         <MenuIcon />
-      </button>
+      </Button> */}
+
+      <div className='hidden md:block'>
+        <Link
+          href={'/chat'}
+          className={buttonVariants({
+            variant: 'ghost',
+            size: 'icon',
+          })}>
+          <ArrowLeftCircle className={''} />
+        </Link>
+      </div>
+
+      <div className='flex items-center md:hidden'>
+        <MobileMenu />
+      </div>
       <Avatar
         className='str-chat__avatar--channel-header'
         // groupChannelDisplayInfo={groupChannelDisplayInfo}
@@ -39,12 +75,12 @@ export default function CustomChannelHeader() {
         name={displayTitle}
       />
       <div className='str-chat__channel-header-end'>
-        <p className='str-chat__channel-header-title'>
+        <p className='str-chat__channel-header-title flex items-center gap-1'>
           {displayTitle}{' '}
           {live && (
             <span className='str-chat__header-livestream-livelabel'>
               {/* {t('live')} */}
-              live
+              <DotIcon />
             </span>
           )}
         </p>
@@ -63,6 +99,11 @@ export default function CustomChannelHeader() {
           {/* {t('{{ watcherCount }} online', { watcherCount: watcher_count })} */}
           {watcher_count} online
         </p>
+      </div>
+
+      <div className={'flex items-center gap-2'}>
+        <ThemeModeToggle />
+        <CustomUserButton />
       </div>
     </div>
   );

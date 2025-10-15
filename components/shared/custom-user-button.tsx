@@ -5,6 +5,7 @@ import {
   CombineIcon,
   FileUser,
   HouseHeartIcon,
+  HousePlus,
   MessageCircleMore,
   Rotate3d,
   ShieldUserIcon,
@@ -26,6 +27,7 @@ function DotIcon() {
 const userButtonLinks = [
   // { href: '/', label: 'Home', active: true, labelIcon: HomeIcon },
   { href: '/profile', label: 'Profile', labelIcon: UserSquare },
+  { href: '/add-property', label: 'Add Property', labelIcon: HousePlus },
   { href: '/chat', label: 'Live Chat', labelIcon: MessageCircleMore },
   { href: '/swappings', label: 'Swappings', labelIcon: Rotate3d },
   // { href: '/matches', label: 'Matches', labelIcon: CombineIcon },

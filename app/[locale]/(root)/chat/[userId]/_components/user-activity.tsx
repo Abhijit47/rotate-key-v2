@@ -1,4 +1,3 @@
-import { ThemeModeToggle } from '@/components/shared/theme-mode-toggle';
 import { Button } from '@/components/ui/button';
 import SwapUnswapContextProvider from '@/contexts/swap-unswap-context';
 import { ShieldBan, ShieldCheck } from 'lucide-react';
@@ -15,11 +14,10 @@ export default function UserActivity() {
         <SwapModal />
         <UnSwapModal />
       </SwapUnswapContextProvider>
-      <ThemeModeToggle />
-      <Button size={'icon'} variant={'outline'}>
+      <Button size={'icon'} variant={'outline'} title='Ban'>
         <ShieldBan className='h-4 w-4' />
       </Button>
-      <Button size={'icon'} variant={'outline'}>
+      <Button size={'icon'} variant={'outline'} title='UnBan'>
         <ShieldCheck className='h-4 w-4' />
       </Button>
     </div>

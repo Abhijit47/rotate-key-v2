@@ -13,7 +13,7 @@ export async function startConversationWithMatchedUser() {
         columns: {
           id: true,
           fullName: true,
-          avatarUrl: true,
+          avatar: true,
           streamToken: true,
           expireTime: true,
           issuedAt: true,

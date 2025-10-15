@@ -1,3 +1,13 @@
+import {
+  CalendarClock,
+  CheckCircle2,
+  LockKeyholeIcon,
+  MessageCircleMore,
+  Video,
+  X,
+} from 'lucide-react';
+import { Suspense } from 'react';
+
 import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import {
@@ -11,19 +21,9 @@ import {
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Link } from '@/i18n/navigation';
-import { getUserMatchesV2 } from '@/lib/user-matches';
-import {
-  CalendarClock,
-  CheckCircle2,
-  LockKeyholeIcon,
-  MessageCircleMore,
-  Video,
-  X,
-} from 'lucide-react';
-import { Suspense } from 'react';
-// import TestSwpping from './[userId]/_components/test-swpping';
-
 import { routing } from '@/i18n/routing';
+import { getUserMatchesV2 } from '@/lib/user-matches';
+// import TestSwpping from './[userId]/_components/test-swpping';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
