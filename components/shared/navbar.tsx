@@ -1,6 +1,13 @@
 'use client';
 
-import Logo from '@/components/shared/logo';
+import { SignedOut } from '@clerk/nextjs';
+import { BellOff } from 'lucide-react';
+import { useLocale } from 'next-intl';
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
+import { useState } from 'react';
+
+// import Logo from '@/components/shared/logo';
 import { Button } from '@/components/ui/button';
 import {
   NavigationMenu,
@@ -15,10 +22,8 @@ import {
 } from '@/components/ui/popover';
 import { Link, usePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
-import { SignedOut } from '@clerk/nextjs';
-import { BellOff } from 'lucide-react';
-import { useLocale } from 'next-intl';
-import { useState } from 'react';
+import LogoDark from '@/public/logos/logo-landscape-2.webp';
+import LogoLight from '@/public/logos/logo-landscape.png';
 import CustomUserButton from './custom-user-button';
 import LanguageSwitcher from './language-switcher';
 import { ThemeModeToggle } from './theme-mode-toggle';
@@ -55,6 +60,7 @@ export default function Navbar() {
   const locale = useLocale();
   // const t = useTranslations();
   const pathname = usePathname();
+  const { theme } = useTheme();
 
   // Regex to match /chat/[userId] paths
   const chatSlugRegex = /^\/chat\/[^/]+$/;
@@ -87,8 +93,37 @@ export default function Navbar() {
           </div>
           {/* Main nav */}
           <div className='flex items-center gap-6'>
-            <Link href='/' className='text-primary hover:text-primary/90'>
-              <Logo />
+            <Link
+              href='/'
+              className={cn(
+                theme === 'dark' && 'h-full w-36',
+                theme === 'light' && 'h-full w-36',
+                'block'
+              )}>
+              {/* <Logo /> */}
+              {theme === 'dark' ? (
+                <Image
+                  src={LogoDark}
+                  alt='logo'
+                  width={2500}
+                  height={2500}
+                  className={'object-cover w-full h-full'}
+                  priority={true}
+                  placeholder='blur'
+                  blurDataURL={LogoDark.blurDataURL}
+                />
+              ) : (
+                <Image
+                  src={LogoLight}
+                  alt='logo'
+                  width={106}
+                  height={80}
+                  className={'object-contain w-full h-full'}
+                  priority={true}
+                  placeholder='blur'
+                  blurDataURL={LogoLight.blurDataURL}
+                />
+              )}
             </Link>
             {/* Navigation menu */}
             <NavigationMenu className='h-full *:h-full max-md:hidden'>
