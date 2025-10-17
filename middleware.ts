@@ -18,6 +18,12 @@ const isProtectedRoute = createRouteMatcher([
   '/my-properties(.*)',
   '/chat(.*)',
   '/profile(.*)',
+  '/add-property(.*)',
+  '/favourite-homes(.*)',
+  '/my-exchanges(.*)',
+  '/my-matches(.*)',
+  '/my-properties(.*)',
+  '/user-profile(.*)',
 ]);
 
 const isAdminRoute = createRouteMatcher(['/admin(.*)']);

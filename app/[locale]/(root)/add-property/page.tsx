@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { routing } from '@/i18n/routing';
+import { requireAuth } from '@/lib/require-auth';
 import { HousePlusIcon } from 'lucide-react';
 import CreatePropertyForm from './_components/CreatePropertyForm';
 
@@ -15,7 +16,9 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export default function AddPropertyPage() {
+export default async function AddPropertyPage() {
+  await requireAuth();
+
   return (
     <main className={'py-16'}>
       <SectionWrapper className={'space-y-6'}>

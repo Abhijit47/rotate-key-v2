@@ -2,12 +2,15 @@ import COMING_SOON_IMG from '@/public/coming-soon.svg';
 import Image from 'next/image';
 
 import { routing } from '@/i18n/routing';
+import { requireAuth } from '@/lib/require-auth';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export default function FavouriteHomesPage() {
+export default async function FavouriteHomesPage() {
+  await requireAuth();
+
   return (
     <div className={'h-dvh flex items-center justify-center'}>
       <Image

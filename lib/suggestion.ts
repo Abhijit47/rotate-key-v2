@@ -1,3 +1,4 @@
+/*
 'use server';
 
 import { db } from '@/drizzle/db';
@@ -113,3 +114,4 @@ export async function likePropertyAndMaybeMatchV2({
     revalidatePath('/swappings');
   }
 }
+*/

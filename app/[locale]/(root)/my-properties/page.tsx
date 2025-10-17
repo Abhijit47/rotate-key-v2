@@ -34,6 +34,7 @@ import {
 // import { cache } from 'react';
 // import { unstable_cache as cache } from 'next/cache';
 import { Link } from '@/i18n/navigation';
+import { requireAuth } from '@/lib/require-auth';
 import Image from 'next/image';
 import { cache, Suspense } from 'react';
 import PropertyInteractions from '../swappings/_components/property-interactions';
@@ -43,7 +44,11 @@ const getCachedMyProperties = cache(async () => {
   return data;
 });
 
+const isDev = process.env.NODE_ENV === 'development';
+
 export default async function MyProperties() {
+  await requireAuth();
+
   const myProperties = await getCachedMyProperties();
 
   if (myProperties.length === 0) {
@@ -66,13 +71,15 @@ export default async function MyProperties() {
 
   return (
     <div className={'container mx-auto px-4 2xl:px-0 max-w-7xl'}>
-      <form
-        action={async () => {
-          'use server';
-          await clearCache('properties');
-        }}>
-        <Button variant={'destructive'}>Clear cache</Button>
-      </form>
+      {isDev ? (
+        <form
+          action={async () => {
+            'use server';
+            await clearCache('properties');
+          }}>
+          <Button variant={'destructive'}>Clear cache</Button>
+        </form>
+      ) : null}
       <section
         className={
           'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'

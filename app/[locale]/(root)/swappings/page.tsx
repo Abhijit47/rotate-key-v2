@@ -9,6 +9,7 @@ import UserPreferenceCard from './_components/user-preference-card';
 
 import SectionWrapper from '@/components/shared/SectionWrapper';
 import { routing } from '@/i18n/routing';
+import { requireAuth } from '@/lib/require-auth';
 import { LazySwappingCarousel } from './_components';
 import SwappingBanner from './_components/swapping-banner';
 
@@ -18,7 +19,9 @@ export function generateStaticParams() {
 
 export const revalidate = 3600; // 1 hour
 
-export default function SwappingsPage() {
+export default async function SwappingsPage() {
+  await requireAuth();
+
   return (
     <section
       className={

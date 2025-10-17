@@ -1,3 +1,5 @@
+import { requireAuth } from '@/lib/require-auth';
+
 type PageProps = {
   params: Promise<{ matchedUserId: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -5,6 +7,7 @@ type PageProps = {
 
 export default async function MatchedUserProfilePage({ params }: PageProps) {
   const matchedUserId = (await params).matchedUserId;
+  await requireAuth();
 
   return (
     <div>

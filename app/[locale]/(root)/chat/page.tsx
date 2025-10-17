@@ -22,6 +22,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { Link } from '@/i18n/navigation';
 import { routing } from '@/i18n/routing';
+import { requireAuth } from '@/lib/require-auth';
 import { getUserMatchesV2 } from '@/lib/user-matches';
 // import TestSwpping from './[userId]/_components/test-swpping';
 
@@ -29,7 +30,9 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export default function ChatPage() {
+export default async function ChatPage() {
+  await requireAuth();
+
   return (
     <div className={'container mx-auto max-w-7xl px-4 2xl:px-0 py-8 space-y-8'}>
       <Card className={'gap-4 py-4'}>
