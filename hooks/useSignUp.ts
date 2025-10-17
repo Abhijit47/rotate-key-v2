@@ -19,6 +19,8 @@ import {
 // import { OAuthStrategy } from '@clerk/types';
 // import { useRouter } from 'next/navigation';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 export function useSignUpForm() {
   // const [loading, setLoading] = useState<boolean>(false);
 
@@ -40,13 +42,13 @@ export function useSignUpForm() {
       // password: '',
       // confirmPassword: '',
       // fullName: 'jhon',
-      firstName: 'jhon',
-      lastName: 'doe',
-      fullName: 'jhon doe',
+      firstName: isDev ? 'jhon' : '',
+      lastName: isDev ? 'doe' : '',
+      fullName: isDev ? 'jhon doe' : '',
       userName: '', // jhon_doe_123
-      email: 'jhon+clerk_test@gmail.com', // joe+clerk_test@gmail.com
-      password: 'Admin123852456',
-      confirmPassword: 'Admin123852456',
+      email: isDev ? 'jhon+clerk_test@gmail.com' : '', // joe+clerk_test@gmail.com
+      password: isDev ? 'Admin123852456' : '',
+      confirmPassword: isDev ? 'Admin123852456' : '',
       otp: '',
       // yourLocation: '',
       // yourDestination: '',
