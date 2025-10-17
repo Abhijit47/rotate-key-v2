@@ -2,7 +2,7 @@
 import { Metadata } from 'next';
 // import { forbidden } from 'next/navigation';
 
-import { routing } from '@/i18n/routing';
+// import { routing } from '@/i18n/routing';
 import { requireAuth } from '@/lib/require-auth';
 import CustomProfile from './_components/custom-profile';
 
@@ -24,9 +24,9 @@ export const metadata: Metadata = {
   authors: [{ name: 'Rotate Key', url: 'https://rotatekey.com' }],
 };
 
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
+// export function generateStaticParams() {
+//   return routing.locales.map((locale) => ({ locale }));
+// }
 
 export default async function UserProfilePage() {
   await requireAuth();
