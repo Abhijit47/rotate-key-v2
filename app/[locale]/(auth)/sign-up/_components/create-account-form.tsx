@@ -130,7 +130,12 @@ export default function CreateAccountForm() {
                     setValue('lastName', e.target.value);
                     setValue(
                       'fullName',
-                      `${getValues('firstName')} ${e.target.value}`
+                      `${getValues('firstName')} ${e.target.value}`,
+                      {
+                        shouldValidate: true,
+                        shouldDirty: true,
+                        shouldTouch: true,
+                      }
                     );
                     field.onChange(e);
                   }}

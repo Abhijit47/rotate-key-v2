@@ -22,6 +22,15 @@ export default function SignUpButtonHandler() {
     'password',
     form.formState
   );
+  const isReadyToSentOTP =
+    form.watch('firstName').length > 0 &&
+    form.watch('lastName').length > 0 &&
+    form.watch('email').length > 0 &&
+    form.watch('password').length > 0 &&
+    form.watch('confirmPassword').length > 0;
+
+  // console.log('isReadyToSentOTP', isReadyToSentOTP);
+  // console.log('isName', isName, 'isEmail', isEmail, 'isPassword', isPassword);
 
   if (currentStep === 3) {
     return (
@@ -86,27 +95,30 @@ export default function SignUpButtonHandler() {
           disabled={
             isPendingOTP ||
             form.formState.isSubmitting ||
-            form.formState.isLoading
+            form.formState.isLoading ||
+            !isReadyToSentOTP
           }
           type='submit'
           className={'w-full hover:cursor-pointer disabled:cursor-not-allowed'}
-          {...(isDev && {
-            onClick: () => {
-              onGenerateOTP(
-                form.getValues('firstName'),
-                form.getValues('lastName'),
-                // form.getValues('userName'),
-                form.getValues('email'),
-                form.getValues('password')
-                // setCurrentStep
-              );
-            },
-          })}
+          {...(isDev &&
+            isReadyToSentOTP && {
+              onClick: () => {
+                onGenerateOTP(
+                  form.getValues('firstName'),
+                  form.getValues('lastName'),
+                  // form.getValues('userName'),
+                  form.getValues('email'),
+                  form.getValues('password')
+                  // setCurrentStep
+                );
+              },
+            })}
           // TODO: enable only when all fields are dirty in production
           {...(isName &&
             isEmail &&
             isPassword &&
-            !isDev && {
+            !isDev &&
+            isReadyToSentOTP && {
               onClick: () =>
                 onGenerateOTP(
                   form.getValues('firstName'),

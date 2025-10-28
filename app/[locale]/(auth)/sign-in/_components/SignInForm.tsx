@@ -18,6 +18,8 @@ import { EyeClosed, EyeIcon } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 export default function SignInForm() {
   const passwordRef = useRef<HTMLInputElement>(null);
   const [isShowPassword, setIsShowPassword] = useState(false);
@@ -38,7 +40,7 @@ export default function SignInForm() {
         </p>
       </div>
 
-      <ThemeModeToggle />
+      {isDev ? <ThemeModeToggle /> : null}
 
       <div className={'space-y-4'}>
         <FormField

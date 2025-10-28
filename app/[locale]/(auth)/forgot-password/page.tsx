@@ -20,6 +20,8 @@ export const metadata: Metadata = {
     "Unlock the Door to Your Next Adventure with Rotate Keys. Rotate Keys is not just a platform; it's a community of like-minded individuals sharing the joy of exploration and discovery. Your dream house swap is just a click away.",
 };
 
+const isDev = process.env.NODE_ENV === 'development';
+
 export default async function ForgotPassword() {
   const user = await currentUser();
 
@@ -35,7 +37,7 @@ export default async function ForgotPassword() {
             className={
               'col-span-full md:col-span-2 p-4 md:p-6 inline-grid content-center h-full relative'
             }>
-            <ThemeModeToggle />
+            {isDev ? <ThemeModeToggle /> : null}
             <AuthContextProvider>
               <ForgotPasswordFormProvider>
                 <ForgotPasswordFormStep />
