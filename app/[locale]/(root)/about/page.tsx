@@ -8,7 +8,7 @@ import OurTeams from './_components/OurTeams';
 
 export const metadata: Metadata = {
   title: {
-    default: 'Home',
+    default: 'About Us',
     template: `%s | 'Rotatekey - Smart Real Estate Technology Platform'`,
   },
 };
