@@ -1,9 +1,17 @@
 import FAQSection from '@/app/[locale]/(root)/about/_components/FAQSection';
 import SectionBanner from '@/components/shared/SectionBanner';
 import { routing } from '@/i18n/routing';
+import { Metadata } from 'next';
 import AboutInfo from './_components/AboutInfo';
 import CustomerFeedback from './_components/CustomerFeedback';
 import OurTeams from './_components/OurTeams';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Home',
+    template: `%s | 'Rotatekey - Smart Real Estate Technology Platform'`,
+  },
+};
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

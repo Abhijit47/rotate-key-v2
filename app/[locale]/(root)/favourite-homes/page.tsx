@@ -3,6 +3,14 @@ import Image from 'next/image';
 
 import { routing } from '@/i18n/routing';
 import { requireAuth } from '@/lib/require-auth';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Favourite Homes',
+    template: `%s | 'Rotatekey - Smart Real Estate Technology Platform'`,
+  },
+};
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

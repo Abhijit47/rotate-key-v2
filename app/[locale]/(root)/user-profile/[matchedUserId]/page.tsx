@@ -1,8 +1,16 @@
 import { requireAuth } from '@/lib/require-auth';
+import { Metadata } from 'next';
 
 type PageProps = {
   params: Promise<{ matchedUserId: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Matched User Profile',
+    template: `%s | 'Rotatekey - Smart Real Estate Technology Platform'`,
+  },
 };
 
 export default async function MatchedUserProfilePage({ params }: PageProps) {

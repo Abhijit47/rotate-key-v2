@@ -1,0 +1,65 @@
+import type { Metadata } from 'next';
+
+export const metaInfo: Metadata = {
+  title: 'Rotatekey - Smart Real Estate Technology Platform',
+  description:
+    'Rotatekey is a smart real estate technology platform for buying, selling, swapping, trading, and renting properties with secure, flexible solutions. Experience seamless property transactions and management with our innovative software. Join Rotatekey today to revolutionize your real estate journey!',
+  keywords: [
+    'Rotatekey',
+    'Rotate Key',
+    'real estate technology',
+    'property swapping',
+    'home swapping platform',
+    'property exchange',
+    'property trading',
+    'buy sell swap property',
+    'rental property platform',
+    'real estate software',
+    'digital real estate solutions',
+    'smart property transactions',
+    'real estate IT company',
+    'property management technology',
+    'real estate innovation',
+    'home exchange technology',
+    'property listing platform',
+    'real estate marketplace',
+    'real estate app',
+    'property swap service',
+  ],
+  metadataBase: new URL('https://www.rotatekey.com'),
+  applicationName: 'Rotatekey',
+  authors: [{ name: 'Leanitech', url: 'https://leanitech.com' }],
+  generator: 'Next.js',
+  referrer: 'origin-when-cross-origin',
+  creator: 'Leanitech Teams',
+  publisher: 'Leanitech',
+  robots: { index: true, follow: true },
+  alternates: {
+    canonical: 'https://www.rotatekey.com',
+    languages: {
+      'en-US': 'https://www.rotatekey.com/en-US',
+      'es-ES': 'https://www.rotatekey.com/es-ES',
+    },
+  },
+  icons: 'https://rotatekey.com/icon.png',
+  manifest: 'https://rotatekey.com/manifest.json',
+  openGraph: {
+    type: 'website',
+    title: 'Rotatekey - Smart Real Estate Technology Platform',
+    description:
+      'Rotatekey is a smart real estate technology platform for buying, selling, swapping, trading, and renting properties with secure, flexible solutions. Experience seamless property transactions and management with our innovative software. Join Rotatekey today to revolutionize your real estate journey!',
+    url: 'https://www.rotatekey.com',
+    siteName: 'Rotatekey',
+    images: [
+      {
+        url: 'https://www.rotatekey.com/about/opengraph-image-zdlwa2?8b09c0ebb44233d',
+        width: 1200,
+      },
+    ],
+    countryName: 'India',
+    locale: 'en-IN',
+    ttl: 60,
+  },
+  category: 'Real Estate',
+  classification: 'Real Estate Technology Platform',
+};

@@ -7,23 +7,11 @@ import { requireAuth } from '@/lib/require-auth';
 import CustomProfile from './_components/custom-profile';
 
 export const metadata: Metadata = {
-  title: 'Rotate Key | My Profile',
-  description:
-    'Your Profile - Manage Your Account and Preferences on Rotate Keys',
-  keywords: [
-    'Rotate Key',
-    'User Profile',
-    'Account Management',
-    'Preferences',
-    'House Swapping',
-    'Travel Community',
-    'Explore',
-    'Discover',
-    'Adventure',
-  ],
-  authors: [{ name: 'Rotate Key', url: 'https://rotatekey.com' }],
+  title: {
+    default: 'My Profile',
+    template: `%s | 'Rotatekey - Smart Real Estate Technology Platform'`,
+  },
 };
-
 // export function generateStaticParams() {
 //   return routing.locales.map((locale) => ({ locale }));
 // }

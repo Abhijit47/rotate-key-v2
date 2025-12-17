@@ -11,6 +11,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Link } from '@/i18n/navigation';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Swappings Onboarding',
+    template: `%s | 'Rotatekey - Smart Real Estate Technology Platform'`,
+  },
+};
 
 export default async function OnboardingPage() {
   const user = await currentUser();

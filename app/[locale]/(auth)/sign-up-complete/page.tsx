@@ -11,15 +11,16 @@ import { Card } from '@/components/ui/card';
 import { routing } from '@/i18n/routing';
 import { LazySignUpCompleteForm } from './_components';
 
+export const metadata: Metadata = {
+  title: {
+    default: 'Sign Up Complete',
+    template: `%s | 'Rotatekey - Smart Real Estate Technology Platform'`,
+  },
+};
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
-
-export const metadata: Metadata = {
-  title: 'Rotate Key | Sign Up Complete',
-  description:
-    "Unlock the Door to Your Next Adventure with Rotate Keys. Rotate Keys is not just a platform; it's a community of like-minded individuals sharing the joy of exploration and discovery. Your dream house swap is just a click away.",
-};
 
 export default function SignUpComplete() {
   // const user = (await currentUser()) as User;

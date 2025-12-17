@@ -2,6 +2,14 @@ import { AuthenticateWithRedirectCallback } from '@clerk/nextjs';
 import { Loader2 } from 'lucide-react';
 
 import { routing } from '@/i18n/routing';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Sign up SSO Callback',
+    template: `%s | 'Rotatekey - Smart Real Estate Technology Platform'`,
+  },
+};
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { cache } from 'react';
 
 import { Card } from '@/components/ui/card';
+import { Metadata, ResolvingMetadata } from 'next';
 import { LazyStreamChatInterface } from './_components';
 import { startConversationWithMatchedUser } from './action';
 
@@ -12,6 +13,25 @@ type PageProps = {
   params: Promise<{ userId: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
+
+export async function generateMetadata(
+  { params }: PageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const userId = (await params).userId;
+
+  const slug = `chat-with-user-${userId}`;
+
+  const parentMeta = await parent;
+
+  return {
+    title: {
+      default: slug || 'Chat with Matched User',
+      template: `%s | 'Rotatekey - Smart Real Estate Technology Platform'`,
+    },
+    description: parentMeta.description,
+  };
+}
 
 const getCachedStartConversationWithMatchedUser = cache(async () => {
   return await startConversationWithMatchedUser();

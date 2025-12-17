@@ -24,7 +24,15 @@ import { Link } from '@/i18n/navigation';
 import { routing } from '@/i18n/routing';
 import { requireAuth } from '@/lib/require-auth';
 import { getUserMatchesV2 } from '@/lib/user-matches';
+import { Metadata } from 'next';
 // import TestSwpping from './[userId]/_components/test-swpping';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Chat with Friends',
+    template: `%s | 'Rotatekey - Smart Real Estate Technology Platform'`,
+  },
+};
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

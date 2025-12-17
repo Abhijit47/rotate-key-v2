@@ -10,7 +10,15 @@ import { Separator } from '@/components/ui/separator';
 import { routing } from '@/i18n/routing';
 import { requireAuth } from '@/lib/require-auth';
 import { HousePlusIcon } from 'lucide-react';
+import { Metadata } from 'next';
 import CreatePropertyForm from './_components/CreatePropertyForm';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Add Property',
+    template: `%s | 'Rotatekey - Smart Real Estate Technology Platform'`,
+  },
+};
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

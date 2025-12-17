@@ -4,7 +4,15 @@ import HowItWorksSteps from './_components/HowItWorksSteps';
 import WhyTurnKeys from './_components/WhyTurnKeys';
 
 import { routing } from '@/i18n/routing';
+import { Metadata } from 'next';
 import FAQSection from './_components/FAQSection';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'How It Works',
+    template: `%s | 'Rotatekey - Smart Real Estate Technology Platform'`,
+  },
+};
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

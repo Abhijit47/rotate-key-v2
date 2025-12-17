@@ -10,8 +10,16 @@ import UserPreferenceCard from './_components/user-preference-card';
 import SectionWrapper from '@/components/shared/SectionWrapper';
 import { routing } from '@/i18n/routing';
 import { requireAuth } from '@/lib/require-auth';
+import { Metadata } from 'next';
 import { LazySwappingCarousel } from './_components';
 import SwappingBanner from './_components/swapping-banner';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Swappings',
+    template: `%s | 'Rotatekey - Smart Real Estate Technology Platform'`,
+  },
+};
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

@@ -25,6 +25,14 @@ import { Separator } from '@/components/ui/separator';
 // ]
 
 import { routing } from '@/i18n/routing';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Home',
+    template: `%s | 'Rotatekey - Smart Real Estate Technology Platform'`,
+  },
+};
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

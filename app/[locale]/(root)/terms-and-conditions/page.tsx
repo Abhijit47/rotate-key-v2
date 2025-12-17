@@ -29,7 +29,6 @@ type Props = {
 
 export async function generateMetadata(
   { params }: Props,
-  // eslint-disable-next-line
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // read route params
@@ -37,19 +36,14 @@ export async function generateMetadata(
   console.log('metaParam', metaParam);
   // console.log('parent', await parent);
 
-  // fetch data
-  // const product = await fetch(`https://.../${id}`).then((res) => res.json());
-
-  // optionally access and extend (rather than replace) parent metadata
-  // const previousImages = (await parent).openGraph?.images || [];
+  const parentMeta = await parent;
 
   return {
-    title: 'Terms and Conditions - RotateKey',
-    description: 'Terms and Conditions page of RotateKey',
-    //
-    // openGraph: {
-    //   images: ['/some-specific-page-image.jpg', ...previousImages],
-    // },
+    title: {
+      default: 'Terms and Conditions',
+      template: `%s | 'Rotatekey - Smart Real Estate Technology Platform'`,
+    },
+    description: parentMeta.description,
   };
 }
 

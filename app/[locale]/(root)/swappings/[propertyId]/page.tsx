@@ -28,6 +28,7 @@ import {
   Ruler,
   Tag,
 } from 'lucide-react';
+import { Metadata, ResolvingMetadata } from 'next';
 import { after } from 'next/server';
 import ReviewDrawer from './_components/review-drawer';
 import SwappingRequestCard from './_components/swap-request-card';
@@ -38,13 +39,30 @@ type PageProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
+export const revalidate = 3600; // Revalidate this page every hour
+
 const getCachedProperty = cache(async (id: string) => {
   // const property = await getProperty(id);
   const property = await getPropertyV5(id);
   return property;
 });
 
-export const revalidate = 3600; // Revalidate this page every hour
+export async function generateMetadata(
+  { params }: PageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const propertyId = (await params).propertyId;
+
+  // fetch property information
+  const property = await getCachedProperty(propertyId);
+
+  const parentMeta = await parent;
+
+  return {
+    title: property?.type ?? 'Property Details',
+    description: `Details and information about the property located at ${property?.address}, ${property?.city} ${property?.state}. actively listed for swapping on Rotatekey. Explore its features, amenities, and connect with the owner for potential swapping opportunities. Find your next ideal property swap with Rotatekey. | ${parentMeta.description}`,
+  };
+}
 
 const isDev = process.env.NODE_ENV === 'development';
 

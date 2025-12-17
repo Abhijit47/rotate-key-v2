@@ -35,9 +35,17 @@ import {
 // import { unstable_cache as cache } from 'next/cache';
 import { Link } from '@/i18n/navigation';
 import { requireAuth } from '@/lib/require-auth';
+import { Metadata } from 'next';
 import Image from 'next/image';
 import { cache, Suspense } from 'react';
 import PropertyInteractions from '../swappings/_components/property-interactions';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'My Properties',
+    template: `%s | 'Rotatekey - Smart Real Estate Technology Platform'`,
+  },
+};
 
 const getCachedMyProperties = cache(async () => {
   const data = getMyPropertiesV1();
